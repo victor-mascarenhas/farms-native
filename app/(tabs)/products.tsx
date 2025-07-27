@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Button, List } from "react-native-paper";
-import { query, where, getDocs, collection } from "firebase/firestore";
+import { onSnapshot, query, where, collection } from "firebase/firestore";
 import { useRouter } from "expo-router";
 import { z } from "zod";
 
@@ -17,26 +17,24 @@ export default function ProductsScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = getAuth().currentUser;
-        const querySnapshot = await getDocs(
-          query(
-            collection(db, "products"),
-            where("created_by", "==", user?.uid)
-          )
-        );
+    const user = getAuth().currentUser;
+    const q = query(
+      collection(db, "products"),
+      where("created_by", "==", user?.uid)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
         const items: Product[] = [];
         querySnapshot.forEach((doc) => {
           const data = typedSchema.parse(doc.data());
           items.push({ id: doc.id, ...data });
         });
         setProducts(items);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchData();
+      },
+      (err) => console.error(err)
+    );
+    return unsubscribe;
   }, []);
 
   const renderItem = ({ item }: { item: Product }) => (
