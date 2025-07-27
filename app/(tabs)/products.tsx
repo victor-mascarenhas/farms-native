@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   HelperText,
+  useTheme,
 } from "react-native-paper";
 import {
   onSnapshot,
@@ -34,6 +35,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function ProductsScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
+  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
 
@@ -131,7 +133,7 @@ export default function ProductsScreen() {
         <Modal
           visible={visible}
           onDismiss={() => setVisible(false)}
-          contentContainerStyle={styles.modal}
+          contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.surface }]}
         >
           <View>
             <Controller
@@ -242,7 +244,6 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   modal: {
-    backgroundColor: "white",
     padding: 20,
     margin: 20,
   },

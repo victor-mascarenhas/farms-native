@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Text, Title } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Surface, TextInput, Button, Text, Title } from 'react-native-paper';
 import { useAuth } from '../AuthProvider';
 
 export default function LoginScreen() {
@@ -26,7 +26,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.container}>
       <Title style={styles.title}>Login</Title>
       <TextInput
         label="Email"
@@ -49,23 +49,19 @@ export default function LoginScreen() {
       <Button mode="outlined" onPress={handleRegister} style={styles.button}>
         Register
       </Button>
-    </View>
+    </Surface>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
   input: {
-    width: '100%',
     marginBottom: 12,
   },
   button: {
-    width: '100%',
     marginTop: 8,
   },
   title: {
