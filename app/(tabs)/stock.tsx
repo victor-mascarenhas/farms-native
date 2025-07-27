@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import { Button, List } from 'react-native-paper';
-import { getDocs, collection } from 'firebase/firestore';
+import { onSnapshot, collection } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 import { z } from 'zod';
 
@@ -16,20 +16,19 @@ export default function StockScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'stock'));
+    const unsub = onSnapshot(
+      collection(db, 'stock'),
+      (querySnapshot) => {
         const result: StockItem[] = [];
         querySnapshot.forEach((doc) => {
           const data = typedSchema.parse(doc.data());
           result.push({ id: doc.id, ...data });
         });
         setItems(result);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchData();
+      },
+      (err) => console.error(err)
+    );
+    return unsub;
   }, []);
 
   const renderItem = ({ item }: { item: StockItem }) => (
