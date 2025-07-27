@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { AuthProvider, useAuth } from '../AuthProvider';
 import LoginScreen from './login';
 
@@ -46,7 +47,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <PaperProvider>
+        <RootLayoutNav />
+      </PaperProvider>
     </AuthProvider>
   );
 }

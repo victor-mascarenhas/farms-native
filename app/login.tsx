@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, Text, Title } from 'react-native-paper';
 import { useAuth } from '../AuthProvider';
 
 export default function LoginScreen() {
@@ -26,11 +27,28 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} autoCapitalize="none" />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
+      <Title style={styles.title}>Login</Title>
+      <TextInput
+        label="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        style={styles.input}
+      />
+      <TextInput
+        label="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
+      />
       {error && <Text style={styles.error}>{error}</Text>}
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Register" onPress={handleRegister} />
+      <Button mode="contained" onPress={handleLogin} style={styles.button}>
+        Login
+      </Button>
+      <Button mode="outlined" onPress={handleRegister} style={styles.button}>
+        Register
+      </Button>
     </View>
   );
 }
@@ -44,14 +62,18 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    padding: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    marginBottom: 12,
+  },
+  button: {
+    width: '100%',
+    marginTop: 8,
+  },
+  title: {
+    marginBottom: 20,
   },
   error: {
     color: 'red',
     marginBottom: 10,
   },
 });
+
