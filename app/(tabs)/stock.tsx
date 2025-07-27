@@ -20,6 +20,8 @@ import { z } from "zod";
 import { db } from "@/firebaseConfig";
 import { stockSchema } from "@/schemas/firebaseSchemas";
 import { useAuth } from "@/AuthProvider";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const typedSchema = stockSchema;
 type StockItem = z.infer<typeof typedSchema> & { id: string };
@@ -68,7 +70,7 @@ export default function StockScreen() {
 
   useEffect(() => {
     const unsub = onSnapshot(
-      collection(db, 'stock'),
+      collection(db, "stock"),
       (querySnapshot) => {
         const result: StockItem[] = [];
         querySnapshot.forEach((doc) => {
@@ -105,7 +107,11 @@ export default function StockScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList data={items} keyExtractor={(item) => item.id} renderItem={renderItem} />
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+      />
       <Button
         mode="contained"
         style={styles.addButton}
@@ -178,7 +184,9 @@ export default function StockScreen() {
               )}
             />
             {errors.last_updated && (
-              <HelperText type="error">{errors.last_updated.message}</HelperText>
+              <HelperText type="error">
+                {errors.last_updated.message}
+              </HelperText>
             )}
 
             <Button
