@@ -69,6 +69,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="production-dashboard"
+        options={{
+          title: 'Produção',
+          tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           title: 'Tab Two',
