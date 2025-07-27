@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
-import { Button, List } from 'react-native-paper';
-import { collection, getDocs } from 'firebase/firestore';
-import { useRouter } from 'expo-router';
-import { z } from 'zod';
+import React, { useEffect, useState } from "react";
+import { FlatList, View, StyleSheet } from "react-native";
+import { Button, List } from "react-native-paper";
+import { query, where, getDocs, collection } from "firebase/firestore";
+import { useRouter } from "expo-router";
+import { z } from "zod";
 
-import { db } from '@/firebaseConfig';
-import { productSchema } from '@/schemas/firebaseSchemas';
+import { db } from "@/firebaseConfig";
+import { productSchema } from "@/schemas/firebaseSchemas";
+import { getAuth } from "firebase/auth";
 
 const typedSchema = productSchema;
 type Product = z.infer<typeof typedSchema> & { id: string };
@@ -18,7 +19,13 @@ export default function ProductsScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'products'));
+        const user = getAuth().currentUser;
+        const querySnapshot = await getDocs(
+          query(
+            collection(db, "products"),
+            where("created_by", "==", user?.uid)
+          )
+        );
         const items: Product[] = [];
         querySnapshot.forEach((doc) => {
           const data = typedSchema.parse(doc.data());
@@ -38,7 +45,9 @@ export default function ProductsScreen() {
       description={item.category}
       onPress={() => router.push(`/product/${item.id}`)}
       right={() => (
-        <Button onPress={() => router.push(`/product/${item.id}/edit`)}>Editar</Button>
+        <Button onPress={() => router.push(`/product/${item.id}/edit`)}>
+          Editar
+        </Button>
       )}
     />
   );
