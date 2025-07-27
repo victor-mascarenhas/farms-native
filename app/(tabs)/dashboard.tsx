@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Text, View } from '@/components/Themed';
-import { collection, getDocs } from 'firebase/firestore';
-import { WebView } from 'react-native-webview';
-import { z } from 'zod';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, ScrollView } from "react-native";
+import { Surface, Text } from "react-native-paper";
+import { collection, getDocs } from "firebase/firestore";
+import { WebView } from "react-native-webview";
+import { z } from "zod";
 
-import { db } from '@/firebaseConfig';
-import { saleSchema, productSchema, stockSchema } from '@/schemas/firebaseSchemas';
+import { db } from "@/firebaseConfig";
+import {
+  saleSchema,
+  productSchema,
+  stockSchema,
+} from "@/schemas/firebaseSchemas";
 
 // Data types for queries
 const typedSale = saleSchema;
@@ -23,7 +27,7 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     const load = async () => {
-      const saleSnap = await getDocs(collection(db, 'sales'));
+      const saleSnap = await getDocs(collection(db, "sales"));
       const salesData: Sale[] = [];
       saleSnap.forEach((doc) => {
         const data = typedSale.parse(doc.data());
@@ -31,7 +35,7 @@ export default function DashboardScreen() {
       });
       setSales(salesData);
 
-      const productSnap = await getDocs(collection(db, 'products'));
+      const productSnap = await getDocs(collection(db, "products"));
       const productData: Product[] = [];
       productSnap.forEach((doc) => {
         const data = typedProduct.parse(doc.data());
@@ -39,7 +43,7 @@ export default function DashboardScreen() {
       });
       setProducts(productData);
 
-      const stockSnap = await getDocs(collection(db, 'stock'));
+      const stockSnap = await getDocs(collection(db, "stock"));
       const stockData: Stock[] = [];
       stockSnap.forEach((doc) => {
         const data = typedStock.parse(doc.data());
@@ -87,7 +91,7 @@ export default function DashboardScreen() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Produto');
         data.addColumn('number', 'Lucro');
-        data.addRows(${JSON.stringify(profitPerProduct.map(p => [p.name, p.profit]))});
+        data.addRows(${JSON.stringify(profitPerProduct.map((p) => [p.name, p.profit]))});
         var options = { title: 'Lucro por Produto' };
         var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
         chart.draw(data, options);
@@ -101,14 +105,16 @@ export default function DashboardScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Visão Geral</Text>
+      <Text variant="titleLarge" style={styles.title}>
+        Visão Geral
+      </Text>
       <Text>Faturamento total: {totalRevenue.toFixed(2)}</Text>
       <Text>Lucro estimado total: {totalProfit.toFixed(2)}</Text>
       <Text>Quantidade total vendida: {totalQuantity}</Text>
       <Text>Valor atual em estoque: {stockValue.toFixed(2)}</Text>
-      <View style={styles.chart}>
+      <Surface style={styles.chart}>
         <WebView originWhitelist={["*"]} source={{ html: chartHtml }} />
-      </View>
+      </Surface>
     </ScrollView>
   );
 }
@@ -120,7 +126,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 12,
   },
   chart: {

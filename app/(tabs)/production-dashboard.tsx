@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Text, View } from '@/components/Themed';
-import { collection, getDocs } from 'firebase/firestore';
-import { WebView } from 'react-native-webview';
-import { z } from 'zod';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, ScrollView } from "react-native";
+import { Surface, Text } from "react-native-paper";
+import { collection, getDocs } from "firebase/firestore";
+import { WebView } from "react-native-webview";
+import { z } from "zod";
 
-import { db } from '@/firebaseConfig';
-import { productionSchema, productSchema } from '@/schemas/firebaseSchemas';
+import { db } from "@/firebaseConfig";
+import { productionSchema, productSchema } from "@/schemas/firebaseSchemas";
 
 const typedProduction = productionSchema;
 type Production = z.infer<typeof typedProduction> & { id: string };
@@ -19,7 +19,7 @@ export default function ProductionDashboardScreen() {
 
   useEffect(() => {
     const load = async () => {
-      const prodSnap = await getDocs(collection(db, 'productions'));
+      const prodSnap = await getDocs(collection(db, "productions"));
       const prodData: Production[] = [];
       prodSnap.forEach((doc) => {
         const data = typedProduction.parse(doc.data());
@@ -27,7 +27,7 @@ export default function ProductionDashboardScreen() {
       });
       setProductions(prodData);
 
-      const productSnap = await getDocs(collection(db, 'products'));
+      const productSnap = await getDocs(collection(db, "products"));
       const productData: Product[] = [];
       productSnap.forEach((doc) => {
         const data = typedProduct.parse(doc.data());
@@ -41,18 +41,21 @@ export default function ProductionDashboardScreen() {
 
   const totalProductions = productions.length;
   const quantityHarvested = productions
-    .filter((p) => p.status === 'colhido')
+    .filter((p) => p.status === "colhido")
     .reduce((sum, p) => sum + p.quantity, 0);
   const quantityInProgress = productions
-    .filter((p) => p.status !== 'colhido')
+    .filter((p) => p.status !== "colhido")
     .reduce((sum, p) => sum + p.quantity, 0);
 
   const productNames = new Map(products.map((p) => [p.id, p.name]));
-  const quantityPerProduct = productions.reduce<Record<string, number>>((acc, p) => {
-    const name = productNames.get(p.product_id) ?? p.product_id;
-    acc[name] = (acc[name] ?? 0) + p.quantity;
-    return acc;
-  }, {});
+  const quantityPerProduct = productions.reduce<Record<string, number>>(
+    (acc, p) => {
+      const name = productNames.get(p.product_id) ?? p.product_id;
+      acc[name] = (acc[name] ?? 0) + p.quantity;
+      return acc;
+    },
+    {},
+  );
 
   const chartHtml = `<!DOCTYPE html>
   <html>
@@ -80,13 +83,15 @@ export default function ProductionDashboardScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Dados de Produ\u00e7\u00e3o</Text>
+      <Text variant="titleLarge" style={styles.title}>
+        Dados de Produ\u00e7\u00e3o
+      </Text>
       <Text>Total de registros: {totalProductions}</Text>
       <Text>Quantidade em andamento: {quantityInProgress}</Text>
       <Text>Quantidade colhida: {quantityHarvested}</Text>
-      <View style={styles.chart}>
+      <Surface style={styles.chart}>
         <WebView originWhitelist={["*"]} source={{ html: chartHtml }} />
-      </View>
+      </Surface>
     </ScrollView>
   );
 }
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 12,
   },
   chart: {
