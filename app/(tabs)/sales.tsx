@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   HelperText,
+  useTheme,
 } from "react-native-paper";
 import {
   onSnapshot,
@@ -32,6 +33,7 @@ type Sale = z.infer<typeof typedSchema> & { id: string };
 export default function SalesScreen() {
   const [sales, setSales] = useState<Sale[]>([]);
   const { user } = useAuth();
+  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Sale | null>(null);
 
@@ -133,7 +135,7 @@ export default function SalesScreen() {
         <Modal
           visible={visible}
           onDismiss={() => setVisible(false)}
-          contentContainerStyle={styles.modal}
+          contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.surface }]}
         >
           <View>
             <Controller
@@ -270,7 +272,6 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   modal: {
-    backgroundColor: "white",
     padding: 20,
     margin: 20,
   },
