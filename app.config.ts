@@ -41,7 +41,7 @@ export default {
       favicon: "./assets/images/favicon.png",
     },
     // Enable react-native-maps config plugin
-    plugins: ["expo-router", "react-native-maps"],
+    plugins: ["expo-router"],
     experiments: {
       typedRoutes: true,
     },
