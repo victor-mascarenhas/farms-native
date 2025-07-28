@@ -50,6 +50,7 @@ export default function SalesScreen() {
       quantity: 0,
       total_price: 0,
       client_name: "",
+      location: { latitude: 0, longitude: 0 },
       sale_date: new Date(),
     },
   });
@@ -62,6 +63,10 @@ export default function SalesScreen() {
           quantity: editing.quantity,
           total_price: editing.total_price,
           client_name: editing.client_name,
+          location: {
+            latitude: editing.location.latitude,
+            longitude: editing.location.longitude,
+          },
           sale_date:
             editing.sale_date instanceof Date
               ? editing.sale_date
@@ -73,6 +78,7 @@ export default function SalesScreen() {
           quantity: 0,
           total_price: 0,
           client_name: "",
+          location: { latitude: 0, longitude: 0 },
           sale_date: new Date(),
         });
       }
@@ -211,6 +217,46 @@ export default function SalesScreen() {
             {errors.client_name && (
               <HelperText type="error">
                 {errors.client_name.message}
+              </HelperText>
+            )}
+
+            <Controller
+              control={control}
+              name="location.latitude"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Latitude"
+                  value={value ? String(value) : ""}
+                  onBlur={onBlur}
+                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                  keyboardType="numeric"
+                  style={styles.input}
+                />
+              )}
+            />
+            {errors.location?.latitude && (
+              <HelperText type="error">
+                {errors.location.latitude.message}
+              </HelperText>
+            )}
+
+            <Controller
+              control={control}
+              name="location.longitude"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Longitude"
+                  value={value ? String(value) : ""}
+                  onBlur={onBlur}
+                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                  keyboardType="numeric"
+                  style={styles.input}
+                />
+              )}
+            />
+            {errors.location?.longitude && (
+              <HelperText type="error">
+                {errors.location.longitude.message}
               </HelperText>
             )}
 
