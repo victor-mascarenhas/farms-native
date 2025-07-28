@@ -30,6 +30,10 @@ export const saleSchema = z.object({
   quantity: z.number(),
   total_price: z.number(),
   client_name: z.string(),
+  location: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
   sale_date: timestampSchema,
   created_by: z.string(),
 });

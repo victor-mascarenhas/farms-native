@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { Surface, Text } from "react-native-paper";
 import { collection, getDocs } from "firebase/firestore";
 import { WebView } from "react-native-webview";
@@ -115,6 +116,21 @@ export default function DashboardScreen() {
       <Surface style={styles.chart}>
         <WebView originWhitelist={["*"]} source={{ html: chartHtml }} />
       </Surface>
+      <Surface style={styles.map}>
+        <MapView style={StyleSheet.absoluteFillObject}>
+          {sales.map((s) => (
+            <Marker
+              key={s.id}
+              coordinate={{
+                latitude: s.location.latitude,
+                longitude: s.location.longitude,
+              }}
+              title={productMap.get(s.product_id)?.name ?? s.product_id}
+              description={`${s.client_name} - ${s.quantity}`}
+            />
+          ))}
+        </MapView>
+      </Surface>
     </ScrollView>
   );
 }
@@ -130,6 +146,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   chart: {
+    marginTop: 20,
+    height: 300,
+  },
+  map: {
     marginTop: 20,
     height: 300,
   },

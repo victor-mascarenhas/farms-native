@@ -17,7 +17,9 @@ export default {
     icon: "./assets/images/icon.png",
     scheme: "mobilenative",
     userInterfaceStyle: "automatic",
-    newArchEnabled: true,
+    // The new architecture causes issues with certain native modules like
+    // react-native-maps, so disable it for now
+    newArchEnabled: false,
     splash: {
       image: "./assets/images/splash-icon.png",
       resizeMode: "contain",
@@ -38,6 +40,7 @@ export default {
       output: "static",
       favicon: "./assets/images/favicon.png",
     },
+    // Enable react-native-maps config plugin
     plugins: ["expo-router"],
     experiments: {
       typedRoutes: true,
