@@ -2,8 +2,22 @@
   "name": "farms-monorepo",
   "private": true,
   "version": "1.0.0",
+  "packageManager": "pnpm@8.6.12",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "cross-env": "^10.0.0",
+    "turbo": "^2.5.5"
+  },
+  "scripts": {
+    "dev:mobile": "pnpm --filter @mobile-native/mobile dev",
+    "dev:web-host": "pnpm --filter @mobile-native/web-host dev",
+    "dev:web-remote": "pnpm --filter @mobile-native/web-remote dev",
+    "dev": "turbo run dev --parallel"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0"
+  }
 }

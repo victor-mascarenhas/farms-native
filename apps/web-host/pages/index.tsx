@@ -4,4 +4,4 @@ const RemoteApp = dynamic(() => import("remote/RemoteApp"), { ssr: false });
 
 export default function Home() {
   return <RemoteApp />;
-}
+} 
