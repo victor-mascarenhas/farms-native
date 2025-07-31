@@ -15,6 +15,7 @@
     "dev:mobile": "pnpm --filter @mobile-native/mobile dev",
     "dev:web-host": "pnpm --filter @mobile-native/web-host dev",
     "dev:web-remote": "pnpm --filter @mobile-native/web-remote dev",
+    "dev:web": "pnpm --filter web-remote dev && pnpm --filter web-host dev --parallel",
     "dev": "turbo run dev --parallel"
   },
   "devDependencies": {

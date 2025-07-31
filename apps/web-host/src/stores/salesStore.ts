@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import {
   getAllFromCollection,
   addToCollection,
@@ -12,6 +12,8 @@ export type Sale = {
   quantidade: number;
   valor: number;
   data: string;
+  lat?: number;
+  lng?: number;
   // Adicione outros campos necessários
 };
 
@@ -29,19 +31,32 @@ export const useSalesStore = create<SalesStore>((set, get) => ({
   loading: false,
   fetchSales: async () => {
     set({ loading: true });
-    const sales = await getAllFromCollection<Sale>("sales");
+    const res = await fetch("/api/sales");
+    const sales: Sale[] = await res.json();
     set({ sales, loading: false });
   },
-  addSale: async (data) => {
-    await addToCollection("sales", data);
+  addSale: async (data: Omit<Sale, "id">) => {
+    await fetch("/api/sales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     await get().fetchSales();
   },
-  updateSale: async (id, data) => {
-    await updateInCollection("sales", id, data);
+  updateSale: async (id: string, data: Partial<Sale>) => {
+    await fetch("/api/sales", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, ...data }),
+    });
     await get().fetchSales();
   },
-  deleteSale: async (id) => {
-    await deleteFromCollection("sales", id);
+  deleteSale: async (id: string) => {
+    await fetch("/api/sales", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
     await get().fetchSales();
   },
 }));

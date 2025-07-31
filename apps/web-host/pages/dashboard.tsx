@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useSalesStore } from "../src/stores/salesStore";
+import { useSalesStore, Sale } from "../src/stores/salesStore";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
 import { Bar } from "react-chartjs-2";
 import {
@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import Sidebar from "../src/components/Sidebar";
 
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -24,7 +25,7 @@ export default function DashboardPage() {
   // Agrupar vendas por produto e calcular lucro total
   const lucroPorProduto = useMemo(() => {
     const map: Record<string, number> = {};
-    sales.forEach((sale) => {
+    sales.forEach((sale: Sale) => {
       map[sale.produto] = (map[sale.produto] || 0) + (sale.valor || 0);
     });
     return map;
@@ -46,57 +47,59 @@ export default function DashboardPage() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
   // Supondo que cada venda tem lat/lng
-  const markers = sales.filter((s) => s.lat && s.lng);
+  const markers = sales.filter((s: Sale) => s.lat && s.lng);
 
   return (
-    <ProtectedRoute>
-      <div style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
-        <h1>Dashboard de Vendas</h1>
-        {loading ? (
-          <p>Carregando...</p>
-        ) : (
-          <>
-            <div style={{ marginBottom: 40 }}>
-              <Bar data={chartData} />
-            </div>
-            <h2>Mapa das Vendas</h2>
-            <div style={{ height: 400, width: "100%", marginBottom: 32 }}>
-              {isLoaded ? (
-                <GoogleMap
-                  mapContainerStyle={{ width: "100%", height: "100%" }}
-                  center={{ lat: -14.235, lng: -51.9253 }} // Centro do Brasil
-                  zoom={4}
-                >
-                  {markers.map((sale, idx) => (
-                    <Marker
-                      key={sale.id || idx}
-                      position={{ lat: sale.lat, lng: sale.lng }}
-                      title={sale.produto}
-                    />
-                  ))}
-                </GoogleMap>
-              ) : (
-                <p>Carregando mapa...</p>
-              )}
-            </div>
-            <h2>Vendas Recentes</h2>
-            <ul>
-              {sales.slice(0, 10).map((sale) => (
-                <li key={sale.id}>
-                  <strong>{sale.produto}</strong> - R$ {sale.valor} -{" "}
-                  {sale.data}
-                  {sale.lat && sale.lng && (
-                    <span>
-                      {" "}
-                      ({sale.lat}, {sale.lng})
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-    </ProtectedRoute>
+    <Sidebar>
+      <ProtectedRoute>
+        <div style={{ maxWidth: 900, margin: "auto", padding: 24 }}>
+          <h1>Dashboard de Vendas</h1>
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            <>
+              <div style={{ marginBottom: 40 }}>
+                <Bar data={chartData} />
+              </div>
+              <h2>Mapa das Vendas</h2>
+              <div style={{ height: 400, width: "100%", marginBottom: 32 }}>
+                {isLoaded ? (
+                  <GoogleMap
+                    mapContainerStyle={{ width: "100%", height: "100%" }}
+                    center={{ lat: -14.235, lng: -51.9253 }} // Centro do Brasil
+                    zoom={4}
+                  >
+                    {markers.map((sale: Sale, idx: number) => (
+                      <Marker
+                        key={sale.id || idx}
+                        position={{ lat: sale.lat!, lng: sale.lng! }}
+                        title={sale.produto}
+                      />
+                    ))}
+                  </GoogleMap>
+                ) : (
+                  <p>Carregando mapa...</p>
+                )}
+              </div>
+              <h2>Vendas Recentes</h2>
+              <ul>
+                {sales.slice(0, 10).map((sale: Sale) => (
+                  <li key={sale.id}>
+                    <strong>{sale.produto}</strong> - R$ {sale.valor} -{" "}
+                    {sale.data}
+                    {sale.lat && sale.lng && (
+                      <span>
+                        {" "}
+                        ({sale.lat}, {sale.lng})
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </ProtectedRoute>
+    </Sidebar>
   );
 }

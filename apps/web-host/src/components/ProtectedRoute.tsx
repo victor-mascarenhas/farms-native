@@ -1,23 +1,22 @@
 "use client";
 import { ReactNode, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+
+function hasAuthCookie() {
+  if (typeof document === "undefined") return false;
+  return document.cookie.split(';').some(c => c.trim().startsWith('token='));
+}
 
 type Props = {
   children: ReactNode;
 };
 
 export function ProtectedRoute({ children }: Props) {
-  const { user, loading } = useAuth();
-
   useEffect(() => {
-    if (!loading && !user) {
-      // Usar window.location em vez de useRouter para evitar problemas de hidratação
-      window.location.href = "/login";
+    if (!hasAuthCookie()) {
+      //window.location.href = "/login";
     }
-  }, [user, loading]);
+  }, []);
 
-  if (loading) return <div>Carregando...</div>;
-  if (!user) return null;
 
   return <>{children}</>;
 }

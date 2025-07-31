@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import {
   getAllFromCollection,
   addToCollection,
@@ -28,19 +28,32 @@ export const useProductionStore = create<ProductionStore>((set, get) => ({
   loading: false,
   fetchProductions: async () => {
     set({ loading: true });
-    const productions = await getAllFromCollection<Production>("productions");
+    const res = await fetch("/api/productions");
+    const productions: Production[] = await res.json();
     set({ productions, loading: false });
   },
-  addProduction: async (data) => {
-    await addToCollection("productions", data);
+  addProduction: async (data: Omit<Production, "id">) => {
+    await fetch("/api/productions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     await get().fetchProductions();
   },
-  updateProduction: async (id, data) => {
-    await updateInCollection("productions", id, data);
+  updateProduction: async (id: string, data: Partial<Production>) => {
+    await fetch("/api/productions", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, ...data }),
+    });
     await get().fetchProductions();
   },
-  deleteProduction: async (id) => {
-    await deleteFromCollection("productions", id);
+  deleteProduction: async (id: string) => {
+    await fetch("/api/productions", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
     await get().fetchProductions();
   },
 }));

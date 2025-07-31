@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import {
   getAllFromCollection,
   addToCollection,
@@ -30,19 +30,32 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
   loading: false,
   fetchGoals: async () => {
     set({ loading: true });
-    const goals = await getAllFromCollection<Goal>("goals");
+    const res = await fetch("/api/goals");
+    const goals: Goal[] = await res.json();
     set({ goals, loading: false });
   },
-  addGoal: async (data) => {
-    await addToCollection("goals", data);
+  addGoal: async (data: Omit<Goal, "id">) => {
+    await fetch("/api/goals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     await get().fetchGoals();
   },
-  updateGoal: async (id, data) => {
-    await updateInCollection("goals", id, data);
+  updateGoal: async (id: string, data: Partial<Goal>) => {
+    await fetch("/api/goals", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, ...data }),
+    });
     await get().fetchGoals();
   },
-  deleteGoal: async (id) => {
-    await deleteFromCollection("goals", id);
+  deleteGoal: async (id: string) => {
+    await fetch("/api/goals", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
     await get().fetchGoals();
   },
 }));

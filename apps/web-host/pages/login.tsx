@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@farms/firebase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -15,10 +13,19 @@ export default function LoginPage() {
     setCarregando(true);
     setErro("");
     try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      // Redirecionamento será feito automaticamente pelo useEffect
-    } catch (err: any) {
-      setErro("E-mail ou senha inválidos.");
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: senha }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setErro(data.error || "Erro ao autenticar");
+      } else {
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      setErro("Erro de rede");
     } finally {
       setCarregando(false);
     }
