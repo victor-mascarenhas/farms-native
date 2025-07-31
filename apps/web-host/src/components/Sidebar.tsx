@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 const links = [
   { href: "/dashboard", label: "Dashboard de Vendas" },
   { href: "/production-dashboard", label: "Dashboard de Produção" },
+  { href: "/sales", label: "Controle de Vendas" },
   { href: "/stock", label: "Estoque e Vendas" },
   { href: "/goals", label: "Metas" },
   { href: "/products", label: "Produtos" },

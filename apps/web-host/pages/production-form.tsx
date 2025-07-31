@@ -1,26 +1,25 @@
-import { useForm } from "react-hook-form";
-import { useProductionStore, Production } from "../src/stores/productionStore";
+import { useProductionForm } from "@farms/forms";
+import { useProductionStore } from "../src/stores/productionStore";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
 import { useState } from "react";
 
 export default function ProductionFormPage() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<Omit<Production, "id">>();
+  const form = useProductionForm();
   const { addProduction, loading } = useProductionStore();
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
 
-  const onSubmit = async (data: Omit<Production, "id">) => {
+  const onSubmit = async (data: any) => {
     setSucesso("");
     setErro("");
     try {
-      await addProduction(data);
+      await addProduction({
+        nome: data.product_id,
+        status: data.status,
+        data: data.start_date.toISOString(),
+      });
       setSucesso("Produção cadastrada com sucesso!");
-      reset();
+      form.reset();
     } catch (e) {
       setErro("Erro ao cadastrar produção.");
     }
@@ -30,21 +29,21 @@ export default function ProductionFormPage() {
     <ProtectedRoute>
       <div style={{ maxWidth: 400, margin: "auto", padding: 32 }}>
         <h1>Cadastrar Produção</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div style={{ marginBottom: 12 }}>
-            <label>Nome:</label>
+            <label>Produto:</label>
             <input
-              {...register("nome", { required: true })}
+              {...form.register("product_id")}
               style={{ width: "100%" }}
             />
-            {errors.nome && (
-              <span style={{ color: "red" }}>Campo obrigatório</span>
+            {form.formState.errors.product_id && (
+              <span style={{ color: "red" }}>{form.formState.errors.product_id.message}</span>
             )}
           </div>
           <div style={{ marginBottom: 12 }}>
             <label>Status:</label>
             <select
-              {...register("status", { required: true })}
+              {...form.register("status")}
               style={{ width: "100%" }}
             >
               <option value="">Selecione</option>
@@ -52,19 +51,30 @@ export default function ProductionFormPage() {
               <option value="em_producao">Em Produção</option>
               <option value="colhido">Colhido</option>
             </select>
-            {errors.status && (
-              <span style={{ color: "red" }}>Campo obrigatório</span>
+            {form.formState.errors.status && (
+              <span style={{ color: "red" }}>{form.formState.errors.status.message}</span>
             )}
           </div>
           <div style={{ marginBottom: 12 }}>
-            <label>Data:</label>
+            <label>Quantidade:</label>
             <input
-              type="date"
-              {...register("data", { required: true })}
+              type="number"
+              {...form.register("quantity", { valueAsNumber: true })}
               style={{ width: "100%" }}
             />
-            {errors.data && (
-              <span style={{ color: "red" }}>Campo obrigatório</span>
+            {form.formState.errors.quantity && (
+              <span style={{ color: "red" }}>{form.formState.errors.quantity.message}</span>
+            )}
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <label>Data de Início:</label>
+            <input
+              type="date"
+              {...form.register("start_date", { valueAsDate: true })}
+              style={{ width: "100%" }}
+            />
+            {form.formState.errors.start_date && (
+              <span style={{ color: "red" }}>{form.formState.errors.start_date.message}</span>
             )}
           </div>
           <button type="submit" disabled={loading} style={{ width: "100%" }}>

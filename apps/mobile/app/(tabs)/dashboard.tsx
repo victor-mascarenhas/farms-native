@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { Surface, Text } from "react-native-paper";
+import { Surface, Text, Card, Title, Paragraph, useTheme } from "react-native-paper";
 import { collection, getDocs } from "firebase/firestore";
 import { WebView } from "react-native-webview";
 import { z } from "zod";
 
 import { db } from "@farms/firebase";
+import { useSalesStore } from "@farms/state";
 import {
   saleSchema,
   productSchema,
@@ -22,39 +23,42 @@ const typedStock = stockSchema;
 type Stock = z.infer<typeof typedStock> & { id: string };
 
 export default function DashboardScreen() {
-  const [sales, setSales] = useState<Sale[]>([]);
+  const theme = useTheme();
+  const { sales, fetchSales } = useSalesStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [stocks, setStocks] = useState<Stock[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const saleSnap = await getDocs(collection(db, "sales"));
-      const salesData: Sale[] = [];
-      saleSnap.forEach((doc) => {
-        const data = typedSale.parse(doc.data());
-        salesData.push({ id: doc.id, ...data });
-      });
-      setSales(salesData);
+      setLoading(true);
+      try {
+        await fetchSales();
 
-      const productSnap = await getDocs(collection(db, "products"));
-      const productData: Product[] = [];
-      productSnap.forEach((doc) => {
-        const data = typedProduct.parse(doc.data());
-        productData.push({ id: doc.id, ...data });
-      });
-      setProducts(productData);
+        const productSnap = await getDocs(collection(db, "products"));
+        const productData: Product[] = [];
+        productSnap.forEach((doc) => {
+          const data = typedProduct.parse(doc.data());
+          productData.push({ id: doc.id, ...data });
+        });
+        setProducts(productData);
 
-      const stockSnap = await getDocs(collection(db, "stock"));
-      const stockData: Stock[] = [];
-      stockSnap.forEach((doc) => {
-        const data = typedStock.parse(doc.data());
-        stockData.push({ id: doc.id, ...data });
-      });
-      setStocks(stockData);
+        const stockSnap = await getDocs(collection(db, "stock"));
+        const stockData: Stock[] = [];
+        stockSnap.forEach((doc) => {
+          const data = typedStock.parse(doc.data());
+          stockData.push({ id: doc.id, ...data });
+        });
+        setStocks(stockData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    load().catch((err) => console.error(err));
-  }, []);
+    load();
+  }, [fetchSales]);
 
   const productMap = new Map(products.map((p) => [p.id, p]));
   const totalRevenue = sales.reduce((sum, s) => sum + s.total_price, 0);
@@ -78,7 +82,8 @@ export default function DashboardScreen() {
       const profit = (p.unit_price - p.cost_price) * quantitySold;
       return { name: p.name, profit };
     })
-    .sort((a, b) => b.profit - a.profit);
+    .sort((a, b) => b.profit - a.profit)
+    .slice(0, 5); // Top 5 produtos
 
   const chartHtml = `<!DOCTYPE html>
 <html>
@@ -93,44 +98,115 @@ export default function DashboardScreen() {
         data.addColumn('string', 'Produto');
         data.addColumn('number', 'Lucro');
         data.addRows(${JSON.stringify(profitPerProduct.map((p) => [p.name, p.profit]))});
-        var options = { title: 'Lucro por Produto' };
+        var options = { 
+          title: 'Top 5 Produtos por Lucro',
+          colors: ['#10b981'],
+          backgroundColor: '#f8fafc'
+        };
         var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
         chart.draw(data, options);
       }
     </script>
   </head>
-  <body>
-    <div id="chart" style="width:100%;height:300px"></div>
+  <body style="margin: 0; padding: 0;">
+    <div id="chart" style="width:100%;height:250px"></div>
   </body>
 </html>`;
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Carregando...</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
-      <Text variant="titleLarge" style={styles.title}>
-        Visão Geral
-      </Text>
-      <Text>Faturamento total: {totalRevenue.toFixed(2)}</Text>
-      <Text>Lucro estimado total: {totalProfit.toFixed(2)}</Text>
-      <Text>Quantidade total vendida: {totalQuantity}</Text>
-      <Text>Valor atual em estoque: {stockValue.toFixed(2)}</Text>
-      <Surface style={styles.chart}>
-        <WebView originWhitelist={["*"]} source={{ html: chartHtml }} />
-      </Surface>
-      <Surface style={styles.map}>
-        <MapView style={StyleSheet.absoluteFillObject}>
-          {sales.map((s) => (
-            <Marker
-              key={s.id}
-              coordinate={{
-                latitude: s.location.latitude,
-                longitude: s.location.longitude,
-              }}
-              title={productMap.get(s.product_id)?.name ?? s.product_id}
-              description={`${s.client_name} - ${s.quantity}`}
+      <Title style={styles.title}>Dashboard de Vendas</Title>
+      
+      {/* Cards de estatísticas */}
+      <View style={styles.statsContainer}>
+        <Card style={styles.statCard}>
+          <Card.Content>
+            <Title style={styles.statTitle}>Faturamento</Title>
+            <Paragraph style={styles.statValue}>
+              R$ {totalRevenue.toFixed(2)}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.statCard}>
+          <Card.Content>
+            <Title style={styles.statTitle}>Lucro</Title>
+            <Paragraph style={[styles.statValue, { color: '#10b981' }]}>
+              R$ {totalProfit.toFixed(2)}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.statCard}>
+          <Card.Content>
+            <Title style={styles.statTitle}>Quantidade</Title>
+            <Paragraph style={styles.statValue}>
+              {totalQuantity}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.statCard}>
+          <Card.Content>
+            <Title style={styles.statTitle}>Estoque</Title>
+            <Paragraph style={styles.statValue}>
+              R$ {stockValue.toFixed(2)}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+      </View>
+
+      {/* Gráfico */}
+      <Card style={styles.chartCard}>
+        <Card.Content>
+          <Title style={styles.chartTitle}>Lucro por Produto</Title>
+          <Surface style={styles.chart}>
+            <WebView 
+              originWhitelist={["*"]} 
+              source={{ html: chartHtml }}
+              style={styles.webview}
             />
-          ))}
-        </MapView>
-      </Surface>
+          </Surface>
+        </Card.Content>
+      </Card>
+
+      {/* Mapa */}
+      <Card style={styles.mapCard}>
+        <Card.Content>
+          <Title style={styles.mapTitle}>Vendas por Região</Title>
+          <Surface style={styles.map}>
+            <MapView 
+              style={StyleSheet.absoluteFillObject}
+              initialRegion={{
+                latitude: -14.235,
+                longitude: -51.9253,
+                latitudeDelta: 10,
+                longitudeDelta: 10,
+              }}
+            >
+              {sales.filter(s => s.location?.latitude && s.location?.longitude).map((s) => (
+                <Marker
+                  key={s.id}
+                  coordinate={{
+                    latitude: s.location.latitude,
+                    longitude: s.location.longitude,
+                  }}
+                  title={productMap.get(s.product_id)?.name ?? s.product_id}
+                  description={`${s.client_name} - ${s.quantity}`}
+                />
+              ))}
+            </MapView>
+          </Surface>
+        </Card.Content>
+      </Card>
     </ScrollView>
   );
 }
@@ -139,18 +215,66 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#f8fafc',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statCard: {
+    width: '48%',
+    marginBottom: 12,
+    elevation: 2,
+  },
+  statTitle: {
+    fontSize: 14,
+    color: '#64748b',
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1e293b',
+  },
+  chartCard: {
+    marginBottom: 20,
+    elevation: 2,
+  },
+  chartTitle: {
+    fontSize: 16,
     marginBottom: 12,
   },
   chart: {
-    marginTop: 20,
-    height: 300,
+    height: 250,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  webview: {
+    backgroundColor: 'transparent',
+  },
+  mapCard: {
+    marginBottom: 20,
+    elevation: 2,
+  },
+  mapTitle: {
+    fontSize: 16,
+    marginBottom: 12,
   },
   map: {
-    marginTop: 20,
     height: 300,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
 });

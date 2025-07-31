@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@farms/firebase": "workspace:^",
+    "@farms/forms": "workspace:^",
     "@module-federation/nextjs-mf": "8.7.8",
     "@react-google-maps/api": "^2.20.7",
     "chart.js": "^4.5.0",

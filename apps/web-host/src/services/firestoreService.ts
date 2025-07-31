@@ -22,7 +22,7 @@ export async function getAllFromCollection<T = DocumentData>(
 }
 
 export async function addToCollection<T = DocumentData>(col: string, data: T) {
-  const ref = await addDoc(collection(db, col), data);
+  const ref = await addDoc(collection(db, col), data as any);
   return ref.id;
 }
 
