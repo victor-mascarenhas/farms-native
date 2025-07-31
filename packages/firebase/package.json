@@ -4,7 +4,10 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
-    "firebase": "^12.0.0",
-    "expo-constants": "^17.1.7"
+    "expo-constants": "^17.1.7",
+    "firebase": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20"
   }
 }
