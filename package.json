@@ -18,6 +18,12 @@
     "dev:web": "pnpm --filter web-remote dev && pnpm --filter web-host dev --parallel",
     "dev": "turbo run dev --parallel"
   },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
+  },
   "devDependencies": {
     "turbo": "^1.13.0"
   }

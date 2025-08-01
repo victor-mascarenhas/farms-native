@@ -18,7 +18,7 @@ export async function getAllFromCollection<T = DocumentData>(
 ) {
   const q = query(collection(db, col), ...constraints);
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as T[];
+  return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() })) as T[];
 }
 
 export async function addToCollection<T = DocumentData>(col: string, data: T) {

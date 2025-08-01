@@ -14,6 +14,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import type { Product } from "./stores/productsStore";
 
 Chart.register(
   BarElement,
@@ -139,7 +140,7 @@ export default function DashboardPage() {
 
   // Configuração do mapa
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    googleMapsApiKey: "",
   });
 
   const markers = vendasFiltradas.filter((s: Sale) => s.lat && s.lng);

@@ -19,7 +19,7 @@ function Sidebar({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div style={{ display: "flex", minHeight: "100vh", height: "100vh" }}>
       <nav
         style={{
           width: 220,
@@ -29,6 +29,10 @@ function Sidebar({ children }: { children: ReactNode }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflowY: "auto",
         }}
       >
         <div>
@@ -67,7 +71,7 @@ function Sidebar({ children }: { children: ReactNode }) {
           Sair
         </button>
       </nav>
-      <main style={{ flex: 1, padding: 32 }}>{children}</main>
+      <main style={{ flex: 1, padding: 32, height: "100vh", overflowY: "auto" }}>{children}</main>
     </div>
   );
 }

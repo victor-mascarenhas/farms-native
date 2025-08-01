@@ -127,7 +127,7 @@ export default function SalesPage() {
                   <option value="">Selecione um produto</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.nome}>
-                      {product.nome} - R$ {product.preco.toFixed(2)}
+                      {product.nome} - R$ {product?.preco?.toFixed(2)}
                     </option>
                   ))}
                 </select>
@@ -436,7 +436,7 @@ export default function SalesPage() {
                             fontWeight: "600",
                           }}
                         >
-                          R$ {sale.valor.toFixed(2)}
+                          R$ {sale.valor?.toFixed(2)}
                         </td>
                         <td style={{ padding: "12px" }}>-</td>
                         <td style={{ padding: "12px" }}>{sale.data}</td>
@@ -445,7 +445,7 @@ export default function SalesPage() {
                             <span
                               style={{ fontSize: "12px", color: "#64748b" }}
                             >
-                              ({sale.lat.toFixed(4)}, {sale.lng.toFixed(4)})
+                              ({sale.lat?.toFixed(4)}, {sale.lng?.toFixed(4)})
                             </span>
                           ) : (
                             <span style={{ color: "#94a3b8" }}>
