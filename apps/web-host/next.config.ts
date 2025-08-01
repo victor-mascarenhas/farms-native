@@ -9,7 +9,9 @@ const nextConfig: NextConfig = {
         name: "host",
         filename: "static/chunks/remoteEntry.js",
         remotes: {
-          remote: `remote@http://localhost:3001/_next/static/${isServer ? 'ssr' : 'chunks'}/remoteEntry.js`,
+          remote: `remote@http://localhost:3001/_next/static/${
+            isServer ? "ssr" : "chunks"
+          }/remoteEntry.js`,
         },
         shared: {},
       })

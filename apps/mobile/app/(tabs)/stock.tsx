@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import {
   Button,
-  List,
   Portal,
   Modal,
   TextInput,
   HelperText,
   useTheme,
+  Card,
+  Title,
+  Paragraph,
+  FAB,
 } from "react-native-paper";
 import {
   onSnapshot,
@@ -33,6 +36,7 @@ export default function StockScreen() {
   const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<StockItem | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const schema = typedSchema;
   const {
@@ -80,139 +84,205 @@ export default function StockScreen() {
           result.push({ id: doc.id, ...data });
         });
         setItems(result);
+        setLoading(false);
       },
-      (err) => console.error(err)
+      (err) => {
+        console.error(err);
+        setLoading(false);
+      }
     );
     return unsub;
   }, []);
 
-  const renderItem = ({ item }: { item: StockItem }) => (
-    <List.Item
-      title={item.product_id}
-      description={`Qtd: ${item.available_quantity}`}
-      onPress={() => {
-        setEditing(item);
-        setVisible(true);
-      }}
-      right={() => (
-        <Button
-          onPress={() => {
-            setEditing(item);
-            setVisible(true);
-          }}
-        >
-          Editar
-        </Button>
-      )}
-    />
-  );
+  const renderItem = ({ item }: { item: StockItem }) => {
+    const lastUpdated = item.last_updated instanceof Date 
+      ? item.last_updated 
+      : new Date((item.last_updated as any).seconds * 1000);
+
+    return (
+      <Card style={styles.stockCard}>
+        <Card.Content>
+          <View style={styles.stockHeader}>
+            <Title style={styles.productId}>{item.product_id}</Title>
+            <View style={styles.stockActions}>
+              <Button
+                mode="contained"
+                compact
+                onPress={() => {
+                  setEditing(item);
+                  setVisible(true);
+                }}
+                style={styles.editButton}
+              >
+                Editar
+              </Button>
+            </View>
+          </View>
+
+          <View style={styles.stockDetails}>
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Quantidade Disponível:</Paragraph>
+              <Paragraph style={styles.quantityValue}>
+                {item.available_quantity}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Última Atualização:</Paragraph>
+              <Paragraph style={styles.dateValue}>
+                {lastUpdated.toLocaleDateString('pt-BR')}
+              </Paragraph>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Paragraph>Carregando estoque...</Paragraph>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Title style={styles.title}>Estoque</Title>
+        <Paragraph style={styles.subtitle}>
+          {items.length} item{items.length !== 1 ? "s" : ""} em estoque
+        </Paragraph>
+      </View>
+
       <FlatList
         data={items}
-        keyExtractor={(item) => item.id}
         renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
       />
-      <Button
-        mode="contained"
-        style={styles.addButton}
-        onPress={() => {
-          setEditing(null);
-          setVisible(true);
-        }}
-      >
-        Novo
-      </Button>
+
       <Portal>
         <Modal
           visible={visible}
           onDismiss={() => setVisible(false)}
-          contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.surface }]}
+          contentContainerStyle={styles.modal}
         >
-          <View>
-            <Controller
-              control={control}
-              name="product_id"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Produto"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  style={styles.input}
-                />
-              )}
-            />
-            {errors.product_id && (
-              <HelperText type="error">{errors.product_id.message}</HelperText>
-            )}
+          <Card style={styles.formCard}>
+            <Card.Content>
+              <Title style={styles.formTitle}>
+                {editing ? "Editar Item" : "Novo Item"}
+              </Title>
 
-            <Controller
-              control={control}
-              name="available_quantity"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Quantidade"
-                  value={value ? String(value) : ""}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="product_id"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Produto"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    error={!!errors.product_id}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.product_id && (
+                <HelperText type="error">
+                  {errors.product_id.message}
+                </HelperText>
               )}
-            />
-            {errors.available_quantity && (
-              <HelperText type="error">
-                {errors.available_quantity.message}
-              </HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="last_updated"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Atualizado em"
-                  value={
-                    value instanceof Date
-                      ? value.toISOString().slice(0, 10)
-                      : ""
-                  }
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(new Date(text))}
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="available_quantity"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Quantidade Disponível"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.available_quantity}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.available_quantity && (
+                <HelperText type="error">
+                  {errors.available_quantity.message}
+                </HelperText>
               )}
-            />
-            {errors.last_updated && (
-              <HelperText type="error">
-                {errors.last_updated.message}
-              </HelperText>
-            )}
 
-            <Button
-              mode="contained"
-              onPress={handleSubmit(async (data) => {
-                try {
-                  if (editing) {
-                    await updateDoc(doc(db, "stock", editing.id), data);
-                  } else {
-                    await addDoc(collection(db, "stock"), data);
-                  }
-                  setVisible(false);
-                  setEditing(null);
-                } catch (err) {
-                  console.error(err);
-                }
-              })}
-              loading={isSubmitting}
-            >
-              Salvar
-            </Button>
-          </View>
+              <Controller
+                control={control}
+                name="last_updated"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Data da Última Atualização"
+                    value={
+                      value instanceof Date
+                        ? value.toISOString().slice(0, 10)
+                        : ""
+                    }
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(new Date(text))}
+                    error={!!errors.last_updated}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.last_updated && (
+                <HelperText type="error">
+                  {errors.last_updated.message}
+                </HelperText>
+              )}
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  mode="outlined"
+                  onPress={() => setVisible(false)}
+                  style={styles.button}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit(async (data) => {
+                    try {
+                      if (editing) {
+                        await updateDoc(doc(db, "stock", editing.id), data);
+                      } else {
+                        await addDoc(collection(db, "stock"), data);
+                      }
+                      setVisible(false);
+                      setEditing(null);
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  })}
+                  loading={isSubmitting}
+                  style={styles.button}
+                >
+                  {editing ? "Atualizar" : "Salvar"}
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
         </Modal>
       </Portal>
+
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => {
+          setEditing(null);
+          setVisible(true);
+        }}
+      />
     </View>
   );
 }
@@ -220,15 +290,98 @@ export default function StockScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f8fafc",
   },
-  addButton: {
-    margin: 16,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    padding: 16,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: "#64748b",
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    padding: 16,
+  },
+  stockCard: {
+    marginBottom: 12,
+    elevation: 2,
+  },
+  stockHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  productId: {
+    fontSize: 18,
+    flex: 1,
+  },
+  stockActions: {
+    flexDirection: "row",
+  },
+  editButton: {
+    marginLeft: 8,
+  },
+  stockDetails: {
+    gap: 8,
+  },
+  detailContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  detailLabel: {
+    color: "#64748b",
+  },
+  quantityValue: {
+    fontWeight: "bold",
+    color: "#3b82f6",
+  },
+  dateValue: {
+    fontWeight: "bold",
+    color: "#8b5cf6",
   },
   modal: {
-    padding: 20,
     margin: 20,
   },
+  formCard: {
+    elevation: 8,
+  },
+  formTitle: {
+    marginBottom: 20,
+    textAlign: "center",
+  },
   input: {
-    marginBottom: 12,
+    marginBottom: 16,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

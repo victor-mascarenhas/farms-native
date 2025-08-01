@@ -1,3 +1,6 @@
 {
-  "urlRandomness": "IaRlTw4"
+  "urlRandomness": "IaRlTw4",
+  "dev": true,
+  "minify": false,
+  "https": false
 }

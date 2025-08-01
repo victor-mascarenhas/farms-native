@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import {
   Button,
-  List,
   Portal,
   Modal,
   TextInput,
   HelperText,
   useTheme,
+  Card,
+  Title,
+  Paragraph,
+  FAB,
 } from "react-native-paper";
 import {
   onSnapshot,
@@ -36,6 +39,7 @@ export default function SalesScreen() {
   const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Sale | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const schema = typedSchema.omit({ created_by: true });
   const {
@@ -97,215 +101,303 @@ export default function SalesScreen() {
           items.push({ id: doc.id, ...data });
         });
         setSales(items);
+        setLoading(false);
       },
-      (err) => console.error(err)
+      (err) => {
+        console.error(err);
+        setLoading(false);
+      }
     );
     return unsubscribe;
   }, []);
 
-  const renderItem = ({ item }: { item: Sale }) => (
-    <List.Item
-      title={item.client_name}
-      description={`${item.quantity} - ${item.total_price}`}
-      onPress={() => {
-        setEditing(item);
-        setVisible(true);
-      }}
-      right={() => (
-        <Button
-          onPress={() => {
-            setEditing(item);
-            setVisible(true);
-          }}
-        >
-          Editar
-        </Button>
-      )}
-    />
-  );
+  const renderItem = ({ item }: { item: Sale }) => {
+    const saleDate = item.sale_date instanceof Date 
+      ? item.sale_date 
+      : new Date((item.sale_date as any).seconds * 1000);
+
+    return (
+      <Card style={styles.saleCard}>
+        <Card.Content>
+          <View style={styles.saleHeader}>
+            <Title style={styles.clientName}>{item.client_name}</Title>
+            <View style={styles.saleActions}>
+              <Button
+                mode="contained"
+                compact
+                onPress={() => {
+                  setEditing(item);
+                  setVisible(true);
+                }}
+                style={styles.editButton}
+              >
+                Editar
+              </Button>
+            </View>
+          </View>
+
+          <Paragraph style={styles.productId}>Produto: {item.product_id}</Paragraph>
+
+          <View style={styles.saleDetails}>
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Quantidade:</Paragraph>
+              <Paragraph style={styles.detailValue}>
+                {item.quantity}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Valor Total:</Paragraph>
+              <Paragraph style={styles.priceValue}>
+                R$ {item.total_price.toFixed(2)}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Data da Venda:</Paragraph>
+              <Paragraph style={styles.dateValue}>
+                {saleDate.toLocaleDateString('pt-BR')}
+              </Paragraph>
+            </View>
+
+            <View style={styles.locationContainer}>
+              <Paragraph style={styles.detailLabel}>Localização:</Paragraph>
+              <Paragraph style={styles.locationValue}>
+                {item.location.latitude.toFixed(4)}, {item.location.longitude.toFixed(4)}
+              </Paragraph>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Paragraph>Carregando vendas...</Paragraph>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <FlatList data={sales} keyExtractor={(item) => item.id} renderItem={renderItem} />
-      <Button
-        mode="contained"
-        style={styles.addButton}
-        onPress={() => {
-          setEditing(null);
-          setVisible(true);
-        }}
-      >
-        Novo
-      </Button>
+      <View style={styles.header}>
+        <Title style={styles.title}>Vendas</Title>
+        <Paragraph style={styles.subtitle}>
+          {sales.length} venda{sales.length !== 1 ? "s" : ""} registrada{sales.length !== 1 ? "s" : ""}
+        </Paragraph>
+      </View>
+
+      <FlatList
+        data={sales}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+      />
+
       <Portal>
         <Modal
           visible={visible}
           onDismiss={() => setVisible(false)}
-          contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.surface }]}
+          contentContainerStyle={styles.modal}
         >
-          <View>
-            <Controller
-              control={control}
-              name="product_id"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Produto"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  style={styles.input}
-                />
-              )}
-            />
-            {errors.product_id && (
-              <HelperText type="error">
-                {errors.product_id.message}
-              </HelperText>
-            )}
+          <Card style={styles.formCard}>
+            <Card.Content>
+              <Title style={styles.formTitle}>
+                {editing ? "Editar Venda" : "Nova Venda"}
+              </Title>
 
-            <Controller
-              control={control}
-              name="quantity"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Quantidade"
-                  value={value ? String(value) : ""}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="client_name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Nome do Cliente"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    error={!!errors.client_name}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.client_name && (
+                <HelperText type="error">
+                  {errors.client_name.message}
+                </HelperText>
               )}
-            />
-            {errors.quantity && (
-              <HelperText type="error">{errors.quantity.message}</HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="total_price"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Valor Total"
-                  value={value ? String(value) : ""}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="product_id"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Produto"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    error={!!errors.product_id}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.product_id && (
+                <HelperText type="error">
+                  {errors.product_id.message}
+                </HelperText>
               )}
-            />
-            {errors.total_price && (
-              <HelperText type="error">
-                {errors.total_price.message}
-              </HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="client_name"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Cliente"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="quantity"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Quantidade"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.quantity}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.quantity && (
+                <HelperText type="error">{errors.quantity.message}</HelperText>
               )}
-            />
-            {errors.client_name && (
-              <HelperText type="error">
-                {errors.client_name.message}
-              </HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="location.latitude"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Latitude"
-                  value={value ? String(value) : ""}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="total_price"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Valor Total (R$)"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.total_price}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.total_price && (
+                <HelperText type="error">
+                  {errors.total_price.message}
+                </HelperText>
               )}
-            />
-            {errors.location?.latitude && (
-              <HelperText type="error">
-                {errors.location.latitude.message}
-              </HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="location.longitude"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Longitude"
-                  value={value ? String(value) : ""}
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                  keyboardType="numeric"
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="location.latitude"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Latitude"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.location?.latitude}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.location?.latitude && (
+                <HelperText type="error">
+                  {errors.location.latitude.message}
+                </HelperText>
               )}
-            />
-            {errors.location?.longitude && (
-              <HelperText type="error">
-                {errors.location.longitude.message}
-              </HelperText>
-            )}
 
-            <Controller
-              control={control}
-              name="sale_date"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Data"
-                  value={
-                    value instanceof Date
-                      ? value.toISOString().slice(0, 10)
-                      : ""
-                  }
-                  onBlur={onBlur}
-                  onChangeText={(text) => onChange(new Date(text))}
-                  style={styles.input}
-                />
+              <Controller
+                control={control}
+                name="location.longitude"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Longitude"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.location?.longitude}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.location?.longitude && (
+                <HelperText type="error">
+                  {errors.location.longitude.message}
+                </HelperText>
               )}
-            />
-            {errors.sale_date && (
-              <HelperText type="error">{errors.sale_date.message}</HelperText>
-            )}
 
-            <Button
-              mode="contained"
-              onPress={handleSubmit(async (data) => {
-                try {
-                  if (editing) {
-                    await updateDoc(doc(db, "sales", editing.id), data);
-                  } else if (user) {
-                    await addDoc(collection(db, "sales"), {
-                      ...data,
-                      created_by: user.uid,
-                    });
-                  }
-                  setVisible(false);
-                  setEditing(null);
-                } catch (err) {
-                  console.error(err);
-                }
-              })}
-              loading={isSubmitting}
-            >
-              Salvar
-            </Button>
-          </View>
+              <Controller
+                control={control}
+                name="sale_date"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Data da Venda"
+                    value={
+                      value instanceof Date
+                        ? value.toISOString().slice(0, 10)
+                        : ""
+                    }
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(new Date(text))}
+                    error={!!errors.sale_date}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.sale_date && (
+                <HelperText type="error">{errors.sale_date.message}</HelperText>
+              )}
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  mode="outlined"
+                  onPress={() => setVisible(false)}
+                  style={styles.button}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit(async (data) => {
+                    try {
+                      if (editing) {
+                        await updateDoc(doc(db, "sales", editing.id), data);
+                      } else if (user) {
+                        await addDoc(collection(db, "sales"), {
+                          ...data,
+                          created_by: user.uid,
+                        });
+                      }
+                      setVisible(false);
+                      setEditing(null);
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  })}
+                  loading={isSubmitting}
+                  style={styles.button}
+                >
+                  {editing ? "Atualizar" : "Salvar"}
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
         </Modal>
       </Portal>
+
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => {
+          setEditing(null);
+          setVisible(true);
+        }}
+      />
     </View>
   );
 }
@@ -313,15 +405,116 @@ export default function SalesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f8fafc",
   },
-  addButton: {
-    margin: 16,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    padding: 16,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: "#64748b",
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    padding: 16,
+  },
+  saleCard: {
+    marginBottom: 12,
+    elevation: 2,
+  },
+  saleHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  clientName: {
+    fontSize: 18,
+    flex: 1,
+  },
+  saleActions: {
+    flexDirection: "row",
+  },
+  editButton: {
+    marginLeft: 8,
+  },
+  productId: {
+    color: "#64748b",
+    marginBottom: 12,
+  },
+  saleDetails: {
+    gap: 8,
+  },
+  detailContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  detailLabel: {
+    color: "#64748b",
+  },
+  detailValue: {
+    fontWeight: "bold",
+    color: "#3b82f6",
+  },
+  priceValue: {
+    fontWeight: "bold",
+    color: "#10b981",
+  },
+  dateValue: {
+    fontWeight: "bold",
+    color: "#8b5cf6",
+  },
+  locationContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  locationValue: {
+    fontWeight: "bold",
+    color: "#f59e0b",
+    fontSize: 12,
   },
   modal: {
-    padding: 20,
     margin: 20,
   },
+  formCard: {
+    elevation: 8,
+  },
+  formTitle: {
+    marginBottom: 20,
+    textAlign: "center",
+  },
   input: {
-    marginBottom: 12,
+    marginBottom: 16,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

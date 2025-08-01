@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useSalesStore, Sale } from "../src/stores/salesStore";
 import { useProductsStore } from "../src/stores/productsStore";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
-import { useSaleForm } from "@farms/forms";
+import { useSaleForm } from "../src/hooks/useSaleForm";
 import Sidebar from "../src/components/Sidebar";
 
 export default function SalesPage() {
-  const { sales, loading, fetchSales, addSale, updateSale, deleteSale } = useSalesStore();
+  const { sales, loading, fetchSales, addSale, updateSale, deleteSale } =
+    useSalesStore();
   const { products, fetchProducts } = useProductsStore();
   const form = useSaleForm();
   const [sucesso, setSucesso] = useState("");
@@ -82,20 +83,35 @@ export default function SalesPage() {
           <h1>Controle de Vendas</h1>
 
           {/* Formulário */}
-          <div style={{
-            background: "white",
-            padding: 24,
-            borderRadius: 8,
-            border: "1px solid #e2e8f0",
-            marginBottom: 32
-          }}>
+          <div
+            style={{
+              background: "white",
+              padding: 24,
+              borderRadius: 8,
+              border: "1px solid #e2e8f0",
+              marginBottom: 32,
+            }}
+          >
             <h2 style={{ marginTop: 0, marginBottom: 20 }}>
               {editId ? "Editar Venda" : "Registrar Nova Venda"}
             </h2>
 
-            <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+              }}
+            >
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Produto *
                 </label>
                 <select
@@ -105,11 +121,11 @@ export default function SalesPage() {
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                 >
                   <option value="">Selecione um produto</option>
-                  {products.map(product => (
+                  {products.map((product) => (
                     <option key={product.id} value={product.nome}>
                       {product.nome} - R$ {product.preco.toFixed(2)}
                     </option>
@@ -123,7 +139,13 @@ export default function SalesPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Quantidade *
                 </label>
                 <input
@@ -135,7 +157,7 @@ export default function SalesPage() {
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="1"
                 />
@@ -147,7 +169,13 @@ export default function SalesPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Valor Total (R$) *
                 </label>
                 <input
@@ -159,7 +187,7 @@ export default function SalesPage() {
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="0.00"
                 />
@@ -171,7 +199,13 @@ export default function SalesPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Nome do Cliente *
                 </label>
                 <input
@@ -181,7 +215,7 @@ export default function SalesPage() {
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="Nome do comprador"
                 />
@@ -193,7 +227,13 @@ export default function SalesPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Data da Venda *
                 </label>
                 <input
@@ -204,7 +244,7 @@ export default function SalesPage() {
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                 />
                 {form.formState.errors.sale_date && (
@@ -215,38 +255,54 @@ export default function SalesPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Latitude
                 </label>
                 <input
                   type="number"
                   step="any"
-                  {...form.register("location.latitude", { valueAsNumber: true })}
+                  {...form.register("location.latitude", {
+                    valueAsNumber: true,
+                  })}
                   style={{
                     width: "100%",
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="-23.5505"
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Longitude
                 </label>
                 <input
                   type="number"
                   step="any"
-                  {...form.register("location.longitude", { valueAsNumber: true })}
+                  {...form.register("location.longitude", {
+                    valueAsNumber: true,
+                  })}
                   style={{
                     width: "100%",
                     padding: "12px",
                     border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="-46.6333"
                 />
@@ -264,7 +320,7 @@ export default function SalesPage() {
                     borderRadius: "6px",
                     cursor: "pointer",
                     fontSize: "14px",
-                    fontWeight: "600"
+                    fontWeight: "600",
                   }}
                 >
                   {editId ? "Salvar Alterações" : "Registrar Venda"}
@@ -281,7 +337,7 @@ export default function SalesPage() {
                       borderRadius: "6px",
                       cursor: "pointer",
                       fontSize: "14px",
-                      fontWeight: "600"
+                      fontWeight: "600",
                     }}
                   >
                     Cancelar
@@ -291,39 +347,47 @@ export default function SalesPage() {
             </form>
 
             {sucesso && (
-              <div style={{
-                color: "green",
-                marginTop: 16,
-                padding: "12px",
-                backgroundColor: "#dcfce7",
-                borderRadius: "6px",
-                border: "1px solid #bbf7d0"
-              }}>
+              <div
+                style={{
+                  color: "green",
+                  marginTop: 16,
+                  padding: "12px",
+                  backgroundColor: "#dcfce7",
+                  borderRadius: "6px",
+                  border: "1px solid #bbf7d0",
+                }}
+              >
                 {sucesso}
               </div>
             )}
             {erro && (
-              <div style={{
-                color: "red",
-                marginTop: 16,
-                padding: "12px",
-                backgroundColor: "#fef2f2",
-                borderRadius: "6px",
-                border: "1px solid #fecaca"
-              }}>
+              <div
+                style={{
+                  color: "red",
+                  marginTop: 16,
+                  padding: "12px",
+                  backgroundColor: "#fef2f2",
+                  borderRadius: "6px",
+                  border: "1px solid #fecaca",
+                }}
+              >
                 {erro}
               </div>
             )}
           </div>
 
           {/* Lista de vendas */}
-          <div style={{
-            background: "white",
-            padding: 24,
-            borderRadius: 8,
-            border: "1px solid #e2e8f0"
-          }}>
-            <h2 style={{ marginTop: 0, marginBottom: 20 }}>Vendas Registradas</h2>
+          <div
+            style={{
+              background: "white",
+              padding: 24,
+              borderRadius: 8,
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <h2 style={{ marginTop: 0, marginBottom: 20 }}>
+              Vendas Registradas
+            </h2>
 
             {loading ? (
               <p>Carregando...</p>
@@ -332,32 +396,61 @@ export default function SalesPage() {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Produto</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Quantidade</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Valor</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Cliente</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Data</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Localização</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Ações</th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Produto
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Quantidade
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Valor
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Cliente
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Data
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Localização
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Ações
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {sales.map((sale) => (
-                      <tr key={sale.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
-                        <td style={{ padding: "12px", fontWeight: "600" }}>{sale.produto}</td>
+                      <tr
+                        key={sale.id}
+                        style={{ borderBottom: "1px solid #f1f5f9" }}
+                      >
+                        <td style={{ padding: "12px", fontWeight: "600" }}>
+                          {sale.produto}
+                        </td>
                         <td style={{ padding: "12px" }}>{sale.quantidade}</td>
-                        <td style={{ padding: "12px", color: "#10b981", fontWeight: "600" }}>
+                        <td
+                          style={{
+                            padding: "12px",
+                            color: "#10b981",
+                            fontWeight: "600",
+                          }}
+                        >
                           R$ {sale.valor.toFixed(2)}
                         </td>
                         <td style={{ padding: "12px" }}>-</td>
                         <td style={{ padding: "12px" }}>{sale.data}</td>
                         <td style={{ padding: "12px" }}>
                           {sale.lat && sale.lng ? (
-                            <span style={{ fontSize: "12px", color: "#64748b" }}>
+                            <span
+                              style={{ fontSize: "12px", color: "#64748b" }}
+                            >
                               ({sale.lat.toFixed(4)}, {sale.lng.toFixed(4)})
                             </span>
                           ) : (
-                            <span style={{ color: "#94a3b8" }}>Não informado</span>
+                            <span style={{ color: "#94a3b8" }}>
+                              Não informado
+                            </span>
                           )}
                         </td>
                         <td style={{ padding: "12px" }}>
@@ -370,7 +463,7 @@ export default function SalesPage() {
                                 border: "none",
                                 borderRadius: "4px",
                                 cursor: "pointer",
-                                fontSize: "12px"
+                                fontSize: "12px",
                               }}
                               onClick={() => handleEdit(sale)}
                             >
@@ -384,7 +477,7 @@ export default function SalesPage() {
                                 border: "none",
                                 borderRadius: "4px",
                                 cursor: "pointer",
-                                fontSize: "12px"
+                                fontSize: "12px",
                               }}
                               onClick={() => handleDelete(sale.id!)}
                             >
@@ -403,4 +496,4 @@ export default function SalesPage() {
       </ProtectedRoute>
     </Sidebar>
   );
-} 
+}

@@ -1,4 +1,4 @@
-import { useProductionForm } from "@farms/forms";
+import { useProductionForm } from "../src/hooks/useProductionForm";
 import { useProductionStore } from "../src/stores/productionStore";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
 import { useState } from "react";
@@ -32,27 +32,25 @@ export default function ProductionFormPage() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div style={{ marginBottom: 12 }}>
             <label>Produto:</label>
-            <input
-              {...form.register("product_id")}
-              style={{ width: "100%" }}
-            />
+            <input {...form.register("product_id")} style={{ width: "100%" }} />
             {form.formState.errors.product_id && (
-              <span style={{ color: "red" }}>{form.formState.errors.product_id.message}</span>
+              <span style={{ color: "red" }}>
+                {form.formState.errors.product_id.message}
+              </span>
             )}
           </div>
           <div style={{ marginBottom: 12 }}>
             <label>Status:</label>
-            <select
-              {...form.register("status")}
-              style={{ width: "100%" }}
-            >
+            <select {...form.register("status")} style={{ width: "100%" }}>
               <option value="">Selecione</option>
               <option value="aguardando">Aguardando</option>
               <option value="em_producao">Em Produção</option>
               <option value="colhido">Colhido</option>
             </select>
             {form.formState.errors.status && (
-              <span style={{ color: "red" }}>{form.formState.errors.status.message}</span>
+              <span style={{ color: "red" }}>
+                {form.formState.errors.status.message}
+              </span>
             )}
           </div>
           <div style={{ marginBottom: 12 }}>
@@ -63,7 +61,9 @@ export default function ProductionFormPage() {
               style={{ width: "100%" }}
             />
             {form.formState.errors.quantity && (
-              <span style={{ color: "red" }}>{form.formState.errors.quantity.message}</span>
+              <span style={{ color: "red" }}>
+                {form.formState.errors.quantity.message}
+              </span>
             )}
           </div>
           <div style={{ marginBottom: 12 }}>
@@ -74,7 +74,9 @@ export default function ProductionFormPage() {
               style={{ width: "100%" }}
             />
             {form.formState.errors.start_date && (
-              <span style={{ color: "red" }}>{form.formState.errors.start_date.message}</span>
+              <span style={{ color: "red" }}>
+                {form.formState.errors.start_date.message}
+              </span>
             )}
           </div>
           <button type="submit" disabled={loading} style={{ width: "100%" }}>

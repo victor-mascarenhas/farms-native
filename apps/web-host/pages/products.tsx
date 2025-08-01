@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
-import { useProductForm } from "@farms/forms";
+import { useProductForm } from "../src/hooks/useProductForm";
 import { useProducts } from "../src/presentation/hooks/useProducts";
 import { container } from "../src/infrastructure/di/container";
 import Sidebar from "../src/components/Sidebar";
 
 export default function ProductsPage() {
   const productUseCase = container.getProductUseCase();
-  const { 
-    products, 
-    loading, 
-    error, 
-    createProduct, 
-    updateProduct, 
+  const {
+    products,
+    loading,
+    error,
+    createProduct,
+    updateProduct,
     deleteProduct,
-    calculateMargin 
+    calculateMargin,
   } = useProducts(productUseCase);
-  
+
   const form = useProductForm();
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
@@ -78,9 +78,9 @@ export default function ProductsPage() {
     return (
       <Sidebar>
         <ProtectedRoute>
-          <div style={{ padding: 24, textAlign: 'center' }}>
+          <div style={{ padding: 24, textAlign: "center" }}>
             <h2>Erro ao carregar produtos</h2>
-            <p style={{ color: 'red' }}>{error}</p>
+            <p style={{ color: "red" }}>{error}</p>
           </div>
         </ProtectedRoute>
       </Sidebar>
@@ -92,32 +92,47 @@ export default function ProductsPage() {
       <ProtectedRoute>
         <div style={{ maxWidth: 1000, margin: "auto", padding: 24 }}>
           <h1>Controle de Produtos</h1>
-          
+
           {/* Formulário */}
-          <div style={{ 
-            background: "white", 
-            padding: 24, 
-            borderRadius: 8, 
-            border: "1px solid #e2e8f0",
-            marginBottom: 32
-          }}>
+          <div
+            style={{
+              background: "white",
+              padding: 24,
+              borderRadius: 8,
+              border: "1px solid #e2e8f0",
+              marginBottom: 32,
+            }}
+          >
             <h2 style={{ marginTop: 0, marginBottom: 20 }}>
               {editId ? "Editar Produto" : "Cadastrar Novo Produto"}
             </h2>
-            
-            <form onSubmit={form.handleSubmit(onSubmit)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+              }}
+            >
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Nome do Produto *
                 </label>
                 <input
                   {...form.register("name")}
-                  style={{ 
-                    width: "100%", 
-                    padding: "12px", 
-                    border: "1px solid #d1d5db", 
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="Ex: Tomate"
                 />
@@ -129,17 +144,23 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Categoria *
                 </label>
                 <input
                   {...form.register("category")}
-                  style={{ 
-                    width: "100%", 
-                    padding: "12px", 
-                    border: "1px solid #d1d5db", 
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="Ex: Hortaliças"
                 />
@@ -151,19 +172,25 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Preço de Venda (R$) *
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   {...form.register("unit_price", { valueAsNumber: true })}
-                  style={{ 
-                    width: "100%", 
-                    padding: "12px", 
-                    border: "1px solid #d1d5db", 
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="0.00"
                 />
@@ -175,19 +202,25 @@ export default function ProductsPage() {
               </div>
 
               <div>
-                <label style={{ display: "block", marginBottom: 8, fontWeight: "600" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 8,
+                    fontWeight: "600",
+                  }}
+                >
                   Preço de Custo (R$) *
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   {...form.register("cost_price", { valueAsNumber: true })}
-                  style={{ 
-                    width: "100%", 
-                    padding: "12px", 
-                    border: "1px solid #d1d5db", 
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    border: "1px solid #d1d5db",
                     borderRadius: "6px",
-                    fontSize: "14px"
+                    fontSize: "14px",
                   }}
                   placeholder="0.00"
                 />
@@ -199,9 +232,9 @@ export default function ProductsPage() {
               </div>
 
               <div style={{ gridColumn: "1 / -1", display: "flex", gap: 12 }}>
-                <button 
-                  type="submit" 
-                  style={{ 
+                <button
+                  type="submit"
+                  style={{
                     flex: 1,
                     padding: "12px",
                     backgroundColor: "#3b82f6",
@@ -210,7 +243,7 @@ export default function ProductsPage() {
                     borderRadius: "6px",
                     cursor: "pointer",
                     fontSize: "14px",
-                    fontWeight: "600"
+                    fontWeight: "600",
                   }}
                 >
                   {editId ? "Salvar Alterações" : "Cadastrar Produto"}
@@ -227,7 +260,7 @@ export default function ProductsPage() {
                       borderRadius: "6px",
                       cursor: "pointer",
                       fontSize: "14px",
-                      fontWeight: "600"
+                      fontWeight: "600",
                     }}
                   >
                     Cancelar
@@ -237,40 +270,48 @@ export default function ProductsPage() {
             </form>
 
             {sucesso && (
-              <div style={{ 
-                color: "green", 
-                marginTop: 16, 
-                padding: "12px", 
-                backgroundColor: "#dcfce7", 
-                borderRadius: "6px",
-                border: "1px solid #bbf7d0"
-              }}>
+              <div
+                style={{
+                  color: "green",
+                  marginTop: 16,
+                  padding: "12px",
+                  backgroundColor: "#dcfce7",
+                  borderRadius: "6px",
+                  border: "1px solid #bbf7d0",
+                }}
+              >
                 {sucesso}
               </div>
             )}
             {erro && (
-              <div style={{ 
-                color: "red", 
-                marginTop: 16, 
-                padding: "12px", 
-                backgroundColor: "#fef2f2", 
-                borderRadius: "6px",
-                border: "1px solid #fecaca"
-              }}>
+              <div
+                style={{
+                  color: "red",
+                  marginTop: 16,
+                  padding: "12px",
+                  backgroundColor: "#fef2f2",
+                  borderRadius: "6px",
+                  border: "1px solid #fecaca",
+                }}
+              >
                 {erro}
               </div>
             )}
           </div>
 
           {/* Lista de produtos */}
-          <div style={{ 
-            background: "white", 
-            padding: 24, 
-            borderRadius: 8, 
-            border: "1px solid #e2e8f0"
-          }}>
-            <h2 style={{ marginTop: 0, marginBottom: 20 }}>Produtos Cadastrados</h2>
-            
+          <div
+            style={{
+              background: "white",
+              padding: 24,
+              borderRadius: 8,
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <h2 style={{ marginTop: 0, marginBottom: 20 }}>
+              Produtos Cadastrados
+            </h2>
+
             {loading ? (
               <p>Carregando...</p>
             ) : (
@@ -278,36 +319,73 @@ export default function ProductsPage() {
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Nome</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Categoria</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Preço de Venda</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Preço de Custo</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Margem</th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>Ações</th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Nome
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Categoria
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Preço de Venda
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Preço de Custo
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Margem
+                      </th>
+                      <th style={{ padding: "12px", textAlign: "left" }}>
+                        Ações
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {products.map((product) => {
                       const margem = calculateMargin(product);
                       return (
-                        <tr key={product.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
-                          <td style={{ padding: "12px", fontWeight: "600" }}>{product.name}</td>
-                          <td style={{ padding: "12px" }}>{product.category}</td>
-                          <td style={{ padding: "12px", color: "#10b981", fontWeight: "600" }}>
+                        <tr
+                          key={product.id}
+                          style={{ borderBottom: "1px solid #f1f5f9" }}
+                        >
+                          <td style={{ padding: "12px", fontWeight: "600" }}>
+                            {product.name}
+                          </td>
+                          <td style={{ padding: "12px" }}>
+                            {product.category}
+                          </td>
+                          <td
+                            style={{
+                              padding: "12px",
+                              color: "#10b981",
+                              fontWeight: "600",
+                            }}
+                          >
                             R$ {product.unit_price.toFixed(2)}
                           </td>
                           <td style={{ padding: "12px", color: "#ef4444" }}>
                             R$ {product.cost_price.toFixed(2)}
                           </td>
                           <td style={{ padding: "12px" }}>
-                            <span style={{
-                              padding: "4px 8px",
-                              borderRadius: "4px",
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              backgroundColor: margem > 50 ? "#dcfce7" : margem > 30 ? "#fef3c7" : "#fef2f2",
-                              color: margem > 50 ? "#166534" : margem > 30 ? "#92400e" : "#991b1b"
-                            }}>
+                            <span
+                              style={{
+                                padding: "4px 8px",
+                                borderRadius: "4px",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                backgroundColor:
+                                  margem > 50
+                                    ? "#dcfce7"
+                                    : margem > 30
+                                    ? "#fef3c7"
+                                    : "#fef2f2",
+                                color:
+                                  margem > 50
+                                    ? "#166534"
+                                    : margem > 30
+                                    ? "#92400e"
+                                    : "#991b1b",
+                              }}
+                            >
                               {margem.toFixed(1)}%
                             </span>
                           </td>
@@ -321,7 +399,7 @@ export default function ProductsPage() {
                                   border: "none",
                                   borderRadius: "4px",
                                   cursor: "pointer",
-                                  fontSize: "12px"
+                                  fontSize: "12px",
                                 }}
                                 onClick={() => handleEdit(product)}
                               >
@@ -335,7 +413,7 @@ export default function ProductsPage() {
                                   border: "none",
                                   borderRadius: "4px",
                                   cursor: "pointer",
-                                  fontSize: "12px"
+                                  fontSize: "12px",
                                 }}
                                 onClick={() => handleDelete(product.id!)}
                               >
