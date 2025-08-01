@@ -227,7 +227,7 @@ export default function ProductsScreen() {
               <TextInput
                 label="Nome do Produto"
                 value={form.watch("name")}
-                onChangeText={form.register("name").onChange}
+                onChangeText={(text) => form.setValue("name", text)}
                 error={!!form.formState.errors.name}
                 style={styles.input}
               />
@@ -240,7 +240,7 @@ export default function ProductsScreen() {
               <TextInput
                 label="Categoria"
                 value={form.watch("category")}
-                onChangeText={form.register("category").onChange}
+                onChangeText={(text) => form.setValue("category", text)}
                 error={!!form.formState.errors.category}
                 style={styles.input}
               />

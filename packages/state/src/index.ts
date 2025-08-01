@@ -63,3 +63,24 @@ export const useNotificationStore = create<NotificationState>()(
     }
   )
 );
+
+// Sales state (minimal implementation)
+interface SalesState {
+  sales: any[];
+  fetchSales: () => Promise<void>;
+}
+
+export const useSalesStore = create<SalesState>()(
+  persist(
+    (set) => ({
+      sales: [],
+      fetchSales: async () => {
+        // placeholder for fetching sales data
+        set({ sales: [] });
+      },
+    }),
+    {
+      name: 'sales-storage',
+    }
+  )
+);

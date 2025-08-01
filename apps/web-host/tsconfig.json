@@ -23,7 +23,8 @@
       "@farms/forms": ["../../packages/forms/src"],
       "@farms/schemas": ["../../packages/schemas/src"],
       "@farms/firebase": ["../../packages/firebase/src"],
-      "@farms/state": ["../../packages/state/src"]
+      "@farms/state": ["../../packages/state/src"],
+      "remote/*": ["../web-remote/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

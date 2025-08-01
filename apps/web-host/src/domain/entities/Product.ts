@@ -25,4 +25,16 @@ export interface ProductUseCase {
   deleteProduct(id: string): Promise<void>;
   calculateMargin(product: Product): number;
   getTopProductsByMargin(products: Product[], limit: number): Product[];
-} 
+  getProductsByCategory(products: Product[], category: string): Product[];
+  getProductsByPriceRange(
+    products: Product[],
+    minPrice: number,
+    maxPrice: number
+  ): Product[];
+  calculateTotalInventoryValue(
+    products: Product[],
+    quantities: Record<string, number>
+  ): number;
+  getLowMarginProducts(products: Product[], threshold?: number): Product[];
+  getHighMarginProducts(products: Product[], threshold?: number): Product[];
+}
