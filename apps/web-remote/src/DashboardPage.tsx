@@ -42,7 +42,7 @@ export default function DashboardPage() {
     const hoje = new Date();
     const diasAtras = new Date(hoje.getTime() - parseInt(periodo) * 24 * 60 * 60 * 1000);
     
-    return sales.filter((sale) => {
+      return sales.filter((sale: Sale) => {
       const dataVenda = new Date(sale.data);
       const dentroDoPeriodo = dataVenda >= diasAtras;
       const produtoCorreto = filtroProduto === "todos" || sale.produto === filtroProduto;
@@ -54,8 +54,8 @@ export default function DashboardPage() {
   const lucroPorProduto = useMemo(() => {
     const map: Record<string, { vendas: number; lucro: number; quantidade: number }> = {};
     
-    vendasFiltradas.forEach((sale) => {
-      const produto = products.find(p => p.nome === sale.produto);
+      vendasFiltradas.forEach((sale: Sale) => {
+      const produto = products.find((p: Product) => p.nome === sale.produto);
       const custoUnitario = produto?.preco || 0; // Usando preco como custo por enquanto
       const lucroUnitario = (sale.valor / sale.quantidade) - custoUnitario;
       const lucroTotal = lucroUnitario * sale.quantidade;
@@ -102,7 +102,7 @@ export default function DashboardPage() {
   // Gráfico de linha para evolução temporal
   const vendasPorDia = useMemo(() => {
     const map: Record<string, number> = {};
-    vendasFiltradas.forEach((sale) => {
+    vendasFiltradas.forEach((sale: Sale) => {
       const data = sale.data.split('T')[0]; // Pegar apenas a data
       map[data] = (map[data] || 0) + sale.valor;
     });
@@ -145,10 +145,10 @@ export default function DashboardPage() {
   const markers = vendasFiltradas.filter((s: Sale) => s.lat && s.lng);
 
   // Estatísticas gerais
-  const estatisticas = useMemo(() => {
-    const totalVendas = vendasFiltradas.reduce((sum, sale) => sum + sale.valor, 0);
-    const totalLucro = Object.values(lucroPorProduto).reduce((sum, p) => sum + p.lucro, 0);
-    const totalQuantidade = vendasFiltradas.reduce((sum, sale) => sum + sale.quantidade, 0);
+    const estatisticas = useMemo(() => {
+    const totalVendas = vendasFiltradas.reduce((sum: number, sale: Sale) => sum + sale.valor, 0);
+    const totalLucro = Object.values(lucroPorProduto).reduce((sum: number, p) => sum + p.lucro, 0);
+    const totalQuantidade = vendasFiltradas.reduce((sum: number, sale: Sale) => sum + sale.quantidade, 0);
     const mediaTicket = totalVendas / vendasFiltradas.length || 0;
     
     return {
@@ -187,7 +187,7 @@ export default function DashboardPage() {
                 style={{ padding: "8px", marginLeft: "8px" }}
               >
                 <option value="todos">Todos os produtos</option>
-                {products.map(product => (
+                {products.map((product: Product) => (
                   <option key={product.id} value={product.nome}>
                     {product.nome}
                   </option>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useProductionStore } from "./stores/productionStore";
-import { useProductsStore } from "./stores/productsStore";
+import { useProductionStore, Production } from "./stores/productionStore";
+import { useProductsStore, Product } from "./stores/productsStore";
 import { Pie, Bar, Line } from "react-chartjs-2";
 import {
   Chart,
@@ -38,7 +38,7 @@ export default function ProductionDashboardPage() {
 
   // Filtrar produções
   const producoesFiltradas = useMemo(() => {
-    return productions.filter((prod) => {
+    return productions.filter((prod: Production) => {
       const produtoCorreto = filtroProduto === "todos" || prod.nome === filtroProduto;
       const statusCorreto = filtroStatus === "todos" || prod.status === filtroStatus;
       return produtoCorreto && statusCorreto;
@@ -48,16 +48,16 @@ export default function ProductionDashboardPage() {
   // Estatísticas por status
   const statusCount = useMemo(() => {
     return {
-      aguardando: producoesFiltradas.filter((p) => p.status === "aguardando").length,
-      em_producao: producoesFiltradas.filter((p) => p.status === "em_producao").length,
-      colhido: producoesFiltradas.filter((p) => p.status === "colhido").length,
+      aguardando: producoesFiltradas.filter((p: Production) => p.status === "aguardando").length,
+      em_producao: producoesFiltradas.filter((p: Production) => p.status === "em_producao").length,
+      colhido: producoesFiltradas.filter((p: Production) => p.status === "colhido").length,
     };
   }, [producoesFiltradas]);
 
   // Quantidade total por produto
   const quantidadePorProduto = useMemo(() => {
     const map: Record<string, number> = {};
-    producoesFiltradas.forEach((prod) => {
+    producoesFiltradas.forEach((prod: Production) => {
       map[prod.nome] = (map[prod.nome] || 0) + 1; // Contando produções, não quantidade
     });
     return map;
@@ -66,7 +66,7 @@ export default function ProductionDashboardPage() {
   // Produções por mês
   const producoesPorMes = useMemo(() => {
     const map: Record<string, number> = {};
-    producoesFiltradas.forEach((prod) => {
+    producoesFiltradas.forEach((prod: Production) => {
       const data = new Date(prod.data);
       const mesAno = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
       map[mesAno] = (map[mesAno] || 0) + 1;
@@ -146,7 +146,7 @@ export default function ProductionDashboardPage() {
                 style={{ padding: "8px", marginLeft: "8px" }}
               >
                 <option value="todos">Todos os produtos</option>
-                {products.map(product => (
+                  {products.map((product: Product) => (
                   <option key={product.id} value={product.nome}>
                     {product.nome}
                   </option>
@@ -257,7 +257,7 @@ export default function ProductionDashboardPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {producoesFiltradas.slice(0, 10).map((prod) => (
+                      {producoesFiltradas.slice(0, 10).map((prod: Production) => (
                         <tr key={prod.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
                           <td style={{ padding: "12px" }}>{prod.nome}</td>
                           <td style={{ padding: "12px" }}>
