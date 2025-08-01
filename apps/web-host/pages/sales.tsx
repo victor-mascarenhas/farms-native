@@ -79,30 +79,18 @@ export default function SalesPage() {
   return (
     <Sidebar>
       <ProtectedRoute>
-        <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
+        <div className="container">
           <h1>Controle de Vendas</h1>
 
           {/* Formulário */}
-          <div
-            style={{
-              background: "white",
-              padding: 24,
-              borderRadius: 8,
-              border: "1px solid #e2e8f0",
-              marginBottom: 32,
-            }}
-          >
+          <div className="card" style={{ marginBottom: 32 }}>
             <h2 style={{ marginTop: 0, marginBottom: 20 }}>
               {editId ? "Editar Venda" : "Registrar Nova Venda"}
             </h2>
 
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 16,
-              }}
+              style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
             >
               <div>
                 <label
@@ -377,14 +365,7 @@ export default function SalesPage() {
           </div>
 
           {/* Lista de vendas */}
-          <div
-            style={{
-              background: "white",
-              padding: 24,
-              borderRadius: 8,
-              border: "1px solid #e2e8f0",
-            }}
-          >
+          <div className="card">
             <h2 style={{ marginTop: 0, marginBottom: 20 }}>
               Vendas Registradas
             </h2>

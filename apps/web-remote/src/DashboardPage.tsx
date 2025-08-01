@@ -162,7 +162,7 @@ export default function DashboardPage() {
   }, [vendasFiltradas, lucroPorProduto]);
 
   return (
-    <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
+    <div className="container">
           <h1>Dashboard de Vendas</h1>
           
           {/* Filtros */}
@@ -202,51 +202,26 @@ export default function DashboardPage() {
           ) : (
             <>
               {/* Cards de estatísticas */}
-              <div style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", 
-                gap: 16, 
-                marginBottom: 32 
-              }}>
-                <div style={{ 
-                  background: "#f8fafc", 
-                  padding: 20, 
-                  borderRadius: 8, 
-                  border: "1px solid #e2e8f0" 
-                }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
+                <div className="card">
                   <h3 style={{ margin: 0, color: "#64748b" }}>Total de Vendas</h3>
                   <p style={{ fontSize: 24, fontWeight: "bold", margin: "8px 0", color: "#3b82f6" }}>
                     R$ {estatisticas.totalVendas.toFixed(2)}
                   </p>
                 </div>
-                <div style={{ 
-                  background: "#f8fafc", 
-                  padding: 20, 
-                  borderRadius: 8, 
-                  border: "1px solid #e2e8f0" 
-                }}>
+                <div className="card">
                   <h3 style={{ margin: 0, color: "#64748b" }}>Lucro Total</h3>
                   <p style={{ fontSize: 24, fontWeight: "bold", margin: "8px 0", color: "#10b981" }}>
                     R$ {estatisticas.totalLucro.toFixed(2)}
                   </p>
                 </div>
-                <div style={{ 
-                  background: "#f8fafc", 
-                  padding: 20, 
-                  borderRadius: 8, 
-                  border: "1px solid #e2e8f0" 
-                }}>
+                <div className="card">
                   <h3 style={{ margin: 0, color: "#64748b" }}>Quantidade Vendida</h3>
                   <p style={{ fontSize: 24, fontWeight: "bold", margin: "8px 0", color: "#f59e0b" }}>
                     {estatisticas.totalQuantidade}
                   </p>
                 </div>
-                <div style={{ 
-                  background: "#f8fafc", 
-                  padding: 20, 
-                  borderRadius: 8, 
-                  border: "1px solid #e2e8f0" 
-                }}>
+                <div className="card">
                   <h3 style={{ margin: 0, color: "#64748b" }}>Ticket Médio</h3>
                   <p style={{ fontSize: 24, fontWeight: "bold", margin: "8px 0", color: "#8b5cf6" }}>
                     R$ {estatisticas.mediaTicket.toFixed(2)}
@@ -256,29 +231,29 @@ export default function DashboardPage() {
 
               {/* Gráficos */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
-                <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div className="card">
                   <h3>Lucro por Produto</h3>
                   <Bar data={chartDataLucro} />
                 </div>
-                <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div className="card">
                   <h3>Vendas por Produto</h3>
                   <Bar data={chartDataVendas} />
                 </div>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
-                <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div className="card">
                   <h3>Evolução das Vendas</h3>
                   <Line data={chartDataEvolucao} />
                 </div>
-                <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div className="card">
                   <h3>Distribuição por Quantidade</h3>
                   <Doughnut data={chartDataDistribuicao} />
                 </div>
               </div>
 
               {/* Mapa */}
-              <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0", marginBottom: 32 }}>
+              <div className="card" style={{ marginBottom: 32 }}>
                 <h3>Mapa das Vendas</h3>
                 <div style={{ height: 400, width: "100%" }}>
                   {isLoaded ? (
@@ -302,7 +277,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Tabela de vendas recentes */}
-              <div style={{ background: "white", padding: 20, borderRadius: 8, border: "1px solid #e2e8f0" }}>
+              <div className="card">
                 <h3>Vendas Recentes</h3>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>

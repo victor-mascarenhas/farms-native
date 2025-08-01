@@ -1,42 +1,93 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+/* Reset básico */
 * {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: #f4f6fa;
+  color: #23272f;
+  line-height: 1.5;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #f4f6fa 0%, #e9ecf3 100%);
+}
+
+/* Links */
 a {
-  color: inherit;
+  color: #2563eb;
   text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #1e40af;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: #23272f;
+  margin-bottom: 12px;
+}
+
+/* Botões */
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #1e40af;
+}
+
+/* Inputs */
+input, select, textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  background: #f9fafb;
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #2563eb;
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #e5e7eb;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+/* Espaçamento padrão para containers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
 }

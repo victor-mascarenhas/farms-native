@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { collection, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
-import { db } from './firebaseConfig';
+import { db } from '@farms/firebase';
 import { useAuth } from './AuthProvider';
 
 const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

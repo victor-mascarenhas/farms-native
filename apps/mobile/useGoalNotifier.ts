@@ -10,8 +10,8 @@ import {
   DocumentSnapshot,
 } from 'firebase/firestore';
 import { useAuth } from './AuthProvider';
-import { db } from './firebaseConfig';
-import { goalSchema } from './schemas/firebaseSchemas';
+import { db } from '@farms/firebase';
+import { goalSchema } from '@farms/schemas';
 import { z } from 'zod';
 
 const typedGoal = goalSchema;

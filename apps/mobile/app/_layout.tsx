@@ -19,7 +19,7 @@ import { AuthProvider, useAuth } from "../AuthProvider";
 import LoginScreen from "./login";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import useGoalNotifier from "@/useGoalNotifier";
+import useGoalNotifier from "../useGoalNotifier";
 import NotificationProvider from "../NotificationProvider";
 
 export {

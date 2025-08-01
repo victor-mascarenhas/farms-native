@@ -27,9 +27,9 @@ export default function ProductionFormPage() {
 
   return (
     <ProtectedRoute>
-      <div style={{ maxWidth: 400, margin: "auto", padding: 32 }}>
+      <div className="container" style={{ maxWidth: 400 }}>
         <h1>Cadastrar Produção</h1>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="card">
           <div style={{ marginBottom: 12 }}>
             <label>Produto:</label>
             <input {...form.register("product_id")} style={{ width: "100%" }} />
