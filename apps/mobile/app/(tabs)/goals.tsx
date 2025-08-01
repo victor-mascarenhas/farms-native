@@ -1,0 +1,537 @@
+import React, { useEffect, useState } from "react";
+import { FlatList, View, StyleSheet } from "react-native";
+import {
+  Button,
+  Portal,
+  Modal,
+  TextInput,
+  HelperText,
+  useTheme,
+  Card,
+  Title,
+  Paragraph,
+  FAB,
+} from "react-native-paper";
+import {
+  onSnapshot,
+  query,
+  where,
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+import { z } from "zod";
+import { getAuth } from "firebase/auth";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useAuth } from "@/AuthProvider";
+import { db } from "@farms/firebase";
+import { goalSchema } from "@farms/schemas";
+import { useGoalStore } from "@farms/state";
+
+const typedSchema = goalSchema;
+type Goal = z.infer<typeof typedSchema> & { id: string };
+
+const formSchema = typedSchema.omit({ created_by: true });
+type FormData = z.infer<typeof formSchema>;
+
+export default function GoalsScreen() {
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const { user } = useAuth();
+  const theme = useTheme();
+  const [visible, setVisible] = useState(false);
+  const reachedGoals = useGoalStore((s) => s.reachedGoals);
+  const setGoalReached = useGoalStore((s) => s.setGoalReached);
+  const [editing, setEditing] = useState<Goal | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const schema = formSchema;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      type: "venda",
+      product_id: "",
+      target_quantity: 0,
+      start_date: new Date(),
+      end_date: new Date(),
+      notified: false,
+    },
+  });
+
+  useEffect(() => {
+    const user = getAuth().currentUser;
+    const q = query(
+      collection(db, "goals"),
+      where("created_by", "==", user?.uid)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const items: Goal[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSchema.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
+        setGoals(items);
+        items.forEach((g) => {
+          if (g.notified && !reachedGoals[g.id]) {
+            setGoalReached(g.id);
+          }
+        });
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        setLoading(false);
+      }
+    );
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (visible) {
+      if (editing) {
+        reset({
+          type: editing.type,
+          product_id: editing.product_id,
+          target_quantity: editing.target_quantity,
+          start_date:
+            editing.start_date instanceof Date
+              ? editing.start_date
+              : new Date((editing.start_date as any).seconds * 1000),
+          end_date:
+            editing.end_date instanceof Date
+              ? editing.end_date
+              : new Date((editing.end_date as any).seconds * 1000),
+          notified: editing.notified,
+        });
+      } else {
+        reset({
+          type: "venda",
+          product_id: "",
+          target_quantity: 0,
+          start_date: new Date(),
+          end_date: new Date(),
+          notified: false,
+        });
+      }
+    }
+  }, [visible, editing]);
+
+  const renderItem = ({ item }: { item: Goal }) => {
+    const startDate =
+      item.start_date instanceof Date
+        ? item.start_date
+        : new Date((item.start_date as any).seconds * 1000);
+
+    const endDate =
+      item.end_date instanceof Date
+        ? item.end_date
+        : new Date((item.end_date as any).seconds * 1000);
+
+    const getTypeColor = (type: string) => {
+      switch (type) {
+        case "venda":
+          return "#10b981";
+        case "producao":
+          return "#3b82f6";
+        default:
+          return "#64748b";
+      }
+    };
+
+    const getTypeText = (type: string) => {
+      switch (type) {
+        case "venda":
+          return "Venda";
+        case "producao":
+          return "Produção";
+        default:
+          return type;
+      }
+    };
+
+    return (
+      <Card style={styles.goalCard}>
+        <Card.Content>
+          <View style={styles.goalHeader}>
+            <Title style={styles.productId}>{item.product_id}</Title>
+            <View style={styles.goalActions}>
+              <Button
+                mode="contained"
+                compact
+                onPress={() => {
+                  setEditing(item);
+                  setVisible(true);
+                }}
+                style={styles.editButton}
+              >
+                Editar
+              </Button>
+            </View>
+          </View>
+
+          <View style={styles.goalDetails}>
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Tipo:</Paragraph>
+              <View
+                style={[
+                  styles.typeBadge,
+                  { backgroundColor: getTypeColor(item.type) + "20" },
+                ]}
+              >
+                <Paragraph
+                  style={[styles.typeValue, { color: getTypeColor(item.type) }]}
+                >
+                  {getTypeText(item.type)}
+                </Paragraph>
+              </View>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Meta:</Paragraph>
+              <Paragraph style={styles.targetValue}>
+                {item.target_quantity}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Data de Início:</Paragraph>
+              <Paragraph style={styles.dateValue}>
+                {startDate.toLocaleDateString("pt-BR")}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Data de Fim:</Paragraph>
+              <Paragraph style={styles.endDateValue}>
+                {endDate.toLocaleDateString("pt-BR")}
+              </Paragraph>
+            </View>
+
+            <View style={styles.detailContainer}>
+              <Paragraph style={styles.detailLabel}>Notificado:</Paragraph>
+              <Paragraph style={styles.notifiedValue}>
+                {item.notified ? "Sim" : "Não"}
+              </Paragraph>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Paragraph>Carregando metas...</Paragraph>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Title style={styles.title}>Metas</Title>
+        <Paragraph style={styles.subtitle}>
+          {goals.length} meta{goals.length !== 1 ? "s" : ""} definida
+          {goals.length !== 1 ? "s" : ""}
+        </Paragraph>
+      </View>
+
+      <FlatList
+        data={goals}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+      />
+
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={styles.modal}
+        >
+          <Card style={styles.formCard}>
+            <Card.Content>
+              <Title style={styles.formTitle}>
+                {editing ? "Editar Meta" : "Nova Meta"}
+              </Title>
+
+              <Controller
+                control={control}
+                name="product_id"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Produto"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    error={!!errors.product_id}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.product_id && (
+                <HelperText type="error">
+                  {errors.product_id.message}
+                </HelperText>
+              )}
+
+              <Controller
+                control={control}
+                name="type"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Tipo"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    error={!!errors.type}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.type && (
+                <HelperText type="error">{errors.type.message}</HelperText>
+              )}
+
+              <Controller
+                control={control}
+                name="target_quantity"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Meta de Quantidade"
+                    value={value ? String(value) : ""}
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                    keyboardType="numeric"
+                    error={!!errors.target_quantity}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.target_quantity && (
+                <HelperText type="error">
+                  {errors.target_quantity.message}
+                </HelperText>
+              )}
+
+              <Controller
+                control={control}
+                name="start_date"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Data de Início"
+                    value={
+                      value instanceof Date
+                        ? value.toISOString().slice(0, 10)
+                        : ""
+                    }
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(new Date(text))}
+                    error={!!errors.start_date}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.start_date && (
+                <HelperText type="error">
+                  {errors.start_date.message}
+                </HelperText>
+              )}
+
+              <Controller
+                control={control}
+                name="end_date"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    label="Data de Fim"
+                    value={
+                      value instanceof Date
+                        ? value.toISOString().slice(0, 10)
+                        : ""
+                    }
+                    onBlur={onBlur}
+                    onChangeText={(text) => onChange(new Date(text))}
+                    error={!!errors.end_date}
+                    style={styles.input}
+                  />
+                )}
+              />
+              {errors.end_date && (
+                <HelperText type="error">{errors.end_date.message}</HelperText>
+              )}
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  mode="outlined"
+                  onPress={() => setVisible(false)}
+                  style={styles.button}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit(async (data) => {
+                    try {
+                      if (editing) {
+                        await updateDoc(doc(db, "goals", editing.id), data);
+                      } else if (user) {
+                        await addDoc(collection(db, "goals"), {
+                          ...data,
+                          created_by: user.uid,
+                        });
+                      }
+                      setVisible(false);
+                      setEditing(null);
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  })}
+                  loading={isSubmitting}
+                  style={styles.button}
+                >
+                  {editing ? "Atualizar" : "Salvar"}
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
+        </Modal>
+      </Portal>
+
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => {
+          setEditing(null);
+          setVisible(true);
+        }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    padding: 16,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: "#64748b",
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    padding: 16,
+  },
+  goalCard: {
+    marginBottom: 12,
+    elevation: 2,
+  },
+  goalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  productId: {
+    fontSize: 18,
+    flex: 1,
+  },
+  goalActions: {
+    flexDirection: "row",
+  },
+  editButton: {
+    marginLeft: 8,
+  },
+  goalDetails: {
+    gap: 8,
+  },
+  detailContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  detailLabel: {
+    color: "#64748b",
+  },
+  targetValue: {
+    fontWeight: "bold",
+    color: "#3b82f6",
+  },
+  dateValue: {
+    fontWeight: "bold",
+    color: "#8b5cf6",
+  },
+  endDateValue: {
+    fontWeight: "bold",
+    color: "#f59e0b",
+  },
+  notifiedValue: {
+    fontWeight: "bold",
+    color: "#10b981",
+  },
+  typeBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  typeValue: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  modal: {
+    margin: 20,
+  },
+  formCard: {
+    elevation: 8,
+  },
+  formTitle: {
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  input: {
+    marginBottom: 16,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+});
