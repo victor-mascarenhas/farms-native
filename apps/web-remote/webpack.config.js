@@ -25,7 +25,9 @@ module.exports = {
       name: 'remote',
       filename: 'remoteEntry.js',
       exposes: {
-        './RemoteApp': './src/RemoteApp'
+        './RemoteApp': './src/RemoteApp',
+        './DashboardPage': './src/DashboardPage',
+        './ProductionDashboardPage': './src/ProductionDashboardPage'
       },
       shared: { react: { singleton: true }, 'react-dom': { singleton: true } }
     }),
