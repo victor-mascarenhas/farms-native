@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text, Surface } from "react-native-paper";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
@@ -9,7 +9,7 @@ export default function TabOneScreen() {
       <Text variant="titleLarge" style={styles.title}>
         Tab One
       </Text>
-      <Surface style={styles.separator} />
+      <View style={styles.separator} />
       <EditScreenInfo path="app/(tabs)/index.tsx" />
     </Surface>
   );

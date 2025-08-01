@@ -27,10 +27,10 @@ export class FirebaseProductRepository implements ProductRepository {
         return null;
       }
 
-      const doc = docSnap.docs[0];
+      const productDoc = docSnap.docs[0];
       return {
-        id: doc.id,
-        ...doc.data()
+        id: productDoc.id,
+        ...productDoc.data()
       } as Product;
     } catch (error) {
       console.error('Error fetching product:', error);

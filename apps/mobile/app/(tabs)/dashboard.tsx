@@ -61,14 +61,14 @@ export default function DashboardScreen() {
   }, [fetchSales]);
 
   const productMap = new Map(products.map((p) => [p.id, p]));
-  const totalRevenue = sales.reduce((sum, s) => sum + s.total_price, 0);
-  const totalQuantity = sales.reduce((sum, s) => sum + s.quantity, 0);
-  const totalProfit = sales.reduce((sum, s) => {
+  const totalRevenue = sales.reduce((sum: number, s: Sale) => sum + s.total_price, 0);
+  const totalQuantity = sales.reduce((sum: number, s: Sale) => sum + s.quantity, 0);
+  const totalProfit = sales.reduce((sum: number, s: Sale) => {
     const prod = productMap.get(s.product_id);
     if (!prod) return sum;
     return sum + (s.total_price - prod.cost_price * s.quantity);
   }, 0);
-  const stockValue = stocks.reduce((sum, st) => {
+  const stockValue = stocks.reduce((sum: number, st: Stock) => {
     const prod = productMap.get(st.product_id);
     if (!prod) return sum;
     return sum + st.available_quantity * prod.unit_price;
@@ -77,8 +77,8 @@ export default function DashboardScreen() {
   const profitPerProduct = products
     .map((p) => {
       const quantitySold = sales
-        .filter((s) => s.product_id === p.id)
-        .reduce((sum, s) => sum + s.quantity, 0);
+        .filter((s: Sale) => s.product_id === p.id)
+        .reduce((sum: number, s: Sale) => sum + s.quantity, 0);
       const profit = (p.unit_price - p.cost_price) * quantitySold;
       return { name: p.name, profit };
     })
