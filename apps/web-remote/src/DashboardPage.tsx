@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSalesStore, Sale } from "./stores/salesStore";
 import { useProductsStore } from "./stores/productsStore";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Bar, Line, Doughnut } from "react-chartjs-2";
 import {
   Chart,
@@ -15,7 +14,6 @@ import {
   ArcElement,
 } from "chart.js";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import Sidebar from "./components/Sidebar";
 
 Chart.register(
   BarElement,
@@ -163,9 +161,7 @@ export default function DashboardPage() {
   }, [vendasFiltradas, lucroPorProduto]);
 
   return (
-    <Sidebar>
-      <ProtectedRoute>
-        <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
+    <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
           <h1>Dashboard de Vendas</h1>
           
           {/* Filtros */}
@@ -343,7 +339,5 @@ export default function DashboardPage() {
             </>
           )}
         </div>
-      </ProtectedRoute>
-    </Sidebar>
   );
 }

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useProductionStore } from "./stores/productionStore";
 import { useProductsStore } from "./stores/productsStore";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Pie, Bar, Line } from "react-chartjs-2";
 import {
   Chart,
@@ -14,7 +13,6 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
-import Sidebar from "./components/Sidebar";
 
 Chart.register(
   ArcElement,
@@ -135,9 +133,7 @@ export default function ProductionDashboardPage() {
   }, [producoesFiltradas, statusCount]);
 
   return (
-    <Sidebar>
-      <ProtectedRoute>
-        <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
+    <div style={{ maxWidth: 1200, margin: "auto", padding: 24 }}>
           <h1>Dashboard de Produção</h1>
 
           {/* Filtros */}
@@ -298,7 +294,5 @@ export default function ProductionDashboardPage() {
             </>
           )}
         </div>
-      </ProtectedRoute>
-    </Sidebar>
   );
 }
