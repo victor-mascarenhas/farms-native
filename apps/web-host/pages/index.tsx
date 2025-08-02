@@ -1,7 +1,13 @@
-import dynamic from "next/dynamic";
-
-const RemoteApp = dynamic(() => import("remote/RemoteApp"), { ssr: false });
+import { ProtectedRoute } from "@web-host/components/ProtectedRoute";
+import { useEffect } from "react";
 
 export default function Home() {
-  return <RemoteApp />;
-} 
+  useEffect(() => {
+    window.location.href = "/dashboard";
+  }, []);
+  return (
+    <ProtectedRoute>
+      <div>Redirecionando...</div>
+    </ProtectedRoute>
+  );
+}

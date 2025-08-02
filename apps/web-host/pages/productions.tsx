@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useForm } from "react-hook-form";
+import styles from "./productions.module.css";
 
 type Production = {
   id: string;
@@ -11,12 +12,9 @@ type Production = {
   harvest_date: string | { _seconds: number } | null;
 };
 
-// Adicione o tipo Product
-
 type Product = {
   id: string;
   name: string;
-  // outros campos se necessário
 };
 
 export default function ProductionsPage() {
@@ -37,7 +35,6 @@ export default function ProductionsPage() {
   });
   const [products, setProducts] = useState<Product[]>([]);
 
-  // Fetch productions
   const fetchProductions = async () => {
     setLoading(true);
     const res = await fetch("/api/productions");
@@ -84,7 +81,6 @@ export default function ProductionsPage() {
       .then(setProducts);
   }, []);
 
-  // Save or update production
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
@@ -111,13 +107,11 @@ export default function ProductionsPage() {
     }
   };
 
-  // Edit
   const handleEdit = (prod: Production) => {
     setEditing(prod);
     setModalOpen(true);
   };
 
-  // Delete
   const handleDelete = async (id: string) => {
     if (!window.confirm("Tem certeza que deseja remover esta produção?"))
       return;
@@ -134,7 +128,6 @@ export default function ProductionsPage() {
     }
   };
 
-  // Utilitário para exibir datas
   function renderDate(date: any) {
     if (!date) return "";
     if (typeof date === "string") return date;
@@ -143,7 +136,6 @@ export default function ProductionsPage() {
     return "";
   }
 
-  // Status helpers
   function getStatusColor(status: string) {
     switch (status) {
       case "aguardando":
@@ -169,7 +161,6 @@ export default function ProductionsPage() {
     }
   }
 
-  // Função utilitária para extrair o id do product_id
   function getProductId(product_id: any) {
     if (!product_id) return "";
     if (typeof product_id === "string") return product_id;
@@ -181,12 +172,10 @@ export default function ProductionsPage() {
       typeof product_id._path === "object" &&
       "segments" in product_id._path
     ) {
-      // Firestore DocumentReference pode ter _path: {segments: [...]}
       return product_id._path.segments?.at?.(-1) || "";
     }
     return "";
   }
-  // Função para buscar o nome do produto
   function getProductName(product_id: any) {
     const id = getProductId(product_id);
     const found = products.find((p) => p.id === id);
@@ -195,7 +184,7 @@ export default function ProductionsPage() {
 
   return (
     <Sidebar>
-      <div className="container" style={{ padding: 24 }}>
+      <div className={styles.container}>
         <h1>Produções</h1>
         <p style={{ color: "#64748b" }}>
           {productions.length} produção{productions.length !== 1 ? "ões" : ""}{" "}
@@ -204,20 +193,7 @@ export default function ProductionsPage() {
 
         {/* Botão flutuante */}
         <button
-          style={{
-            position: "fixed",
-            right: 32,
-            bottom: 32,
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            width: 56,
-            height: 56,
-            fontSize: 32,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px #0002",
-          }}
+          className={styles.fab}
           onClick={() => {
             setEditing(null);
             setModalOpen(true);
@@ -229,29 +205,11 @@ export default function ProductionsPage() {
         {/* Modal */}
         {modalOpen && (
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "#0008",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-            }}
+            className={styles.modalOverlay}
             onClick={() => setModalOpen(false)}
           >
             <div
-              style={{
-                background: "#fff",
-                borderRadius: 12,
-                padding: 32,
-                minWidth: 320,
-                minHeight: 320,
-                position: "relative",
-              }}
+              className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
             >
               <h2 style={{ marginTop: 0, marginBottom: 20 }}>
@@ -354,7 +312,7 @@ export default function ProductionsPage() {
         )}
 
         {/* Lista de produções */}
-        <div className="card" style={{ marginTop: 32 }}>
+        <div className={styles.card}>
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>
             Produções Cadastradas
           </h2>

@@ -1,22 +1,26 @@
 "use client";
-import { ReactNode, useEffect } from "react";
-
-function hasAuthCookie() {
-  if (typeof document === "undefined") return false;
-  return document.cookie.split(';').some(c => c.trim().startsWith('token='));
-}
+import { ReactNode, useEffect, useState } from "react";
 
 type Props = {
   children: ReactNode;
 };
 
 export function ProtectedRoute({ children }: Props) {
+  const [checking, setChecking] = useState(true);
+
   useEffect(() => {
-    if (!hasAuthCookie()) {
-      //window.location.href = "/login";
-    }
+    fetch("/api/me").then((res) => {
+      if (res.status !== 200) {
+        window.location.href = "/login";
+      } else {
+        setChecking(false);
+      }
+    });
   }, []);
 
+  if (checking) {
+    return <div>Verificando autenticação...</div>;
+  }
 
   return <>{children}</>;
 }

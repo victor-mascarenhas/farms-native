@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useForm } from "react-hook-form";
+import styles from "./goals.module.css";
 
 type Goal = {
   id: string;
@@ -30,7 +31,6 @@ export default function GoalsPage() {
     },
   });
 
-  // Fetch goals
   const fetchGoals = async () => {
     setLoading(true);
     const res = await fetch("/api/goals");
@@ -53,7 +53,6 @@ export default function GoalsPage() {
     }
   }, [modalOpen, editing]);
 
-  // Save or update goal
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
@@ -80,13 +79,11 @@ export default function GoalsPage() {
     }
   };
 
-  // Edit
   const handleEdit = (goal: Goal) => {
     setEditing(goal);
     setModalOpen(true);
   };
 
-  // Delete
   const handleDelete = async (id: string) => {
     if (!window.confirm("Tem certeza que deseja remover esta meta?")) return;
     try {
@@ -102,7 +99,6 @@ export default function GoalsPage() {
     }
   };
 
-  // Utilitário para exibir datas
   function renderDate(date: any) {
     if (!date) return "";
     if (typeof date === "string") return date;
@@ -111,7 +107,6 @@ export default function GoalsPage() {
     return "";
   }
 
-  // Utilitário para exibir referência de produto
   function renderProductId(product_id: any) {
     if (!product_id) return "";
     if (typeof product_id === "string") return product_id;
@@ -122,7 +117,7 @@ export default function GoalsPage() {
 
   return (
     <Sidebar>
-      <div className="container" style={{ padding: 24 }}>
+      <div className={styles.container}>
         <h1>Metas</h1>
         <p style={{ color: "#64748b" }}>
           {goals.length} meta{goals.length !== 1 ? "s" : ""} cadastrada
@@ -131,20 +126,7 @@ export default function GoalsPage() {
 
         {/* Botão flutuante */}
         <button
-          style={{
-            position: "fixed",
-            right: 32,
-            bottom: 32,
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            width: 56,
-            height: 56,
-            fontSize: 32,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px #0002",
-          }}
+          className={styles.fab}
           onClick={() => {
             setEditing(null);
             setModalOpen(true);
@@ -156,29 +138,11 @@ export default function GoalsPage() {
         {/* Modal */}
         {modalOpen && (
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "#0008",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-            }}
+            className={styles.modalOverlay}
             onClick={() => setModalOpen(false)}
           >
             <div
-              style={{
-                background: "#fff",
-                borderRadius: 12,
-                padding: 32,
-                minWidth: 320,
-                minHeight: 320,
-                position: "relative",
-              }}
+              className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
             >
               <h2 style={{ marginTop: 0, marginBottom: 20 }}>
@@ -281,7 +245,7 @@ export default function GoalsPage() {
         )}
 
         {/* Lista de metas */}
-        <div className="card" style={{ marginTop: 32 }}>
+        <div className={styles.card}>
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>Metas Cadastradas</h2>
           {loading ? (
             <p>Carregando...</p>

@@ -1,0 +1,51 @@
+.sidebarNav {
+  width: 220px;
+  background: #f3f4f6;
+  padding: 24px;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.menuTitle {
+  margin-bottom: 32px;
+  font-size: 20px;
+}
+.menuList {
+  list-style: none;
+  padding: 0;
+}
+.menuItem {
+  margin-bottom: 16px;
+}
+.menuLink {
+  color: #111827;
+  font-weight: normal;
+  text-decoration: none;
+}
+.logoutBtn {
+  margin-top: 32px;
+  width: 100%;
+  padding: 10px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.main {
+  flex: 1;
+  padding: 32px;
+  height: 100vh;
+  overflow-y: auto;
+}
+.layout {
+  display: flex;
+  min-height: 100vh;
+  height: 100vh;
+}

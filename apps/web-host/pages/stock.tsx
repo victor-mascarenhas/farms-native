@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useForm } from "react-hook-form";
+import styles from "./stock.module.css";
 
-// Tipos
 interface StockItem {
   id: string;
   product_id: string;
@@ -30,7 +30,6 @@ export default function StockPage() {
     },
   });
 
-  // Buscar estoque
   const fetchStock = async () => {
     setLoading(true);
     const res = await fetch("/api/stock");
@@ -38,7 +37,6 @@ export default function StockPage() {
     setItems(data);
     setLoading(false);
   };
-  // Buscar produtos
   const fetchProducts = async () => {
     const res = await fetch("/api/products");
     const data = await res.json();
@@ -50,7 +48,6 @@ export default function StockPage() {
     fetchProducts();
   }, []);
 
-  // Resetar form ao abrir modal
   useEffect(() => {
     if (modalOpen) {
       if (editing) {
@@ -75,7 +72,6 @@ export default function StockPage() {
     }
   }, [modalOpen, editing]);
 
-  // Salvar ou editar
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
@@ -102,13 +98,11 @@ export default function StockPage() {
     }
   };
 
-  // Editar
   const handleEdit = (item: StockItem) => {
     setEditing(item);
     setModalOpen(true);
   };
 
-  // Remover
   const handleDelete = async (id: string) => {
     if (!window.confirm("Tem certeza que deseja remover este item?")) return;
     try {
@@ -124,7 +118,6 @@ export default function StockPage() {
     }
   };
 
-  // Utilitário para exibir datas
   function renderDate(date: any) {
     if (!date) return "";
     if (typeof date === "string") return date;
@@ -132,7 +125,6 @@ export default function StockPage() {
       return new Date(date._seconds * 1000).toLocaleDateString("pt-BR");
     return "";
   }
-  // Utilitário para exibir nome do produto
   function getProductName(product_id: any) {
     if (!product_id) return "-";
     const id =
@@ -145,7 +137,7 @@ export default function StockPage() {
 
   return (
     <Sidebar>
-      <div className="container" style={{ padding: 24 }}>
+      <div className={styles.container}>
         <h1>Estoque</h1>
         <p style={{ color: "#64748b" }}>
           {items.length} item{items.length !== 1 ? "s" : ""} em estoque
@@ -153,20 +145,7 @@ export default function StockPage() {
 
         {/* Botão flutuante */}
         <button
-          style={{
-            position: "fixed",
-            right: 32,
-            bottom: 32,
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            width: 56,
-            height: 56,
-            fontSize: 32,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px #0002",
-          }}
+          className={styles.fab}
           onClick={() => {
             setEditing(null);
             setModalOpen(true);
@@ -178,29 +157,11 @@ export default function StockPage() {
         {/* Modal */}
         {modalOpen && (
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "#0008",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-            }}
+            className={styles.modalOverlay}
             onClick={() => setModalOpen(false)}
           >
             <div
-              style={{
-                background: "#fff",
-                borderRadius: 12,
-                padding: 32,
-                minWidth: 320,
-                minHeight: 220,
-                position: "relative",
-              }}
+              className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
             >
               <h2 style={{ marginTop: 0, marginBottom: 20 }}>
@@ -295,7 +256,7 @@ export default function StockPage() {
         )}
 
         {/* Lista de estoque */}
-        <div className="card" style={{ marginTop: 32 }}>
+        <div className={styles.card}>
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>Itens em Estoque</h2>
           {loading ? (
             <p>Carregando...</p>

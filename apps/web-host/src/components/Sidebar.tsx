@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ReactNode } from "react";
+import styles from "./Sidebar.module.css";
 
 const links = [
   { href: "/dashboard", label: "Dashboard de Vendas" },
@@ -9,6 +10,7 @@ const links = [
   { href: "/stock", label: "Estoque e Vendas" },
   { href: "/goals", label: "Metas" },
   { href: "/products", label: "Produtos" },
+  { href: "/productions", label: "Produções" },
   { href: "/production-form", label: "Nova Produção" },
 ];
 
@@ -18,63 +20,25 @@ function Sidebar({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", height: "100vh" }}>
-      <nav
-        style={{
-          width: 220,
-          background: "#f3f4f6",
-          padding: 24,
-          borderRight: "1px solid #e5e7eb",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflowY: "auto",
-        }}
-      >
+    <div className={styles.layout}>
+      <nav className={styles.sidebarNav}>
         <div>
-          <h2 style={{ marginBottom: 32, fontSize: 20 }}>Menu</h2>
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <h2 className={styles.menuTitle}>Menu</h2>
+          <ul className={styles.menuList}>
             {links.map((link) => (
-              <li key={link.href} style={{ marginBottom: 16 }}>
-                <Link
-                  href={link.href}
-                  style={{
-                    color: "#111827",
-                    fontWeight: "normal",
-                    textDecoration: "none",
-                  }}
-                >
+              <li key={link.href} className={styles.menuItem}>
+                <Link href={link.href} className={styles.menuLink}>
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <button
-          onClick={() => handleLogout()}
-          style={{
-            marginTop: 32,
-            width: "100%",
-            padding: 10,
-            background: "#ef4444",
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
+        <button onClick={() => handleLogout()} className={styles.logoutBtn}>
           Sair
         </button>
       </nav>
-      <main
-        style={{ flex: 1, padding: 32, height: "100vh", overflowY: "auto" }}
-      >
-        {children}
-      </main>
+      <main className={styles.main}>{children}</main>
     </div>
   );
 }

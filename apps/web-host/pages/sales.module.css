@@ -1,0 +1,77 @@
+.container {
+  padding: 24px;
+}
+.fab {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 32px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0002;
+}
+.card {
+  margin-top: 32px;
+}
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0008;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modalContent {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  min-width: 320px;
+  min-height: 320px;
+  position: relative;
+}
+.success {
+  color: green;
+  margin-top: 16px;
+}
+.error {
+  color: red;
+  margin-top: 16px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+}
+.table th {
+  border-bottom: 1px solid #e2e8f0;
+}
+.table tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+.actionBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.editBtn {
+  background-color: #3b82f6;
+  color: white;
+}
+.deleteBtn {
+  background-color: #ef4444;
+  color: white;
+}

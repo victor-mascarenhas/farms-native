@@ -149,7 +149,7 @@ export default function DashboardPage() {
   };
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "",
+    googleMapsApiKey: "AIzaSyBU5amYuzfZKYq5P7GapET4e_obxsVxJ_o",
   });
 
   const markers = vendasFiltradas.filter((s: Sale) => s.lat && s.lng);

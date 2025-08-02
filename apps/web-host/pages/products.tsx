@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useProductForm } from "../src/hooks/useProductForm";
+import styles from "./products.module.css";
 
 type Product = {
   id: string;
@@ -19,7 +20,6 @@ export default function ProductsPage() {
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
 
-  // Fetch products
   const fetchProducts = async () => {
     setLoading(true);
     const res = await fetch("/api/products");
@@ -32,7 +32,6 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  // Reset form on modal open
   useEffect(() => {
     if (modalOpen) {
       if (editing) {
@@ -48,7 +47,6 @@ export default function ProductsPage() {
     }
   }, [modalOpen, editing]);
 
-  // Save or update product
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
@@ -75,13 +73,11 @@ export default function ProductsPage() {
     }
   };
 
-  // Edit
   const handleEdit = (product: Product) => {
     setEditing(product);
     setModalOpen(true);
   };
 
-  // Delete
   const handleDelete = async (id: string) => {
     if (!window.confirm("Tem certeza que deseja remover este produto?")) return;
     try {
@@ -97,35 +93,20 @@ export default function ProductsPage() {
     }
   };
 
-  // Margin calculation
   const calcMargin = (p: Product) =>
     p.unit_price > 0 ? ((p.unit_price - p.cost_price) / p.unit_price) * 100 : 0;
 
   return (
     <Sidebar>
-      <div className="container" style={{ padding: 24 }}>
+      <div className={styles.container}>
         <h1>Produtos</h1>
         <p style={{ color: "#64748b" }}>
           {products.length} produto{products.length !== 1 ? "s" : ""} cadastrado
           {products.length !== 1 ? "s" : ""}
         </p>
 
-        {/* Botão flutuante */}
         <button
-          style={{
-            position: "fixed",
-            right: 32,
-            bottom: 32,
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            width: 56,
-            height: 56,
-            fontSize: 32,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px #0002",
-          }}
+          className={styles.fab}
           onClick={() => {
             setEditing(null);
             setModalOpen(true);
@@ -134,32 +115,13 @@ export default function ProductsPage() {
           +
         </button>
 
-        {/* Modal */}
         {modalOpen && (
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "#0008",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-            }}
+            className={styles.modalOverlay}
             onClick={() => setModalOpen(false)}
           >
             <div
-              style={{
-                background: "#fff",
-                borderRadius: 12,
-                padding: 32,
-                minWidth: 320,
-                minHeight: 320,
-                position: "relative",
-              }}
+              className={styles.modalContent}
               onClick={(e) => e.stopPropagation()}
             >
               <h2 style={{ marginTop: 0, marginBottom: 20 }}>
@@ -172,11 +134,7 @@ export default function ProductsPage() {
                 <input
                   {...form.register("name")}
                   placeholder="Nome do Produto"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
                 {form.formState.errors.name && (
                   <span style={{ color: "red", fontSize: 12 }}>
@@ -187,11 +145,7 @@ export default function ProductsPage() {
                 <input
                   {...form.register("category")}
                   placeholder="Categoria"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
                 {form.formState.errors.category && (
                   <span style={{ color: "red", fontSize: 12 }}>
@@ -204,11 +158,7 @@ export default function ProductsPage() {
                   step="0.01"
                   {...form.register("unit_price", { valueAsNumber: true })}
                   placeholder="Preço de Venda (R$)"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
                 {form.formState.errors.unit_price && (
                   <span style={{ color: "red", fontSize: 12 }}>
@@ -221,11 +171,7 @@ export default function ProductsPage() {
                   step="0.01"
                   {...form.register("cost_price", { valueAsNumber: true })}
                   placeholder="Preço de Custo (R$)"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
                 {form.formState.errors.cost_price && (
                   <span style={{ color: "red", fontSize: 12 }}>
@@ -237,32 +183,11 @@ export default function ProductsPage() {
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    style={{
-                      flex: 1,
-                      padding: 12,
-                      background: "#e5e7eb",
-                      color: "#374151",
-                      border: "none",
-                      borderRadius: 6,
-                      cursor: "pointer",
-                      fontWeight: 600,
-                    }}
+                    className={styles.actionBtn}
                   >
                     Cancelar
                   </button>
-                  <button
-                    type="submit"
-                    style={{
-                      flex: 1,
-                      padding: 12,
-                      background: "#10b981",
-                      color: "white",
-                      border: "none",
-                      borderRadius: 6,
-                      cursor: "pointer",
-                      fontWeight: 600,
-                    }}
-                  >
+                  <button type="submit" className={styles.actionBtn}>
                     {editing ? "Atualizar" : "Salvar"}
                   </button>
                 </div>
@@ -277,8 +202,7 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {/* Lista de produtos */}
-        <div className="card" style={{ marginTop: 32 }}>
+        <div className={styles.card}>
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>
             Produtos Cadastrados
           </h2>
@@ -286,7 +210,7 @@ export default function ProductsPage() {
             <p>Carregando...</p>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <table className={styles.table}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
                     <th style={{ padding: 12, textAlign: "left" }}>Nome</th>
@@ -364,6 +288,7 @@ export default function ProductsPage() {
                                 fontSize: 12,
                               }}
                               onClick={() => handleEdit(product)}
+                              className={styles.editBtn}
                             >
                               Editar
                             </button>
@@ -378,6 +303,7 @@ export default function ProductsPage() {
                                 fontSize: 12,
                               }}
                               onClick={() => handleDelete(product.id)}
+                              className={styles.deleteBtn}
                             >
                               Remover
                             </button>
