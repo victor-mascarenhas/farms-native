@@ -5,8 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  react: 19.1.0
-  react-dom: 19.1.0
+  react: 19.0.0
+  react-dom: 19.0.0
 
 importers:
 
@@ -23,7 +23,7 @@ importers:
     dependencies:
       '@expo/vector-icons':
         specifier: ^14.1.0
-        version: 14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.1.0)
+        version: 14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.0.0)
       '@farms/firebase':
         specifier: workspace:*
         version: link:../../packages/firebase
@@ -41,31 +41,31 @@ importers:
         version: 3.3.4(react-hook-form@7.61.1)
       '@react-navigation/native':
         specifier: ^7.1.6
-        version: 7.1.6(react-native@0.79.5)(react@19.1.0)
+        version: 7.1.6(react-native@0.79.5)(react@19.0.0)
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
       expo:
         specifier: ~53.0.20
-        version: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+        version: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
       expo-constants:
         specifier: ^17.1.7
         version: 17.1.7(expo@53.0.20)(react-native@0.79.5)
       expo-font:
         specifier: ~13.3.2
-        version: 13.3.2(expo@53.0.20)(react@19.1.0)
+        version: 13.3.2(expo@53.0.20)(react@19.0.0)
       expo-linking:
         specifier: ~7.1.7
-        version: 7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.1.0)
+        version: 7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.0.0)
       expo-router:
         specifier: ~5.1.4
-        version: 5.1.4(@types/react@19.0.10)(expo-constants@17.1.7)(expo-linking@7.1.7)(expo@53.0.20)(react-native-reanimated@3.17.4)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0)
+        version: 5.1.4(@types/react@19.0.10)(expo-constants@17.1.7)(expo-linking@7.1.7)(expo@53.0.20)(react-native-reanimated@3.17.4)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0)
       expo-splash-screen:
         specifier: ~0.30.10
         version: 0.30.10(expo@53.0.20)
       expo-status-bar:
         specifier: ~2.2.3
-        version: 2.2.3(react-native@0.79.5)(react@19.1.0)
+        version: 2.2.3(react-native@0.79.5)(react@19.0.0)
       expo-system-ui:
         specifier: ~5.0.10
         version: 5.0.10(expo@53.0.20)(react-native-web@0.20.0)(react-native@0.79.5)
@@ -76,44 +76,47 @@ importers:
         specifier: ^12.0.0
         version: 12.0.0
       react:
-        specifier: 19.1.0
-        version: 19.1.0
+        specifier: 19.0.0
+        version: 19.0.0
       react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
       react-hook-form:
         specifier: ^7.61.1
-        version: 7.61.1(react@19.1.0)
+        version: 7.61.1(react@19.0.0)
       react-native:
         specifier: 0.79.5
-        version: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+        version: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-chart-kit:
+        specifier: ^6.12.0
+        version: 6.12.0(react-native-svg@15.12.1)(react-native@0.79.5)(react@19.0.0)
       react-native-maps:
         specifier: 1.20.1
-        version: 1.20.1(react-native-web@0.20.0)(react-native@0.79.5)(react@19.1.0)
+        version: 1.20.1(react-native-web@0.20.0)(react-native@0.79.5)(react@19.0.0)
       react-native-paper:
         specifier: ^5.14.5
-        version: 5.14.5(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.1.0)
+        version: 5.14.5(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.0.0)
       react-native-reanimated:
         specifier: ~3.17.4
-        version: 3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.1.0)
+        version: 3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.0.0)
       react-native-safe-area-context:
         specifier: 5.4.0
-        version: 5.4.0(react-native@0.79.5)(react@19.1.0)
+        version: 5.4.0(react-native@0.79.5)(react@19.0.0)
       react-native-screens:
         specifier: ~4.11.1
-        version: 4.11.1(react-native@0.79.5)(react@19.1.0)
+        version: 4.11.1(react-native@0.79.5)(react@19.0.0)
       react-native-web:
         specifier: ~0.20.0
-        version: 0.20.0(react-dom@19.1.0)(react@19.1.0)
+        version: 0.20.0(react-dom@19.0.0)(react@19.0.0)
       react-native-webview:
         specifier: ^13.15.0
-        version: 13.15.0(react-native@0.79.5)(react@19.1.0)
+        version: 13.15.0(react-native@0.79.5)(react@19.0.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
       zustand:
         specifier: ^4.4.7
-        version: 4.5.2(@types/react@19.0.10)(react@19.1.0)
+        version: 4.5.2(@types/react@19.0.10)(react@19.0.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -126,16 +129,16 @@ importers:
         version: 19.0.10
       '@types/react-native':
         specifier: ^0.73.0
-        version: 0.73.0(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+        version: 0.73.0(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
       jest:
         specifier: ^29.2.1
         version: 29.2.1(@types/node@20.0.0)
       jest-expo:
         specifier: ~53.0.9
-        version: 53.0.9(@babel/core@7.25.2)(expo@53.0.20)(jest@29.2.1)(react-dom@19.1.0)(react-native@0.79.5)(react@19.1.0)(webpack@5.101.0)
+        version: 53.0.9(@babel/core@7.25.2)(expo@53.0.20)(jest@29.2.1)(react-dom@19.0.0)(react-native@0.79.5)(react@19.0.0)(webpack@5.101.0)
       react-test-renderer:
         specifier: 19.0.0
-        version: 19.0.0(react@19.1.0)
+        version: 19.0.0(react@19.0.0)
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -153,10 +156,10 @@ importers:
         version: 3.3.4(react-hook-form@7.61.1)
       '@module-federation/nextjs-mf':
         specifier: 8.7.8
-        version: 8.7.8(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0)
+        version: 8.7.8(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0)
       '@react-google-maps/api':
         specifier: ^2.20.7
-        version: 2.20.7(react-dom@19.1.0)(react@19.1.0)
+        version: 2.20.7(react-dom@19.0.0)(react@19.0.0)
       chart.js:
         specifier: ^4.5.0
         version: 4.5.0
@@ -168,28 +171,28 @@ importers:
         version: 12.0.0
       next:
         specifier: 15.4.5
-        version: 15.4.5(react-dom@19.1.0)(react@19.1.0)
+        version: 15.4.5(react-dom@19.0.0)(react@19.0.0)
       nookies:
         specifier: ^2.5.2
         version: 2.5.2
       react:
-        specifier: 19.1.0
-        version: 19.1.0
+        specifier: 19.0.0
+        version: 19.0.0
       react-chartjs-2:
         specifier: ^5.3.0
-        version: 5.3.0(chart.js@4.5.0)(react@19.1.0)
+        version: 5.3.0(chart.js@4.5.0)(react@19.0.0)
       react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
       react-hook-form:
         specifier: ^7.61.1
-        version: 7.61.1(react@19.1.0)
+        version: 7.61.1(react@19.0.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
       zustand:
         specifier: ^5.0.3
-        version: 5.0.3(@types/react@19.0.10)(react@19.1.0)
+        version: 5.0.3(@types/react@19.0.10)(react@19.0.0)
     devDependencies:
       '@types/node':
         specifier: ^20
@@ -214,7 +217,7 @@ importers:
         version: link:../../packages/firebase
       '@react-google-maps/api':
         specifier: ^2.20.7
-        version: 2.20.7(react-dom@19.1.0)(react@19.1.0)
+        version: 2.20.7(react-dom@19.0.0)(react@19.0.0)
       chart.js:
         specifier: ^4.5.0
         version: 4.5.0
@@ -222,17 +225,17 @@ importers:
         specifier: ^12.0.0
         version: 12.0.0
       react:
-        specifier: 19.1.0
-        version: 19.1.0
+        specifier: 19.0.0
+        version: 19.0.0
       react-chartjs-2:
         specifier: ^5.3.0
-        version: 5.3.0(chart.js@4.5.0)(react@19.1.0)
+        version: 5.3.0(chart.js@4.5.0)(react@19.0.0)
       react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
       zustand:
         specifier: ^5.0.3
-        version: 5.0.3(@types/react@19.0.10)(react@19.1.0)
+        version: 5.0.3(@types/react@19.0.10)(react@19.0.0)
     devDependencies:
       '@types/react':
         specifier: ^19
@@ -281,11 +284,11 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(react-hook-form@7.61.1)
       react:
-        specifier: '>=18.0.0'
-        version: 19.1.0
+        specifier: 19.0.0
+        version: 19.0.0
       react-hook-form:
         specifier: ^7.61.1
-        version: 7.61.1(react@19.1.0)
+        version: 7.61.1(react@19.0.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -300,7 +303,7 @@ importers:
     dependencies:
       zustand:
         specifier: ^5.0.3
-        version: 5.0.3(@types/react@19.0.10)(react@19.1.0)
+        version: 5.0.3(@types/react@19.0.10)(react@19.0.0)
 
 packages:
 
@@ -1237,14 +1240,14 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@callstack/react-theme-provider@3.0.9(react@19.1.0):
+  /@callstack/react-theme-provider@3.0.9(react@19.0.0):
     resolution: {integrity: sha512-tTQ0uDSCL0ypeMa8T/E9wAZRGKWj8kXP7+6RYgPTfOPs9N07C9xM8P02GJ3feETap4Ux5S69D9nteq9mEj86NA==}
     peerDependencies:
       react: '>=16.3.0'
     dependencies:
       deepmerge: 3.3.0
       hoist-non-react-statics: 3.3.2
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
   /@discoveryjs/json-ext@0.5.7:
@@ -1470,7 +1473,7 @@ packages:
     peerDependencies:
       react-native: '*'
     dependencies:
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     dev: false
 
   /@expo/osascript@2.2.5:
@@ -1536,16 +1539,16 @@ packages:
   /@expo/sudo-prompt@9.3.2:
     resolution: {integrity: sha512-HHQigo3rQWKMDzYDLkubN5WQOYXJJE2eNqIQC2axC2iO3mHdwnIR7FgZVvHWtBwAdzBgAP0ECp8KqS8TiMKvgw==}
 
-  /@expo/vector-icons@14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.1.0):
+  /@expo/vector-icons@14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-7T09UE9h8QDTsUeMGymB4i+iqvtEeaO5VvUjryFB4tugDTG/bkzViWA74hm5pfjjDEhYMXWaX112mcvhccmIwQ==}
     peerDependencies:
       expo-font: '*'
       react: '*'
       react-native: '*'
     dependencies:
-      expo-font: 13.3.2(expo@53.0.20)(react@19.1.0)
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      expo-font: 13.3.2(expo@53.0.20)(react@19.0.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
 
   /@expo/ws-tunnel@1.0.6:
     resolution: {integrity: sha512-nDRbLmSrJar7abvUjp3smDwH8HcbZcoOEa5jVPUv9/9CajgmWw20JNRwTuBRzWIWIkEJDkz20GoNA+tSwUqk0Q==}
@@ -2227,7 +2230,7 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.61.1(react@19.1.0)
+      react-hook-form: 7.61.1(react@19.0.0)
     dev: false
 
   /@hookform/resolvers@5.2.0(react-hook-form@7.61.1):
@@ -2236,7 +2239,7 @@ packages:
       react-hook-form: ^7.55.0
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.61.1(react@19.1.0)
+      react-hook-form: 7.61.1(react@19.0.0)
     dev: false
 
   /@img/sharp-darwin-arm64@0.34.3:
@@ -2740,7 +2743,7 @@ packages:
       semver: 7.6.3
     dev: false
 
-  /@module-federation/data-prefetch@0.7.3(react-dom@19.1.0)(react@19.1.0):
+  /@module-federation/data-prefetch@0.7.3(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-S6fL4pxUczbpJTb5i65ceBrDrMgpGxe0NL6y+Avel/XkuvKKts33M/nc9xAeB5E0gv09yJ8/EctSHQ7/nljK3g==}
     peerDependencies:
       react: '>=16.9.0'
@@ -2749,8 +2752,8 @@ packages:
       '@module-federation/runtime': 0.7.3
       '@module-federation/sdk': 0.7.3
       fs-extra: 9.1.0
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
     dev: false
 
   /@module-federation/dts-plugin@0.7.3(typescript@5.8.3):
@@ -2786,7 +2789,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@module-federation/enhanced@0.7.3(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0):
+  /@module-federation/enhanced@0.7.3(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0):
     resolution: {integrity: sha512-YfXGLwqaErvjZA7pRdn4OobynV8fOySj8YVGXs6CKXw3cDqvC4ZzUhNegGIFLKSu2V9haxhAGod/+2klxZwMpQ==}
     peerDependencies:
       typescript: ^4.9.0 || ^5.0.0
@@ -2801,7 +2804,7 @@ packages:
         optional: true
     dependencies:
       '@module-federation/bridge-react-webpack-plugin': 0.7.3
-      '@module-federation/data-prefetch': 0.7.3(react-dom@19.1.0)(react@19.1.0)
+      '@module-federation/data-prefetch': 0.7.3(react-dom@19.0.0)(react@19.0.0)
       '@module-federation/dts-plugin': 0.7.3(typescript@5.8.3)
       '@module-federation/managers': 0.7.3
       '@module-federation/manifest': 0.7.3(typescript@5.8.3)
@@ -2850,7 +2853,7 @@ packages:
       - vue-tsc
     dev: false
 
-  /@module-federation/nextjs-mf@8.7.8(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0):
+  /@module-federation/nextjs-mf@8.7.8(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0):
     resolution: {integrity: sha512-A9GWTrOodmCZPdG4Slv9Q4ZKGtB5EtXFbhuAfb+iqjq2ClbWtSzjuGDPxNR3fRHMuv3cTyy6HpEqk4N73fGhWQ==}
     requiresBuild: true
     peerDependencies:
@@ -2863,15 +2866,15 @@ packages:
       styled-jsx:
         optional: true
     dependencies:
-      '@module-federation/enhanced': 0.7.3(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0)
-      '@module-federation/node': 2.6.8(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0)
+      '@module-federation/enhanced': 0.7.3(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0)
+      '@module-federation/node': 2.6.8(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0)
       '@module-federation/runtime': 0.7.3
       '@module-federation/sdk': 0.7.3
       '@module-federation/webpack-bundler-runtime': 0.7.3
       fast-glob: 3.3.3
-      next: 15.4.5(react-dom@19.1.0)(react@19.1.0)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      next: 15.4.5(react-dom@19.0.0)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
       webpack: 5.101.0(webpack-cli@5.0.0)
     transitivePeerDependencies:
       - bufferutil
@@ -2882,7 +2885,7 @@ packages:
       - vue-tsc
     dev: false
 
-  /@module-federation/node@2.6.8(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0):
+  /@module-federation/node@2.6.8(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0):
     resolution: {integrity: sha512-7pu8X5FE9ARAGgWoq89J8fGbhSikiG1WYpwV2d6w6c9m/cbxoDZLYfPJTIW1ND8zxEg7C83XLJlJ8pGejDH7uQ==}
     peerDependencies:
       next: '*'
@@ -2897,16 +2900,16 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@module-federation/enhanced': 0.7.3(react-dom@19.1.0)(react@19.1.0)(typescript@5.8.3)(webpack@5.101.0)
+      '@module-federation/enhanced': 0.7.3(react-dom@19.0.0)(react@19.0.0)(typescript@5.8.3)(webpack@5.101.0)
       '@module-federation/runtime': 0.7.3
       '@module-federation/sdk': 0.7.3
-      '@module-federation/utilities': 3.1.26(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(webpack@5.101.0)
+      '@module-federation/utilities': 3.1.26(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(webpack@5.101.0)
       btoa: 1.2.1
       encoding: 0.1.13
-      next: 15.4.5(react-dom@19.1.0)(react@19.1.0)
+      next: 15.4.5(react-dom@19.0.0)(react@19.0.0)
       node-fetch: 2.7.0(encoding@0.1.13)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
       webpack: 5.101.0(webpack-cli@5.0.0)
     transitivePeerDependencies:
       - bufferutil
@@ -2970,7 +2973,7 @@ packages:
       resolve: 1.22.8
     dev: false
 
-  /@module-federation/utilities@3.1.26(next@15.4.5)(react-dom@19.1.0)(react@19.1.0)(webpack@5.101.0):
+  /@module-federation/utilities@3.1.26(next@15.4.5)(react-dom@19.0.0)(react@19.0.0)(webpack@5.101.0):
     resolution: {integrity: sha512-jaLhAynnElqCoMT4h6aFitd8xnSCOhwF1S5cteC+h7CdDqaZYBBdrSmpU1YvhLmrpiHqShcfZfJ+mZALr45Ong==}
     peerDependencies:
       next: '*'
@@ -2986,9 +2989,9 @@ packages:
         optional: true
     dependencies:
       '@module-federation/sdk': 0.7.3
-      next: 15.4.5(react-dom@19.1.0)(react@19.1.0)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      next: 15.4.5(react-dom@19.0.0)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
       webpack: 5.101.0(webpack-cli@5.0.0)
     dev: false
 
@@ -3149,7 +3152,7 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@radix-ui/react-compose-refs@1.1.2(@types/react@19.0.10)(react@19.1.0):
+  /@radix-ui/react-compose-refs@1.1.2(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-z4eqJvfiNnFMHIIvXP3CY57y2WJs5g2v3X0zm9mEJkrkNv4rDxu+sg9Jh8EkXyeqBkB7SOcboo9dMVqhyrACIg==}
     peerDependencies:
       '@types/react': '*'
@@ -3159,10 +3162,10 @@ packages:
         optional: true
     dependencies:
       '@types/react': 19.0.10
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
-  /@radix-ui/react-slot@1.2.0(@types/react@19.0.10)(react@19.1.0):
+  /@radix-ui/react-slot@1.2.0(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-ujc+V6r0HNDviYqIK3rW4ffgYiZ8g5DEHrGJVk4x7kTlLXRDILnKX9vAUYeIsLOoDpDJ0ujpqMkjH4w2ofuo6w==}
     peerDependencies:
       '@types/react': '*'
@@ -3171,12 +3174,12 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.0.10)(react@19.1.0)
+      '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.0.10)(react@19.0.0)
       '@types/react': 19.0.10
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
-  /@react-google-maps/api@2.20.7(react-dom@19.1.0)(react@19.1.0):
+  /@react-google-maps/api@2.20.7(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-ys7uri3V6gjhYZUI43srHzSKDC6/jiKTwHNlwXFTvjeaJE3M3OaYBt9FZKvJs8qnOhL6i6nD1BKJoi1KrnkCkg==}
     peerDependencies:
       react: ^16.8 || ^17 || ^18 || ^19
@@ -3188,8 +3191,8 @@ packages:
       '@react-google-maps/marker-clusterer': 2.20.0
       '@types/google.maps': 3.58.1
       invariant: 2.2.4
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
     dev: false
 
   /@react-google-maps/infobox@2.20.0:
@@ -3342,7 +3345,7 @@ packages:
   /@react-native/normalize-colors@0.79.5:
     resolution: {integrity: sha512-nGXMNMclZgzLUxijQQ38Dm3IAEhgxuySAWQHnljFtfB0JdaMwpe0Ox9H7Tp2OgrEA+EMEv+Od9ElKlHwGKmmvQ==}
 
-  /@react-native/virtualized-lists@0.79.5(@types/react@19.0.10)(react-native@0.79.5)(react@19.1.0):
+  /@react-native/virtualized-lists@0.79.5(@types/react@19.0.10)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-EUPM2rfGNO4cbI3olAbhPkIt3q7MapwCwAJBzUfWlZ/pu0PRNOnMQ1IvaXTf3TpeozXV52K1OdprLEI/kI5eUA==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -3356,10 +3359,10 @@ packages:
       '@types/react': 19.0.10
       invariant: 2.2.4
       nullthrows: 1.1.1
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
 
-  /@react-navigation/bottom-tabs@7.4.4(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0):
+  /@react-navigation/bottom-tabs@7.4.4(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-/YEBu/cZUgYAaNoSfUnqoRjpbt8NOsb5YvDiKVyTcOOAF1GTbUw6kRi+AGW1Sm16CqzabO/TF2RvN1RmPS9VHg==}
     peerDependencies:
       '@react-navigation/native': ^7.1.16
@@ -3368,18 +3371,18 @@ packages:
       react-native-safe-area-context: '>= 4.0.0'
       react-native-screens: '>= 4.0.0'
     dependencies:
-      '@react-navigation/elements': 2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.1.0)
-      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.1.0)
+      '@react-navigation/elements': 2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.0.0)
+      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.0.0)
       color: 4.2.3
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.1.0)
-      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.0.0)
+      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.0.0)
     transitivePeerDependencies:
       - '@react-native-masked-view/masked-view'
     dev: false
 
-  /@react-navigation/core@7.12.3(react@19.1.0):
+  /@react-navigation/core@7.12.3(react@19.0.0):
     resolution: {integrity: sha512-oEz5sL8KTYmCv8SQX1A4k75A7VzYadOCudp/ewOBqRXOmZdxDQA9JuN7baE9IVyaRW0QTVDy+N/Wnqx9F4aW6A==}
     peerDependencies:
       react: '>= 18.2.0'
@@ -3388,13 +3391,13 @@ packages:
       escape-string-regexp: 4.0.0
       nanoid: 3.3.11
       query-string: 7.1.3
-      react: 19.1.0
+      react: 19.0.0
       react-is: 19.1.1
-      use-latest-callback: 0.2.4(react@19.1.0)
-      use-sync-external-store: 1.5.0(react@19.1.0)
+      use-latest-callback: 0.2.4(react@19.0.0)
+      use-sync-external-store: 1.5.0(react@19.0.0)
     dev: false
 
-  /@react-navigation/elements@2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.1.0):
+  /@react-navigation/elements@2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-kVbIo+5FaqJv6MiYUR6nQHiw+10dmmH/P10C29wrH9S6fr7k69fImHGeiOI/h7SMDJ2vjWhftyEjqYO+c2LG/w==}
     peerDependencies:
       '@react-native-masked-view/masked-view': '>= 0.2.0'
@@ -3406,16 +3409,16 @@ packages:
       '@react-native-masked-view/masked-view':
         optional: true
     dependencies:
-      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.1.0)
+      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.0.0)
       color: 4.2.3
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.1.0)
-      use-latest-callback: 0.2.4(react@19.1.0)
-      use-sync-external-store: 1.5.0(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.0.0)
+      use-latest-callback: 0.2.4(react@19.0.0)
+      use-sync-external-store: 1.5.0(react@19.0.0)
     dev: false
 
-  /@react-navigation/native-stack@7.3.23(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0):
+  /@react-navigation/native-stack@7.3.23(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-WQBBnPrlM0vXj5YAFnJTyrkiCyANl2KnBV8ZmUG61HkqXFwuBbnHij6eoggXH1VZkEVRxW8k0E3qqfPtEZfUjQ==}
     peerDependencies:
       '@react-navigation/native': ^7.1.16
@@ -3424,30 +3427,30 @@ packages:
       react-native-safe-area-context: '>= 4.0.0'
       react-native-screens: '>= 4.0.0'
     dependencies:
-      '@react-navigation/elements': 2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.1.0)
-      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.1.0)
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.1.0)
-      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.1.0)
+      '@react-navigation/elements': 2.6.1(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.0.0)
+      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.0.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.0.0)
+      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.0.0)
       warn-once: 0.1.1
     transitivePeerDependencies:
       - '@react-native-masked-view/masked-view'
     dev: false
 
-  /@react-navigation/native@7.1.6(react-native@0.79.5)(react@19.1.0):
+  /@react-navigation/native@7.1.6(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-XcfygfHDfAgf2iC4rNBc67Yy0M1aYRGNeNKqja5AJPFZoBQhAEAxKCwHsH4g3qU0zIbzLCthoSl5107dBjoeZw==}
     peerDependencies:
       react: '>= 18.2.0'
       react-native: '*'
     dependencies:
-      '@react-navigation/core': 7.12.3(react@19.1.0)
+      '@react-navigation/core': 7.12.3(react@19.0.0)
       escape-string-regexp: 4.0.0
       fast-deep-equal: 3.1.3
       nanoid: 3.3.8
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      use-latest-callback: 0.2.4(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      use-latest-callback: 0.2.4(react@19.0.0)
     dev: false
 
   /@react-navigation/routers@7.5.1:
@@ -3654,11 +3657,11 @@ packages:
       '@types/react': 19.0.10
     dev: true
 
-  /@types/react-native@0.73.0(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0):
+  /@types/react-native@0.73.0(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-6ZRPQrYM72qYKGWidEttRe6M5DZBEV5F+MHMHqd4TTYx0tfkcdrUFGdef6CCxY0jXU7wldvd/zA/b0A/kTeJmA==}
     deprecated: This is a stub types definition. react-native provides its own type definitions, so you do not need this installed.
     dependencies:
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     transitivePeerDependencies:
       - '@babel/core'
       - '@react-native-community/cli'
@@ -4339,7 +4342,6 @@ packages:
 
   /boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
-    dev: true
 
   /bplist-creator@0.1.0:
     resolution: {integrity: sha512-sXaHZicyEEmY86WyueLTQesbeoH/mquvarJaQNbjuOQO+7gbFcDEWqKmcWA4cOTLzFlfgvkiVxolk1k5bBIpmg==}
@@ -4864,10 +4866,27 @@ packages:
       nth-check: 2.1.1
     dev: true
 
+  /css-select@5.2.2:
+    resolution: {integrity: sha512-TizTzUddG/xYLA3NXodFM0fSbNizXjOKhqiQQwvhlspadZokn1KDy0NZFS0wuEubIYAV5/c1/lAr0TaaFXEXzw==}
+    dependencies:
+      boolbase: 1.0.0
+      css-what: 6.2.2
+      domhandler: 5.0.3
+      domutils: 3.2.2
+      nth-check: 2.1.1
+    dev: false
+
+  /css-tree@1.1.3:
+    resolution: {integrity: sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      mdn-data: 2.0.14
+      source-map: 0.6.1
+    dev: false
+
   /css-what@6.2.2:
     resolution: {integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==}
     engines: {node: '>= 6'}
-    dev: true
 
   /cssom@0.3.8:
     resolution: {integrity: sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==}
@@ -5101,9 +5120,16 @@ packages:
       entities: 2.2.0
     dev: true
 
+  /dom-serializer@2.0.0:
+    resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
+    dependencies:
+      domelementtype: 2.3.0
+      domhandler: 5.0.3
+      entities: 4.5.0
+    dev: false
+
   /domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
-    dev: true
 
   /domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
@@ -5120,6 +5146,13 @@ packages:
       domelementtype: 2.3.0
     dev: true
 
+  /domhandler@5.0.3:
+    resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
+    engines: {node: '>= 4'}
+    dependencies:
+      domelementtype: 2.3.0
+    dev: false
+
   /domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
     dependencies:
@@ -5127,6 +5160,14 @@ packages:
       domelementtype: 2.3.0
       domhandler: 4.3.1
     dev: true
+
+  /domutils@3.2.2:
+    resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
+    dependencies:
+      dom-serializer: 2.0.0
+      domelementtype: 2.3.0
+      domhandler: 5.0.3
+    dev: false
 
   /dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
@@ -5232,6 +5273,11 @@ packages:
   /entities@2.2.0:
     resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==}
     dev: true
+
+  /entities@4.5.0:
+    resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
+    engines: {node: '>=0.12'}
+    dev: false
 
   /entities@6.0.1:
     resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
@@ -5400,7 +5446,7 @@ packages:
       jest-util: 29.7.0
     dev: true
 
-  /expo-asset@11.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.1.0):
+  /expo-asset@11.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-b5P8GpjUh08fRCf6m5XPVAh7ra42cQrHBIMgH2UXP+xsj4Wufl6pLy6jRF5w6U7DranUMbsXm8TOyq4EHy7ADg==}
     peerDependencies:
       expo: '*'
@@ -5408,10 +5454,10 @@ packages:
       react-native: '*'
     dependencies:
       '@expo/image-utils': 0.7.6
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
       expo-constants: 17.1.7(expo@53.0.20)(react-native@0.79.5)
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5423,8 +5469,8 @@ packages:
     dependencies:
       '@expo/config': 11.0.13
       '@expo/env': 1.0.7
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5434,29 +5480,29 @@ packages:
       expo: '*'
       react-native: '*'
     dependencies:
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
 
-  /expo-font@13.3.2(expo@53.0.20)(react@19.1.0):
+  /expo-font@13.3.2(expo@53.0.20)(react@19.0.0):
     resolution: {integrity: sha512-wUlMdpqURmQ/CNKK/+BIHkDA5nGjMqNlYmW0pJFXY/KE/OG80Qcavdu2sHsL4efAIiNGvYdBS10WztuQYU4X0A==}
     peerDependencies:
       expo: '*'
       react: '*'
     dependencies:
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
       fontfaceobserver: 2.3.0
-      react: 19.1.0
+      react: 19.0.0
 
-  /expo-keep-awake@14.1.4(expo@53.0.20)(react@19.1.0):
+  /expo-keep-awake@14.1.4(expo@53.0.20)(react@19.0.0):
     resolution: {integrity: sha512-wU9qOnosy4+U4z/o4h8W9PjPvcFMfZXrlUoKTMBW7F4pLqhkkP/5G4EviPZixv4XWFMjn1ExQ5rV6BX8GwJsWA==}
     peerDependencies:
       expo: '*'
       react: '*'
     dependencies:
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
-      react: 19.1.0
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
+      react: 19.0.0
 
-  /expo-linking@7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.1.0):
+  /expo-linking@7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-ZJaH1RIch2G/M3hx2QJdlrKbYFUTOjVVW4g39hfxrE5bPX9xhZUYXqxqQtzMNl1ylAevw9JkgEfWbBWddbZ3UA==}
     peerDependencies:
       react: '*'
@@ -5464,8 +5510,8 @@ packages:
     dependencies:
       expo-constants: 17.1.7(expo@53.0.20)(react-native@0.79.5)
       invariant: 2.2.4
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     transitivePeerDependencies:
       - expo
       - supports-color
@@ -5488,7 +5534,7 @@ packages:
     dependencies:
       invariant: 2.2.4
 
-  /expo-router@5.1.4(@types/react@19.0.10)(expo-constants@17.1.7)(expo-linking@7.1.7)(expo@53.0.20)(react-native-reanimated@3.17.4)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0):
+  /expo-router@5.1.4(@types/react@19.0.10)(expo-constants@17.1.7)(expo-linking@7.1.7)(expo@53.0.20)(react-native-reanimated@3.17.4)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-8GulCelVN9x+VSOio74K1ZYTG6VyCdJw417gV+M/J8xJOZZTA7rFxAdzujBZZ7jd6aIAG7WEwOUU3oSvUO76Vw==}
     peerDependencies:
       '@react-navigation/drawer': ^7.3.9
@@ -5509,20 +5555,20 @@ packages:
     dependencies:
       '@expo/metro-runtime': 5.0.4(react-native@0.79.5)
       '@expo/server': 0.6.3
-      '@radix-ui/react-slot': 1.2.0(@types/react@19.0.10)(react@19.1.0)
-      '@react-navigation/bottom-tabs': 7.4.4(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0)
-      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.1.0)
-      '@react-navigation/native-stack': 7.3.23(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.1.0)
+      '@radix-ui/react-slot': 1.2.0(@types/react@19.0.10)(react@19.0.0)
+      '@react-navigation/bottom-tabs': 7.4.4(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0)
+      '@react-navigation/native': 7.1.6(react-native@0.79.5)(react@19.0.0)
+      '@react-navigation/native-stack': 7.3.23(@react-navigation/native@7.1.6)(react-native-safe-area-context@5.4.0)(react-native-screens@4.11.1)(react-native@0.79.5)(react@19.0.0)
       client-only: 0.0.1
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
       expo-constants: 17.1.7(expo@53.0.20)(react-native@0.79.5)
-      expo-linking: 7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.1.0)
+      expo-linking: 7.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.0.0)
       invariant: 2.2.4
       react-fast-compare: 3.2.2
-      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.1.0)
-      react-native-reanimated: 3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.1.0)
-      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.1.0)
-      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.1.0)
+      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.0.0)
+      react-native-reanimated: 3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.0.0)
+      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.0.0)
+      react-native-screens: 4.11.1(react-native@0.79.5)(react@19.0.0)
       schema-utils: 4.3.2
       semver: 7.6.3
       server-only: 0.0.1
@@ -5541,21 +5587,21 @@ packages:
       expo: '*'
     dependencies:
       '@expo/prebuild-config': 9.0.11
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /expo-status-bar@2.2.3(react-native@0.79.5)(react@19.1.0):
+  /expo-status-bar@2.2.3(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-+c8R3AESBoduunxTJ8353SqKAKpxL6DvcD8VKBuh81zzJyUUbfB4CVjr1GufSJEKsMzNPXZU+HJwXx7Xh7lx8Q==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-edge-to-edge: 1.6.0(react-native@0.79.5)(react@19.1.0)
-      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-edge-to-edge: 1.6.0(react-native@0.79.5)(react@19.0.0)
+      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.0.0)
     dev: false
 
   /expo-system-ui@5.0.10(expo@53.0.20)(react-native-web@0.20.0)(react-native@0.79.5):
@@ -5570,9 +5616,9 @@ packages:
     dependencies:
       '@react-native/normalize-colors': 0.79.5
       debug: 4.4.1
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-web: 0.20.0(react-dom@19.1.0)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-web: 0.20.0(react-dom@19.0.0)(react@19.0.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -5583,11 +5629,11 @@ packages:
       expo: '*'
       react-native: '*'
     dependencies:
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     dev: false
 
-  /expo@53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0):
+  /expo@53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-Nh+HIywVy9KxT/LtH08QcXqrxtUOA9BZhsXn3KCsAYA+kNb80M8VKN8/jfQF+I6CgeKyFKJoPNsWgI0y0VBGrA==}
     hasBin: true
     peerDependencies:
@@ -5610,19 +5656,19 @@ packages:
       '@expo/config-plugins': 10.1.2
       '@expo/fingerprint': 0.13.4
       '@expo/metro-config': 0.20.17
-      '@expo/vector-icons': 14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.1.0)
+      '@expo/vector-icons': 14.1.0(expo-font@13.3.2)(react-native@0.79.5)(react@19.0.0)
       babel-preset-expo: 13.2.3(@babel/core@7.25.2)
-      expo-asset: 11.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.1.0)
+      expo-asset: 11.1.7(expo@53.0.20)(react-native@0.79.5)(react@19.0.0)
       expo-constants: 17.1.7(expo@53.0.20)(react-native@0.79.5)
       expo-file-system: 18.1.11(expo@53.0.20)(react-native@0.79.5)
-      expo-font: 13.3.2(expo@53.0.20)(react@19.1.0)
-      expo-keep-awake: 14.1.4(expo@53.0.20)(react@19.1.0)
+      expo-font: 13.3.2(expo@53.0.20)(react@19.0.0)
+      expo-keep-awake: 14.1.4(expo@53.0.20)(react@19.0.0)
       expo-modules-autolinking: 2.1.14
       expo-modules-core: 2.5.0
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-edge-to-edge: 1.6.0(react-native@0.79.5)(react@19.1.0)
-      react-native-webview: 13.15.0(react-native@0.79.5)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-edge-to-edge: 1.6.0(react-native@0.79.5)(react@19.0.0)
+      react-native-webview: 13.15.0(react-native@0.79.5)(react@19.0.0)
       whatwg-url-without-unicode: 8.0.0-3
     transitivePeerDependencies:
       - '@babel/core'
@@ -6947,7 +6993,7 @@ packages:
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
-  /jest-expo@53.0.9(@babel/core@7.25.2)(expo@53.0.20)(jest@29.2.1)(react-dom@19.1.0)(react-native@0.79.5)(react@19.1.0)(webpack@5.101.0):
+  /jest-expo@53.0.9(@babel/core@7.25.2)(expo@53.0.20)(jest@29.2.1)(react-dom@19.0.0)(react-native@0.79.5)(react@19.0.0)(webpack@5.101.0):
     resolution: {integrity: sha512-RFLc6490yucW0rZ41paMWnprKQJ5EccCQOL9XMzckO0V43e45FA3q0NUtlDGuo4686Ln4oWUeiJJTzBHbsx1og==}
     hasBin: true
     peerDependencies:
@@ -6959,7 +7005,7 @@ packages:
       '@jest/create-cache-key-function': 29.7.0
       '@jest/globals': 29.7.0
       babel-jest: 29.7.0(@babel/core@7.25.2)
-      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.1.0)
+      expo: 53.0.20(@babel/core@7.25.2)(react-native-webview@13.15.0)(react-native@0.79.5)(react@19.0.0)
       find-up: 5.0.0
       jest-environment-jsdom: 29.7.0
       jest-snapshot: 29.7.0
@@ -6967,9 +7013,9 @@ packages:
       jest-watch-typeahead: 2.2.1(jest@29.2.1)
       json5: 2.2.3
       lodash: 4.17.21
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-server-dom-webpack: 19.0.0(react-dom@19.1.0)(react@19.1.0)(webpack@5.101.0)
-      react-test-renderer: 19.0.0(react@19.1.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-server-dom-webpack: 19.0.0(react-dom@19.0.0)(react@19.0.0)(webpack@5.101.0)
+      react-test-renderer: 19.0.0(react@19.0.0)
       server-only: 0.0.1
       stacktrace-js: 2.0.2
     transitivePeerDependencies:
@@ -7707,7 +7753,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols@2.2.0:
     resolution: {integrity: sha512-VeIAFslyIerEJLXHziedo2basKbMKtTw3vfn5IzG0XTjhAVEJyNHnL2p7vc+wBDSdQuUpNw3M2u6xb9QsAY5Eg==}
@@ -7793,6 +7838,10 @@ packages:
   /math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
+
+  /mdn-data@2.0.14:
+    resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}
+    dev: false
 
   /media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -8161,7 +8210,7 @@ packages:
   /nested-error-stacks@2.0.1:
     resolution: {integrity: sha512-SrQrok4CATudVzBS7coSz26QRSmlK9TzzoFbeKfcPBUFPjcQM9Rqvr/DlJkOrwI/0KcgvMub1n1g5Jt9EgRn4A==}
 
-  /next@15.4.5(react-dom@19.1.0)(react@19.1.0):
+  /next@15.4.5(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-nJ4v+IO9CPmbmcvsPebIoX3Q+S7f6Fu08/dEWu0Ttfa+wVwQRh9epcmsyCPjmL2b8MxC+CkBR97jgDhUUztI3g==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -8186,9 +8235,9 @@ packages:
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001731
       postcss: 8.4.31
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      styled-jsx: 5.1.6(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      styled-jsx: 5.1.6(react@19.0.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.4.5
       '@next/swc-darwin-x64': 15.4.5
@@ -8277,7 +8326,6 @@ packages:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
     dependencies:
       boolbase: 1.0.0
-    dev: true
 
   /nullthrows@1.1.1:
     resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}
@@ -8525,6 +8573,11 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
+  /paths-js@0.4.11:
+    resolution: {integrity: sha512-3mqcLomDBXOo7Fo+UlaenG6f71bk1ZezPQy2JCmYHy2W2k5VKpP+Jbin9H0bjXynelTbglCqdFhSEkeIkKTYUA==}
+    engines: {node: '>=0.11.0'}
+    dev: false
+
   /picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -8557,6 +8610,10 @@ packages:
   /pngjs@3.4.0:
     resolution: {integrity: sha512-NCrCHhWmnQklfH4MtJMRjZ2a8c80qXeMlQMv2uVp9ISJMTt562SbGd6n2oq0PaPgKm7Z6pL9E2UlLIhC+SHL3w==}
     engines: {node: '>=4.0.0'}
+
+  /point-in-polygon@1.1.0:
+    resolution: {integrity: sha512-3ojrFwjnnw8Q9242TzgXuTD+eKiutbzyslcq1ydfu82Db2y+Ogbmyrkpv0Hgj31qwT3lbS9+QAAO/pIQM35XRw==}
+    dev: false
 
   /portfinder@1.0.37:
     resolution: {integrity: sha512-yuGIEjDAYnnOex9ddMnKZEMFE0CcGo6zbfzDklkmT1m5z734ss6JMzN9rNB3+RR7iS+F10D4/BVIaXOyh8PQKw==}
@@ -8761,14 +8818,14 @@ packages:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  /react-chartjs-2@5.3.0(chart.js@4.5.0)(react@19.1.0):
+  /react-chartjs-2@5.3.0(chart.js@4.5.0)(react@19.0.0):
     resolution: {integrity: sha512-UfZZFnDsERI3c3CZGxzvNJd02SHjaSJ8kgW1djn65H1KK8rehwTjyrRKOG3VTMG8wtHZ5rgAO5oTHtHi9GCCmw==}
     peerDependencies:
       chart.js: ^4.1.1
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
       chart.js: 4.5.0
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
   /react-devtools-core@6.1.5:
@@ -8780,34 +8837,34 @@ packages:
       - bufferutil
       - utf-8-validate
 
-  /react-dom@19.1.0(react@19.1.0):
-    resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
+  /react-dom@19.0.0(react@19.0.0):
+    resolution: {integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==}
     peerDependencies:
-      react: ^19.1.0
+      react: ^19.0.0
     dependencies:
-      react: 19.1.0
-      scheduler: 0.26.0
+      react: 19.0.0
+      scheduler: 0.25.0
 
   /react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
     dev: false
 
-  /react-freeze@1.0.4(react@19.1.0):
+  /react-freeze@1.0.4(react@19.0.0):
     resolution: {integrity: sha512-r4F0Sec0BLxWicc7HEyo2x3/2icUTrRmDjaaRyzzn+7aDyFZliszMDOgLVwSnQnYENOlL1o569Ze2HZefk8clA==}
     engines: {node: '>=10'}
     peerDependencies:
       react: '>=17.0.0'
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
-  /react-hook-form@7.61.1(react@19.1.0):
+  /react-hook-form@7.61.1(react@19.0.0):
     resolution: {integrity: sha512-2vbXUFDYgqEgM2RcXcAT2PwDW/80QARi+PKmHy5q2KhuKvOlG8iIYgf7eIlIANR5trW9fJbP4r5aub3a4egsew==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
   /react-is@16.13.1:
@@ -8820,36 +8877,51 @@ packages:
   /react-is@19.1.1:
     resolution: {integrity: sha512-tr41fA15Vn8p4X9ntI+yCyeGSf1TlYaY5vlTZfQmeLBrFo3psOPX6HhTDnFNL9uj3EhP0KAQ80cugCl4b4BERA==}
 
-  /react-native-edge-to-edge@1.6.0(react-native@0.79.5)(react@19.1.0):
+  /react-native-chart-kit@6.12.0(react-native-svg@15.12.1)(react-native@0.79.5)(react@19.0.0):
+    resolution: {integrity: sha512-nZLGyCFzZ7zmX0KjYeeSV1HKuPhl1wOMlTAqa0JhlyW62qV/1ZPXHgT8o9s8mkFaGxdqbspOeuaa6I9jUQDgnA==}
+    peerDependencies:
+      react: '> 16.7.0'
+      react-native: '>= 0.50.0'
+      react-native-svg: '> 6.4.1'
+    dependencies:
+      lodash: 4.17.21
+      paths-js: 0.4.11
+      point-in-polygon: 1.1.0
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-svg: 15.12.1(react-native@0.79.5)(react@19.0.0)
+    dev: false
+
+  /react-native-edge-to-edge@1.6.0(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-2WCNdE3Qd6Fwg9+4BpbATUxCLcouF6YRY7K+J36KJ4l3y+tWN6XCqAC4DuoGblAAbb2sLkhEDp4FOlbOIot2Og==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
 
-  /react-native-is-edge-to-edge@1.1.7(react-native@0.79.5)(react@19.1.0):
+  /react-native-is-edge-to-edge@1.1.7(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     dev: false
 
-  /react-native-is-edge-to-edge@1.2.1(react-native@0.79.5)(react@19.1.0):
+  /react-native-is-edge-to-edge@1.2.1(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     dev: false
 
-  /react-native-maps@1.20.1(react-native-web@0.20.0)(react-native@0.79.5)(react@19.1.0):
+  /react-native-maps@1.20.1(react-native-web@0.20.0)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-NZI3B5Z6kxAb8gzb2Wxzu/+P2SlFIg1waHGIpQmazDSCRkNoHNY4g96g+xS0QPSaG/9xRBbDNnd2f2/OW6t6LQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -8861,27 +8933,27 @@ packages:
         optional: true
     dependencies:
       '@types/geojson': 7946.0.16
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-web: 0.20.0(react-dom@19.1.0)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-web: 0.20.0(react-dom@19.0.0)(react@19.0.0)
     dev: false
 
-  /react-native-paper@5.14.5(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.1.0):
+  /react-native-paper@5.14.5(react-native-safe-area-context@5.4.0)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-eaIH5bUQjJ/mYm4AkI6caaiyc7BcHDwX6CqNDi6RIxfxfWxROsHpll1oBuwn/cFvknvA8uEAkqLk/vzVihI3AQ==}
     peerDependencies:
       react: '*'
       react-native: '*'
       react-native-safe-area-context: '*'
     dependencies:
-      '@callstack/react-theme-provider': 3.0.9(react@19.1.0)
+      '@callstack/react-theme-provider': 3.0.9(react@19.0.0)
       color: 3.2.1
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.1.0)
-      use-latest-callback: 0.2.4(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-safe-area-context: 5.4.0(react-native@0.79.5)(react@19.0.0)
+      use-latest-callback: 0.2.4(react@19.0.0)
     dev: false
 
-  /react-native-reanimated@3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.1.0):
+  /react-native-reanimated@3.17.4(@babel/core@7.25.2)(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-vmkG/N5KZrexHr4v0rZB7ohPVseGVNaCXjGxoRo+NYKgC9+mIZAkg/QIfy9xxfJ73FfTrryO9iYUrxks3ZfKbA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -8900,37 +8972,50 @@ packages:
       '@babel/preset-typescript': 7.27.1(@babel/core@7.25.2)
       convert-source-map: 2.0.0
       invariant: 2.2.4
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-is-edge-to-edge: 1.1.7(react-native@0.79.5)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-is-edge-to-edge: 1.1.7(react-native@0.79.5)(react@19.0.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /react-native-safe-area-context@5.4.0(react-native@0.79.5)(react@19.1.0):
+  /react-native-safe-area-context@5.4.0(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-JaEThVyJcLhA+vU0NU8bZ0a1ih6GiF4faZ+ArZLqpYbL6j7R3caRqj+mE3lEtKCuHgwjLg3bCxLL1GPUJZVqUA==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
     dev: false
 
-  /react-native-screens@4.11.1(react-native@0.79.5)(react@19.1.0):
+  /react-native-screens@4.11.1(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-F0zOzRVa3ptZfLpD0J8ROdo+y1fEPw+VBFq1MTY/iyDu08al7qFUO5hLMd+EYMda5VXGaTFCa8q7bOppUszhJw==}
     peerDependencies:
       react: '*'
       react-native: '*'
     dependencies:
-      react: 19.1.0
-      react-freeze: 1.0.4(react@19.1.0)
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
-      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.1.0)
+      react: 19.0.0
+      react-freeze: 1.0.4(react@19.0.0)
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      react-native-is-edge-to-edge: 1.2.1(react-native@0.79.5)(react@19.0.0)
       warn-once: 0.1.1
     dev: false
 
-  /react-native-web@0.20.0(react-dom@19.1.0)(react@19.1.0):
+  /react-native-svg@15.12.1(react-native@0.79.5)(react@19.0.0):
+    resolution: {integrity: sha512-vCuZJDf8a5aNC2dlMovEv4Z0jjEUET53lm/iILFnFewa15b4atjVxU6Wirm6O9y6dEsdjDZVD7Q3QM4T1wlI8g==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      css-select: 5.2.2
+      css-tree: 1.1.3
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
+      warn-once: 0.1.1
+    dev: false
+
+  /react-native-web@0.20.0(react-dom@19.0.0)(react@19.0.0):
     resolution: {integrity: sha512-OOSgrw+aON6R3hRosCau/xVxdLzbjEcsLysYedka0ZON4ZZe6n9xgeN9ZkoejhARM36oTlUgHIQqxGutEJ9Wxg==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
@@ -8943,14 +9028,14 @@ packages:
       memoize-one: 6.0.0
       nullthrows: 1.1.1
       postcss-value-parser: 4.2.0
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
       styleq: 0.1.3
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /react-native-webview@13.15.0(react-native@0.79.5)(react@19.1.0):
+  /react-native-webview@13.15.0(react-native@0.79.5)(react@19.0.0):
     resolution: {integrity: sha512-Vzjgy8mmxa/JO6l5KZrsTC7YemSdq+qB01diA0FqjUTaWGAGwuykpJ73MDj3+mzBSlaDxAEugHzTtkUQkQEQeQ==}
     peerDependencies:
       react: '*'
@@ -8958,10 +9043,10 @@ packages:
     dependencies:
       escape-string-regexp: 4.0.0
       invariant: 2.2.4
-      react: 19.1.0
-      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0)
+      react: 19.0.0
+      react-native: 0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0)
 
-  /react-native@0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.1.0):
+  /react-native@0.79.5(@babel/core@7.25.2)(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-jVihwsE4mWEHZ9HkO1J2eUZSwHyDByZOqthwnGrVZCh6kTQBCm4v8dicsyDa6p0fpWNE5KicTcpX/XXl0ASJFg==}
     engines: {node: '>=18'}
     hasBin: true
@@ -8979,7 +9064,7 @@ packages:
       '@react-native/gradle-plugin': 0.79.5
       '@react-native/js-polyfills': 0.79.5
       '@react-native/normalize-colors': 0.79.5
-      '@react-native/virtualized-lists': 0.79.5(@types/react@19.0.10)(react-native@0.79.5)(react@19.1.0)
+      '@react-native/virtualized-lists': 0.79.5(@types/react@19.0.10)(react-native@0.79.5)(react@19.0.0)
       '@types/react': 19.0.10
       abort-controller: 3.0.0
       anser: 1.4.10
@@ -9000,7 +9085,7 @@ packages:
       nullthrows: 1.1.1
       pretty-format: 29.7.0
       promise: 8.3.0
-      react: 19.1.0
+      react: 19.0.0
       react-devtools-core: 6.1.5
       react-refresh: 0.14.2
       regenerator-runtime: 0.13.11
@@ -9021,7 +9106,7 @@ packages:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
 
-  /react-server-dom-webpack@19.0.0(react-dom@19.1.0)(react@19.1.0)(webpack@5.101.0):
+  /react-server-dom-webpack@19.0.0(react-dom@19.0.0)(react@19.0.0)(webpack@5.101.0):
     resolution: {integrity: sha512-hLug9KEXLc8vnU9lDNe2b2rKKDaqrp5gNiES4uyu2Up3FZfZJZmdwLFXlWzdA9gTB/6/cWduSB2K1Lfag2pSvw==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
@@ -9031,24 +9116,24 @@ packages:
     dependencies:
       acorn-loose: 8.5.2
       neo-async: 2.6.2
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
       webpack: 5.101.0(webpack-cli@5.0.0)
       webpack-sources: 3.3.3
     dev: true
 
-  /react-test-renderer@19.0.0(react@19.1.0):
+  /react-test-renderer@19.0.0(react@19.0.0):
     resolution: {integrity: sha512-oX5u9rOQlHzqrE/64CNr0HB0uWxkCQmZNSfozlYvwE71TLVgeZxVf0IjouGEr1v7r1kcDifdAJBeOhdhxsG/DA==}
     peerDependencies:
       react: ^19.0.0
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
       react-is: 19.1.1
       scheduler: 0.25.0
     dev: true
 
-  /react@19.1.0:
-    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
+  /react@19.0.0:
+    resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
     engines: {node: '>=0.10.0'}
 
   /readable-stream@2.3.8:
@@ -9286,9 +9371,6 @@ packages:
 
   /scheduler@0.25.0:
     resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
-
-  /scheduler@0.26.0:
-    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
   /schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
@@ -9822,7 +9904,7 @@ packages:
     dev: false
     optional: true
 
-  /styled-jsx@5.1.6(react@19.1.0):
+  /styled-jsx@5.1.6(react@19.0.0):
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -9836,7 +9918,7 @@ packages:
         optional: true
     dependencies:
       client-only: 0.0.1
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
   /styleq@0.1.3:
@@ -10250,28 +10332,28 @@ packages:
       punycode: 1.4.1
       qs: 6.14.0
 
-  /use-latest-callback@0.2.4(react@19.1.0):
+  /use-latest-callback@0.2.4(react@19.0.0):
     resolution: {integrity: sha512-LS2s2n1usUUnDq4oVh1ca6JFX9uSqUncTfAm44WMg0v6TxL7POUTk1B044NH8TeLkFbNajIsgDHcgNpNzZucdg==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
-  /use-sync-external-store@1.2.0(react@19.1.0):
+  /use-sync-external-store@1.2.0(react@19.0.0):
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
-  /use-sync-external-store@1.5.0(react@19.1.0):
+  /use-sync-external-store@1.5.0(react@19.0.0):
     resolution: {integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
-      react: 19.1.0
+      react: 19.0.0
     dev: false
 
   /util-deprecate@1.0.2:
@@ -10733,7 +10815,7 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  /zustand@4.5.2(@types/react@19.0.10)(react@19.1.0):
+  /zustand@4.5.2(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -10749,11 +10831,11 @@ packages:
         optional: true
     dependencies:
       '@types/react': 19.0.10
-      react: 19.1.0
-      use-sync-external-store: 1.2.0(react@19.1.0)
+      react: 19.0.0
+      use-sync-external-store: 1.2.0(react@19.0.0)
     dev: false
 
-  /zustand@5.0.3(@types/react@19.0.10)(react@19.1.0):
+  /zustand@5.0.3(@types/react@19.0.10)(react@19.0.0):
     resolution: {integrity: sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
@@ -10772,5 +10854,5 @@ packages:
         optional: true
     dependencies:
       '@types/react': 19.0.10
-      react: 19.1.0
+      react: 19.0.0
     dev: false

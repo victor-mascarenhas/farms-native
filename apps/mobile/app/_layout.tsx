@@ -19,8 +19,8 @@ import { AuthProvider, useAuth } from "../AuthProvider";
 import LoginScreen from "./login";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import useGoalNotifier from "../useGoalNotifier";
-import NotificationProvider from "../NotificationProvider";
+/* import useGoalNotifier from "./../useGoalNotifier";
+import NotificationProvider from "./../NotificationProvider"; */
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,14 +66,12 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <NotificationProvider>
-        <PaperProvider theme={paperTheme}>
-          <RootLayoutNav
-            navigationLight={LightTheme}
-            navigationDark={DarkTheme}
-          />
-        </PaperProvider>
-      </NotificationProvider>
+      <PaperProvider theme={paperTheme}>
+        <RootLayoutNav
+          navigationLight={LightTheme}
+          navigationDark={DarkTheme}
+        />
+      </PaperProvider>
     </AuthProvider>
   );
 }
@@ -83,7 +81,6 @@ type NavProps = { navigationLight: any; navigationDark: any };
 function RootLayoutNav({ navigationLight, navigationDark }: NavProps) {
   const colorScheme = useColorScheme();
   const { user, loading } = useAuth();
-  useGoalNotifier();
 
   if (loading) {
     return null;
