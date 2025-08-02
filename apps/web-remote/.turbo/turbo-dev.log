@@ -1,0 +1,37 @@
+
+> web-remote@0.1.0 dev C:\Users\Wzeer\Desktop\native\farms-native\apps\web-remote
+> webpack serve --mode development
+
+<i> [webpack-dev-server] Project is running at:
+<i> [webpack-dev-server] Loopback: [36mhttp://localhost:3001/[39m
+<i> [webpack-dev-server] On Your Network (IPv4): [36mhttp://192.168.0.11:3001/[39m
+<i> [webpack-dev-server] On Your Network (IPv6): [36mhttp://[fe80::32de:825b:6b58:a7d4]:3001/[39m
+<i> [webpack-dev-server] Content not from webpack is served from '[36mC:\Users\Wzeer\Desktop\native\farms-native\apps\web-remote\public[39m' directory
+assets by chunk 1.01 MiB (id hint: vendors)
+  asset [1m[32mvendors-node_modules_pnpm_react-chartjs-2_5_3_0_chart_js_4_5_0_react_19_0_0_node_modules_reac-380cd8.bundle.js[39m[22m 571 KiB [1m[32m[emitted][39m[22m (id hint: vendors)
+  asset [1m[32mvendors-node_modules_pnpm_react-google-maps_api_2_20_7_react-dom_19_0_0_react_19_0_0_node_mod-cf0893.bundle.js[39m[22m 358 KiB [1m[32m[emitted][39m[22m (id hint: vendors)
+  asset [1m[32mvendors-node_modules_pnpm_react_19_0_0_node_modules_react_index_js.bundle.js[39m[22m 58.6 KiB [1m[32m[emitted][39m[22m (id hint: vendors)
+  asset [1m[32mvendors-node_modules_pnpm_react_19_0_0_node_modules_react_jsx-runtime_js.bundle.js[39m[22m 26.8 KiB [1m[32m[emitted][39m[22m (id hint: vendors)
+  asset [1m[32mvendors-node_modules_pnpm_react-dom_19_0_0_react_19_0_0_node_modules_react-dom_index_js.bundle.js[39m[22m 21 KiB [1m[32m[emitted][39m[22m (id hint: vendors)
+asset [1m[32mbundle.js[39m[22m 1.33 MiB [1m[32m[emitted][39m[22m (name: main)
+asset [1m[32mremoteEntry.js[39m[22m 369 KiB [1m[32m[emitted][39m[22m (name: remote)
+asset [1m[32msrc_DashboardPage_tsx-webpack_sharing_consume_default_react-dom_react-dom-webpack_sharing_con-c95426.bundle.js[39m[22m 22.8 KiB [1m[32m[emitted][39m[22m
+asset [1m[32msrc_ProductionDashboardPage_tsx.bundle.js[39m[22m 21.8 KiB [1m[32m[emitted][39m[22m
+asset [1m[32msrc_RemoteApp_tsx.bundle.js[39m[22m 1.55 KiB [1m[32m[emitted][39m[22m
+asset [1m[32mindex.html[39m[22m 229 bytes [1m[32m[emitted][39m[22m
+runtime modules 88.3 KiB 34 modules
+orphan modules 64 bytes [1m[33m[orphan][39m[22m 1 module
+modules by path [1m../../node_modules/.pnpm/[39m[22m 2.04 MiB 86 modules
+modules by path [1m./[39m[22m 26.9 KiB
+  modules by path [1m./src/*.tsx[39m[22m 23.5 KiB 4 modules
+  modules by path [1m./src/stores/*.ts[39m[22m 3.37 KiB 3 modules
+  [1m./util.inspect (ignored)[39m[22m 15 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+consume-shared-module modules 336 bytes
+  [1mconsume shared module (default) react@=19.0.0 (singleton) (fallback: ../../node_...(truncated)[39m[22m 42 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  [1mconsume shared module (default) react@^19.0.0 (singleton) (fallback: ../../node_...(truncated)[39m[22m 42 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  + 6 modules
+provide-module modules 84 bytes
+  [1mprovide shared module (default) react-dom@19.0.0 = ../../node_modules/.pnpm/reac...(truncated)[39m[22m 42 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  [1mprovide shared module (default) react@19.0.0 = ../../node_modules/.pnpm/react@19...(truncated)[39m[22m 42 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1mcontainer entry[39m[22m 42 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+webpack 5.101.0 compiled [1m[32msuccessfully[39m[22m in 3688 ms

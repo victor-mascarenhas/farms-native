@@ -9,17 +9,13 @@ import {
   Paragraph,
   Appbar,
 } from "react-native-paper";
-import { collection, getDocs } from "firebase/firestore";
 import { z } from "zod";
 import { BarChart } from "react-native-chart-kit";
 
-import { db } from "@farms/firebase";
-// Remover: import { useSalesStore } from "@farms/state";
 import { saleSchema, productSchema, stockSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
 import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
 
-// Data types for queries
 const typedSale = saleSchema;
 type Sale = z.infer<typeof typedSale> & { id: string };
 const typedProduct = productSchema;
@@ -205,8 +201,8 @@ export default function DashboardScreen() {
                     <Marker
                       key={s.id}
                       coordinate={{
-                        latitude: s.location.latitude,
-                        longitude: s.location.longitude,
+                        latitude: s.location!.latitude,
+                        longitude: s.location!.longitude,
                       }}
                       title={productMap.get(s.product_id)?.name ?? s.product_id}
                       description={`${s.client_name} - ${s.quantity}`}

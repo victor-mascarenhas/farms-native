@@ -1,9 +1,11 @@
-import { ProductRepository, ProductUseCase } from '../../domain/entities/Product';
-import { SaleRepository, SaleUseCase } from '../../domain/entities/Sale';
-import { FirebaseProductRepository } from '../repositories/FirebaseProductRepository';
-import { ProductUseCaseImpl } from '../../application/useCases/ProductUseCaseImpl';
+import {
+  ProductRepository,
+  ProductUseCase,
+} from "../../domain/entities/Product";
+import { SaleRepository, SaleUseCase } from "../../domain/entities/Sale";
+import { FirebaseProductRepository } from "../repositories/FirebaseProductRepository";
+import { ProductUseCaseImpl } from "../../application/useCases/ProductUseCaseImpl";
 
-// Container de Injeção de Dependência
 class DIContainer {
   private static instance: DIContainer;
   private repositories: Map<string, any> = new Map();
@@ -23,23 +25,28 @@ class DIContainer {
 
   private initializeRepositories() {
     // Repositórios
-    this.repositories.set('ProductRepository', new FirebaseProductRepository());
+    this.repositories.set("ProductRepository", new FirebaseProductRepository());
     // Adicione outros repositórios aqui
   }
 
   private initializeUseCases() {
     // Casos de uso
-    const productRepository = this.repositories.get('ProductRepository') as ProductRepository;
-    this.useCases.set('ProductUseCase', new ProductUseCaseImpl(productRepository));
+    const productRepository = this.repositories.get(
+      "ProductRepository"
+    ) as ProductRepository;
+    this.useCases.set(
+      "ProductUseCase",
+      new ProductUseCaseImpl(productRepository)
+    );
     // Adicione outros casos de uso aqui
   }
 
   getProductRepository(): ProductRepository {
-    return this.repositories.get('ProductRepository');
+    return this.repositories.get("ProductRepository");
   }
 
   getProductUseCase(): ProductUseCase {
-    return this.useCases.get('ProductUseCase');
+    return this.useCases.get("ProductUseCase");
   }
 
   // Métodos para adicionar novos repositórios e casos de uso
@@ -60,4 +67,4 @@ class DIContainer {
   }
 }
 
-export const container = DIContainer.getInstance(); 
+export const container = DIContainer.getInstance();

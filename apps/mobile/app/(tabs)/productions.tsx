@@ -29,6 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { db } from "@farms/firebase";
 import { productionSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
+import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = productionSchema;
 type Production = z.infer<typeof typedSchema> & { id: string };
@@ -70,7 +71,8 @@ export default function ProductionsScreen() {
               ? editing.start_date
               : new Date((editing.start_date as any).seconds * 1000),
           harvest_date:
-            editing.harvest_date instanceof Date || editing.harvest_date === null
+            editing.harvest_date instanceof Date ||
+            editing.harvest_date === null
               ? editing.harvest_date
               : new Date((editing.harvest_date as any).seconds * 1000),
         });
@@ -89,8 +91,8 @@ export default function ProductionsScreen() {
   useEffect(() => {
     const user = getAuth().currentUser;
     const q = query(
-      collection(db, 'productions'),
-      where('created_by', '==', user?.uid)
+      collection(db, "productions"),
+      where("created_by", "==", user?.uid)
     );
     const unsubscribe = onSnapshot(
       q,
@@ -112,13 +114,15 @@ export default function ProductionsScreen() {
   }, []);
 
   const renderItem = ({ item }: { item: Production }) => {
-    const startDate = item.start_date instanceof Date 
-      ? item.start_date 
-      : new Date((item.start_date as any).seconds * 1000);
-    
-    const harvestDate = item.harvest_date instanceof Date 
-      ? item.harvest_date 
-      : item.harvest_date 
+    const startDate =
+      item.start_date instanceof Date
+        ? item.start_date
+        : new Date((item.start_date as any).seconds * 1000);
+
+    const harvestDate =
+      item.harvest_date instanceof Date
+        ? item.harvest_date
+        : item.harvest_date
         ? new Date((item.harvest_date as any).seconds * 1000)
         : null;
 
@@ -198,15 +202,17 @@ export default function ProductionsScreen() {
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Data de Início:</Paragraph>
               <Paragraph style={styles.dateValue}>
-                {startDate.toLocaleDateString('pt-BR')}
+                {startDate.toLocaleDateString("pt-BR")}
               </Paragraph>
             </View>
 
             {harvestDate && (
               <View style={styles.detailContainer}>
-                <Paragraph style={styles.detailLabel}>Data de Colheita:</Paragraph>
+                <Paragraph style={styles.detailLabel}>
+                  Data de Colheita:
+                </Paragraph>
                 <Paragraph style={styles.harvestValue}>
-                  {harvestDate.toLocaleDateString('pt-BR')}
+                  {harvestDate.toLocaleDateString("pt-BR")}
                 </Paragraph>
               </View>
             )}
@@ -224,12 +230,34 @@ export default function ProductionsScreen() {
     );
   }
 
+  const handleSave = async (data: any) => {
+    try {
+      if (editing) {
+        await updateDoc(doc(db, "productions", editing.id), data);
+      } else {
+        await addDoc(collection(db, "productions"), data);
+      }
+      // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
+      const items = await getAllFromCollection<Production>(
+        "productions",
+        user!.uid
+      );
+      setProductions(items);
+      setVisible(false);
+      setEditing(null);
+    } catch (error) {
+      // tratamento de erro
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Title style={styles.title}>Produções</Title>
         <Paragraph style={styles.subtitle}>
-          {productions.length} produção{productions.length !== 1 ? "ões" : ""} registrada{productions.length !== 1 ? "s" : ""}
+          {productions.length} produção{productions.length !== 1 ? "ões" : ""}{" "}
+          registrada{productions.length !== 1 ? "s" : ""}
         </Paragraph>
       </View>
 
@@ -329,7 +357,9 @@ export default function ProductionsScreen() {
                 )}
               />
               {errors.start_date && (
-                <HelperText type="error">{errors.start_date.message}</HelperText>
+                <HelperText type="error">
+                  {errors.start_date.message}
+                </HelperText>
               )}
 
               <Controller
@@ -344,13 +374,17 @@ export default function ProductionsScreen() {
                         : ""
                     }
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(text ? new Date(text) : null)}
+                    onChangeText={(text) =>
+                      onChange(text ? new Date(text) : null)
+                    }
                     style={styles.input}
                   />
                 )}
               />
               {errors.harvest_date && (
-                <HelperText type="error">{errors.harvest_date.message}</HelperText>
+                <HelperText type="error">
+                  {errors.harvest_date.message}
+                </HelperText>
               )}
 
               <View style={styles.buttonContainer}>
@@ -363,22 +397,7 @@ export default function ProductionsScreen() {
                 </Button>
                 <Button
                   mode="contained"
-                  onPress={handleSubmit(async (data) => {
-                    try {
-                      if (editing) {
-                        await updateDoc(doc(db, "productions", editing.id), data);
-                      } else if (user) {
-                        await addDoc(collection(db, "productions"), {
-                          ...data,
-                          created_by: user.uid,
-                        });
-                      }
-                      setVisible(false);
-                      setEditing(null);
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  })}
+                  onPress={handleSubmit(handleSave)}
                   loading={isSubmitting}
                   style={styles.button}
                 >
@@ -405,27 +424,27 @@ export default function ProductionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6fa',
+    backgroundColor: "#f4f6fa",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: "#e2e8f0",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
-    color: '#23272f',
+    color: "#23272f",
   },
   subtitle: {
-    color: '#64748b',
+    color: "#64748b",
   },
   list: {
     flex: 1,
@@ -435,30 +454,30 @@ const styles = StyleSheet.create({
   },
   productionCard: {
     marginBottom: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   productionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   productId: {
     fontSize: 18,
     flex: 1,
-    color: '#23272f',
-    fontWeight: '600',
+    color: "#23272f",
+    fontWeight: "600",
   },
   productionActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   editButton: {
     marginLeft: 8,
@@ -467,24 +486,24 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   detailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   detailLabel: {
-    color: '#64748b',
+    color: "#64748b",
   },
   quantityValue: {
-    fontWeight: 'bold',
-    color: '#3b82f6',
+    fontWeight: "bold",
+    color: "#3b82f6",
   },
   dateValue: {
-    fontWeight: 'bold',
-    color: '#8b5cf6',
+    fontWeight: "bold",
+    color: "#8b5cf6",
   },
   harvestValue: {
-    fontWeight: 'bold',
-    color: '#10b981',
+    fontWeight: "bold",
+    color: "#10b981",
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -493,34 +512,34 @@ const styles = StyleSheet.create({
   },
   statusValue: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   modal: {
     margin: 20,
   },
   formCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 8,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   formTitle: {
     marginBottom: 20,
-    textAlign: 'center',
-    color: '#23272f',
-    fontWeight: '600',
+    textAlign: "center",
+    color: "#23272f",
+    fontWeight: "600",
   },
   input: {
     marginBottom: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   button: {
@@ -528,7 +547,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,

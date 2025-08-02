@@ -1,23 +1,116 @@
 import { useEffect, useState } from "react";
-import { useSalesStore, Sale } from "../src/stores/salesStore";
-import { useProductsStore } from "../src/stores/productsStore";
 import { ProtectedRoute } from "../src/components/ProtectedRoute";
 import { useSaleForm } from "../src/hooks/useSaleForm";
 import Sidebar from "../src/components/Sidebar";
 
+type Product = {
+  id: string;
+  nome: string;
+  preco: number;
+  descricao?: string;
+};
+
+type Sale = {
+  id?: string;
+  produto: string;
+  quantidade: number;
+  valor: number;
+  data: string;
+  lat?: number;
+  lng?: number;
+};
+
 export default function SalesPage() {
-  const { sales, loading, fetchSales, addSale, updateSale, deleteSale } =
-    useSalesStore();
-  const { products, fetchProducts } = useProductsStore();
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const form = useSaleForm();
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // Funções para API
+  const fetchSales = async () => {
+    setLoading(true);
+    const res = await fetch("/api/sales");
+    const data = await res.json();
+    setSales(data);
+    setLoading(false);
+  };
+
+  const fetchProducts = async () => {
+    const res = await fetch("/api/products");
+    const data = await res.json();
+    setProducts(data);
+  };
+
+  const addSale = async (data: any) => {
+    if (!Array.isArray(products) || products.length === 0) {
+      setErro("A lista de produtos ainda não foi carregada.");
+      return;
+    }
+    const foundProduct = products.find((p) => p.id === data.product_id);
+    if (!foundProduct) {
+      setErro("Produto selecionado não existe.");
+      return;
+    }
+    await fetch("/api/sales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...data,
+        produto: foundProduct.nome,
+        quantidade: data.quantity,
+        valor: data.total_price,
+        data: data.sale_date,
+        lat: data.location?.latitude,
+        lng: data.location?.longitude,
+      }),
+    });
+    await fetchSales();
+  };
+
+  const updateSale = async (id: string, data: any) => {
+    if (!Array.isArray(products) || products.length === 0) {
+      setErro("A lista de produtos ainda não foi carregada.");
+      return;
+    }
+    const foundProduct = products.find((p) => p.id === data.product_id);
+    if (!foundProduct) {
+      setErro("Produto selecionado não existe.");
+      return;
+    }
+    await fetch("/api/sales", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id,
+        ...data,
+        produto: foundProduct.nome,
+        quantidade: data.quantity,
+        valor: data.total_price,
+        data: data.sale_date,
+        lat: data.location?.latitude,
+        lng: data.location?.longitude,
+      }),
+    });
+    await fetchSales();
+  };
+
+  const deleteSale = async (id: string) => {
+    await fetch("/api/sales", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    await fetchSales();
+  };
 
   useEffect(() => {
     fetchSales();
     fetchProducts();
-  }, [fetchSales, fetchProducts]);
+  }, []);
 
   const onSubmit = async (data: any) => {
     setSucesso("");
@@ -32,15 +125,23 @@ export default function SalesPage() {
         setSucesso("Venda registrada com sucesso!");
       }
       form.reset();
+      setModalOpen(false);
     } catch (e) {
       setErro("Erro ao salvar venda.");
     }
   };
 
   const handleEdit = (sale: Sale) => {
+    if (!Array.isArray(products) || products.length === 0) {
+      setErro(
+        "A lista de produtos ainda não foi carregada. Tente novamente em instantes."
+      );
+      return;
+    }
     setEditId(sale.id!);
+    const foundProduct = products.find((p) => p.nome === sale.produto);
     form.reset({
-      product_id: sale.produto,
+      product_id: foundProduct ? foundProduct.id : "",
       quantity: sale.quantidade,
       total_price: sale.valor,
       client_name: "", // Campo não existe no tipo Sale
@@ -50,8 +151,22 @@ export default function SalesPage() {
         longitude: sale.lng || 0,
       },
     });
+    setModalOpen(true);
     setSucesso("");
     setErro("");
+  };
+
+  const handleCreate = () => {
+    setEditId(null);
+    form.reset({
+      product_id: "",
+      quantity: 0,
+      total_price: 0,
+      client_name: "",
+      sale_date: new Date(),
+      location: { latitude: 0, longitude: 0 },
+    });
+    setModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -82,16 +197,46 @@ export default function SalesPage() {
         <div className="container">
           <h1>Controle de Vendas</h1>
 
-          {/* Formulário */}
-          <div className="card" style={{ marginBottom: 32 }}>
-            <h2 style={{ marginTop: 0, marginBottom: 20 }}>
-              {editId ? "Editar Venda" : "Registrar Nova Venda"}
-            </h2>
+          {/* Botão para abrir modal de criação */}
+          <button
+            type="button"
+            onClick={handleCreate}
+            style={{
+              marginBottom: 16,
+              padding: "10px 20px",
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "600",
+            }}
+            disabled={products.length === 0}
+          >
+            Nova Venda
+          </button>
 
+          {/* Modal de criação/edição */}
+          {modalOpen && products.length > 0 && (
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+                background: "#fff",
+                borderRadius: "8px",
+                boxShadow: "0 2px 8px #0001",
+                padding: 24,
+                marginBottom: 32,
+              }}
             >
+              {products.length === 0 && (
+                <div style={{ color: "red", marginBottom: 16 }}>
+                  Carregando lista de produtos...
+                </div>
+              )}
               <div>
                 <label
                   style={{
@@ -104,6 +249,7 @@ export default function SalesPage() {
                 </label>
                 <select
                   {...form.register("product_id")}
+                  value={form.watch("product_id") || ""}
                   style={{
                     width: "100%",
                     padding: "12px",
@@ -114,7 +260,7 @@ export default function SalesPage() {
                 >
                   <option value="">Selecione um produto</option>
                   {products.map((product) => (
-                    <option key={product.id} value={product.nome}>
+                    <option key={product.id} value={product.id}>
                       {product.nome} - R$ {product?.preco?.toFixed(2)}
                     </option>
                   ))}
@@ -299,11 +445,33 @@ export default function SalesPage() {
               <div style={{ gridColumn: "1 / -1", display: "flex", gap: 12 }}>
                 <button
                   type="submit"
+                  disabled={products.length === 0}
                   style={{
                     flex: 1,
                     padding: "12px",
-                    backgroundColor: "#10b981",
+                    backgroundColor:
+                      products.length === 0 ? "#a1a1aa" : "#10b981",
                     color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: products.length === 0 ? "not-allowed" : "pointer",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {editId ? "Salvar Alterações" : "Registrar Venda"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalOpen(false);
+                    setEditId(null);
+                    form.reset();
+                  }}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "#e5e7eb",
+                    color: "#374151",
                     border: "none",
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -311,168 +479,147 @@ export default function SalesPage() {
                     fontWeight: "600",
                   }}
                 >
-                  {editId ? "Salvar Alterações" : "Registrar Venda"}
+                  Cancelar
                 </button>
-                {editId && (
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "#e5e7eb",
-                      color: "#374151",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                )}
               </div>
             </form>
+          )}
 
-            {sucesso && (
-              <div
-                style={{
-                  color: "green",
-                  marginTop: 16,
-                  padding: "12px",
-                  backgroundColor: "#dcfce7",
-                  borderRadius: "6px",
-                  border: "1px solid #bbf7d0",
-                }}
-              >
-                {sucesso}
-              </div>
-            )}
-            {erro && (
-              <div
-                style={{
-                  color: "red",
-                  marginTop: 16,
-                  padding: "12px",
-                  backgroundColor: "#fef2f2",
-                  borderRadius: "6px",
-                  border: "1px solid #fecaca",
-                }}
-              >
-                {erro}
-              </div>
-            )}
-          </div>
+          {sucesso && (
+            <div
+              style={{
+                color: "green",
+                marginTop: 16,
+                padding: "12px",
+                backgroundColor: "#dcfce7",
+                borderRadius: "6px",
+                border: "1px solid #bbf7d0",
+              }}
+            >
+              {sucesso}
+            </div>
+          )}
+          {erro && (
+            <div
+              style={{
+                color: "red",
+                marginTop: 16,
+                padding: "12px",
+                backgroundColor: "#fef2f2",
+                borderRadius: "6px",
+                border: "1px solid #fecaca",
+              }}
+            >
+              {erro}
+            </div>
+          )}
+        </div>
+        <div className="card">
+          <h2 style={{ marginTop: 0, marginBottom: 20 }}>Vendas Registradas</h2>
 
-          {/* Lista de vendas */}
-          <div className="card">
-            <h2 style={{ marginTop: 0, marginBottom: 20 }}>
-              Vendas Registradas
-            </h2>
-
-            {loading ? (
-              <p>Carregando...</p>
-            ) : (
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Produto
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Quantidade
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Valor
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Cliente
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Data
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Localização
-                      </th>
-                      <th style={{ padding: "12px", textAlign: "left" }}>
-                        Ações
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sales.map((sale) => (
-                      <tr
-                        key={sale.id}
-                        style={{ borderBottom: "1px solid #f1f5f9" }}
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Produto
+                    </th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Quantidade
+                    </th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Valor
+                    </th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Cliente
+                    </th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>Data</th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Localização
+                    </th>
+                    <th style={{ padding: "12px", textAlign: "left" }}>
+                      Ações
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sales.map((sale) => (
+                    <tr
+                      key={sale.id}
+                      style={{ borderBottom: "1px solid #f1f5f9" }}
+                    >
+                      <td style={{ padding: "12px", fontWeight: "600" }}>
+                        {sale.produto}
+                      </td>
+                      <td style={{ padding: "12px" }}>{sale.quantidade}</td>
+                      <td
+                        style={{
+                          padding: "12px",
+                          color: "#10b981",
+                          fontWeight: "600",
+                        }}
                       >
-                        <td style={{ padding: "12px", fontWeight: "600" }}>
-                          {sale.produto}
-                        </td>
-                        <td style={{ padding: "12px" }}>{sale.quantidade}</td>
-                        <td
-                          style={{
-                            padding: "12px",
-                            color: "#10b981",
-                            fontWeight: "600",
-                          }}
-                        >
-                          R$ {sale.valor?.toFixed(2)}
-                        </td>
-                        <td style={{ padding: "12px" }}>-</td>
-                        <td style={{ padding: "12px" }}>{sale.data}</td>
-                        <td style={{ padding: "12px" }}>
-                          {sale.lat && sale.lng ? (
-                            <span
-                              style={{ fontSize: "12px", color: "#64748b" }}
-                            >
-                              ({sale.lat?.toFixed(4)}, {sale.lng?.toFixed(4)})
-                            </span>
-                          ) : (
-                            <span style={{ color: "#94a3b8" }}>
-                              Não informado
-                            </span>
-                          )}
-                        </td>
-                        <td style={{ padding: "12px" }}>
-                          <div style={{ display: "flex", gap: 8 }}>
-                            <button
-                              style={{
-                                padding: "6px 12px",
-                                backgroundColor: "#3b82f6",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "12px",
-                              }}
-                              onClick={() => handleEdit(sale)}
-                            >
-                              Editar
-                            </button>
-                            <button
-                              style={{
-                                padding: "6px 12px",
-                                backgroundColor: "#ef4444",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "12px",
-                              }}
-                              onClick={() => handleDelete(sale.id!)}
-                            >
-                              Remover
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                        R$ {sale.valor?.toFixed(2)}
+                      </td>
+                      <td style={{ padding: "12px" }}>-</td>
+                      <td style={{ padding: "12px" }}>{sale.data}</td>
+                      <td style={{ padding: "12px" }}>
+                        {sale.lat && sale.lng ? (
+                          <span style={{ fontSize: "12px", color: "#64748b" }}>
+                            ({sale.lat?.toFixed(4)}, {sale.lng?.toFixed(4)})
+                          </span>
+                        ) : (
+                          <span style={{ color: "#94a3b8" }}>
+                            Não informado
+                          </span>
+                        )}
+                      </td>
+                      <td style={{ padding: "12px" }}>
+                        <div style={{ display: "flex", gap: 8 }}>
+                          <button
+                            style={{
+                              padding: "6px 12px",
+                              backgroundColor:
+                                products.length === 0 ? "#a1a1aa" : "#3b82f6",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor:
+                                products.length === 0
+                                  ? "not-allowed"
+                                  : "pointer",
+                              fontSize: "12px",
+                            }}
+                            onClick={() => handleEdit(sale)}
+                            disabled={products.length === 0}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            style={{
+                              padding: "6px 12px",
+                              backgroundColor: "#ef4444",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                            }}
+                            onClick={() => handleDelete(sale.id!)}
+                          >
+                            Remover
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </ProtectedRoute>
     </Sidebar>

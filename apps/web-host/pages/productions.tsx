@@ -2,125 +2,135 @@ import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useForm } from "react-hook-form";
 
-// Tipos
-interface StockItem {
+type Production = {
   id: string;
   product_id: string;
-  available_quantity: number;
-  last_updated: string | { _seconds: number };
-}
-interface Product {
+  status: string;
+  quantity: number;
+  start_date: string | { _seconds: number };
+  harvest_date: string | { _seconds: number } | null;
+};
+
+// Adicione o tipo Product
+
+type Product = {
   id: string;
   name: string;
-}
+  // outros campos se necessário
+};
 
-export default function StockPage() {
-  const [items, setItems] = useState<StockItem[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+export default function ProductionsPage() {
+  const [productions, setProductions] = useState<Production[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState<StockItem | null>(null);
+  const [editing, setEditing] = useState<Production | null>(null);
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
-  const form = useForm<Partial<StockItem>>({
+  const form = useForm<Partial<Production>>({
     defaultValues: {
       product_id: "",
-      available_quantity: 0,
-      last_updated: "",
+      status: "aguardando",
+      quantity: 0,
+      start_date: "",
+      harvest_date: "",
     },
   });
+  const [products, setProducts] = useState<Product[]>([]);
 
-  // Buscar estoque
-  const fetchStock = async () => {
+  // Fetch productions
+  const fetchProductions = async () => {
     setLoading(true);
-    const res = await fetch("/api/stock");
+    const res = await fetch("/api/productions");
     const data = await res.json();
-    setItems(data);
+    setProductions(data);
     setLoading(false);
-  };
-  // Buscar produtos
-  const fetchProducts = async () => {
-    const res = await fetch("/api/products");
-    const data = await res.json();
-    setProducts(data);
   };
 
   useEffect(() => {
-    fetchStock();
-    fetchProducts();
+    fetchProductions();
   }, []);
 
-  // Resetar form ao abrir modal
   useEffect(() => {
     if (modalOpen) {
       if (editing) {
         form.reset({
           ...editing,
-          last_updated:
-            typeof editing.last_updated === "object" &&
-            editing.last_updated !== null &&
-            "_seconds" in editing.last_updated
-              ? new Date((editing.last_updated as any)._seconds * 1000)
+          start_date:
+            typeof editing.start_date === "object" &&
+            editing.start_date !== null &&
+            "_seconds" in editing.start_date
+              ? new Date((editing.start_date as any)._seconds * 1000)
                   .toISOString()
                   .slice(0, 10)
-              : editing.last_updated,
+              : editing.start_date,
+          harvest_date:
+            editing.harvest_date &&
+            typeof editing.harvest_date === "object" &&
+            "_seconds" in editing.harvest_date
+              ? new Date((editing.harvest_date as any)._seconds * 1000)
+                  .toISOString()
+                  .slice(0, 10)
+              : editing.harvest_date || "",
         });
       } else {
-        form.reset({
-          product_id: "",
-          available_quantity: 0,
-          last_updated: new Date().toISOString().slice(0, 10),
-        });
+        form.reset();
       }
     }
   }, [modalOpen, editing]);
 
-  // Salvar ou editar
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then(setProducts);
+  }, []);
+
+  // Save or update production
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
     try {
       if (editing) {
-        await fetch("/api/stock", {
+        await fetch("/api/productions", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: editing.id, ...data }),
         });
       } else {
-        await fetch("/api/stock", {
+        await fetch("/api/productions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
       }
-      await fetchStock();
+      await fetchProductions();
       setModalOpen(false);
       setEditing(null);
-      setSucesso(editing ? "Estoque atualizado!" : "Estoque cadastrado!");
+      setSucesso(editing ? "Produção atualizada!" : "Produção cadastrada!");
     } catch (e) {
-      setErro("Erro ao salvar estoque.");
+      setErro("Erro ao salvar produção.");
     }
   };
 
-  // Editar
-  const handleEdit = (item: StockItem) => {
-    setEditing(item);
+  // Edit
+  const handleEdit = (prod: Production) => {
+    setEditing(prod);
     setModalOpen(true);
   };
 
-  // Remover
+  // Delete
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Tem certeza que deseja remover este item?")) return;
+    if (!window.confirm("Tem certeza que deseja remover esta produção?"))
+      return;
     try {
-      await fetch("/api/stock", {
+      await fetch("/api/productions", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      await fetchStock();
-      setSucesso("Item removido!");
+      await fetchProductions();
+      setSucesso("Produção removida!");
     } catch {
-      setErro("Erro ao remover item.");
+      setErro("Erro ao remover produção.");
     }
   };
 
@@ -132,13 +142,53 @@ export default function StockPage() {
       return new Date(date._seconds * 1000).toLocaleDateString("pt-BR");
     return "";
   }
-  // Utilitário para exibir nome do produto
+
+  // Status helpers
+  function getStatusColor(status: string) {
+    switch (status) {
+      case "aguardando":
+        return "#f59e0b";
+      case "em_andamento":
+        return "#3b82f6";
+      case "concluida":
+        return "#10b981";
+      default:
+        return "#64748b";
+    }
+  }
+  function getStatusText(status: string) {
+    switch (status) {
+      case "aguardando":
+        return "Aguardando";
+      case "em_andamento":
+        return "Em Andamento";
+      case "concluida":
+        return "Concluída";
+      default:
+        return status;
+    }
+  }
+
+  // Função utilitária para extrair o id do product_id
+  function getProductId(product_id: any) {
+    if (!product_id) return "";
+    if (typeof product_id === "string") return product_id;
+    if (typeof product_id === "object" && "id" in product_id)
+      return product_id.id;
+    if (
+      typeof product_id === "object" &&
+      "_path" in product_id &&
+      typeof product_id._path === "object" &&
+      "segments" in product_id._path
+    ) {
+      // Firestore DocumentReference pode ter _path: {segments: [...]}
+      return product_id._path.segments?.at?.(-1) || "";
+    }
+    return "";
+  }
+  // Função para buscar o nome do produto
   function getProductName(product_id: any) {
-    if (!product_id) return "-";
-    const id =
-      typeof product_id === "string"
-        ? product_id
-        : product_id.id || product_id._path?.segments?.at?.(-1) || "";
+    const id = getProductId(product_id);
     const found = products.find((p) => p.id === id);
     return found ? found.name : id || "-";
   }
@@ -146,9 +196,10 @@ export default function StockPage() {
   return (
     <Sidebar>
       <div className="container" style={{ padding: 24 }}>
-        <h1>Estoque</h1>
+        <h1>Produções</h1>
         <p style={{ color: "#64748b" }}>
-          {items.length} item{items.length !== 1 ? "s" : ""} em estoque
+          {productions.length} produção{productions.length !== 1 ? "ões" : ""}{" "}
+          registrada{productions.length !== 1 ? "s" : ""}
         </p>
 
         {/* Botão flutuante */}
@@ -198,42 +249,40 @@ export default function StockPage() {
                 borderRadius: 12,
                 padding: 32,
                 minWidth: 320,
-                minHeight: 220,
+                minHeight: 320,
                 position: "relative",
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <h2 style={{ marginTop: 0, marginBottom: 20 }}>
-                {editing ? "Editar Estoque" : "Novo Estoque"}
+                {editing ? "Editar Produção" : "Nova Produção"}
               </h2>
               <form
                 onSubmit={form.handleSubmit(handleSave)}
                 style={{ display: "flex", flexDirection: "column", gap: 16 }}
               >
-                <select
-                  {...form.register("product_id", { required: true })}
+                <input
+                  {...form.register("product_id")}
+                  placeholder="Produto"
                   style={{
                     padding: 12,
                     borderRadius: 6,
                     border: "1px solid #d1d5db",
                   }}
-                  defaultValue={form.getValues("product_id") || ""}
-                >
-                  <option value="">Selecione o produto</option>
-                  {products.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
+                />
+                <input
+                  {...form.register("status")}
+                  placeholder="Status"
+                  style={{
+                    padding: 12,
+                    borderRadius: 6,
+                    border: "1px solid #d1d5db",
+                  }}
+                />
                 <input
                   type="number"
-                  {...form.register("available_quantity", {
-                    valueAsNumber: true,
-                    required: true,
-                    min: 0,
-                  })}
-                  placeholder="Quantidade disponível"
+                  {...form.register("quantity", { valueAsNumber: true })}
+                  placeholder="Quantidade"
                   style={{
                     padding: 12,
                     borderRadius: 6,
@@ -242,8 +291,18 @@ export default function StockPage() {
                 />
                 <input
                   type="date"
-                  {...form.register("last_updated")}
-                  placeholder="Última atualização"
+                  {...form.register("start_date")}
+                  placeholder="Data de Início"
+                  style={{
+                    padding: 12,
+                    borderRadius: 6,
+                    border: "1px solid #d1d5db",
+                  }}
+                />
+                <input
+                  type="date"
+                  {...form.register("harvest_date")}
+                  placeholder="Data de Colheita (opcional)"
                   style={{
                     padding: 12,
                     borderRadius: 6,
@@ -294,9 +353,11 @@ export default function StockPage() {
           </div>
         )}
 
-        {/* Lista de estoque */}
+        {/* Lista de produções */}
         <div className="card" style={{ marginTop: 32 }}>
-          <h2 style={{ marginTop: 0, marginBottom: 20 }}>Itens em Estoque</h2>
+          <h2 style={{ marginTop: 0, marginBottom: 20 }}>
+            Produções Cadastradas
+          </h2>
           {loading ? (
             <p>Carregando...</p>
           ) : (
@@ -305,27 +366,44 @@ export default function StockPage() {
                 <thead>
                   <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
                     <th style={{ padding: 12, textAlign: "left" }}>Produto</th>
+                    <th style={{ padding: 12, textAlign: "left" }}>Status</th>
                     <th style={{ padding: 12, textAlign: "left" }}>
                       Quantidade
                     </th>
-                    <th style={{ padding: 12, textAlign: "left" }}>
-                      Última Atualização
-                    </th>
+                    <th style={{ padding: 12, textAlign: "left" }}>Início</th>
+                    <th style={{ padding: 12, textAlign: "left" }}>Colheita</th>
                     <th style={{ padding: 12, textAlign: "left" }}>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map((item) => (
+                  {productions.map((prod) => (
                     <tr
-                      key={item.id}
+                      key={prod.id}
                       style={{ borderBottom: "1px solid #f1f5f9" }}
                     >
                       <td style={{ padding: 12 }}>
-                        {getProductName(item.product_id)}
+                        {getProductName(prod.product_id)}
                       </td>
-                      <td style={{ padding: 12 }}>{item.available_quantity}</td>
                       <td style={{ padding: 12 }}>
-                        {renderDate(item.last_updated)}
+                        <span
+                          style={{
+                            padding: "4px 8px",
+                            borderRadius: 4,
+                            fontSize: 12,
+                            fontWeight: "bold",
+                            backgroundColor: getStatusColor(prod.status) + "20",
+                            color: getStatusColor(prod.status),
+                          }}
+                        >
+                          {getStatusText(prod.status)}
+                        </span>
+                      </td>
+                      <td style={{ padding: 12 }}>{prod.quantity}</td>
+                      <td style={{ padding: 12 }}>
+                        {renderDate(prod.start_date)}
+                      </td>
+                      <td style={{ padding: 12 }}>
+                        {renderDate(prod.harvest_date)}
                       </td>
                       <td style={{ padding: 12 }}>
                         <div style={{ display: "flex", gap: 8 }}>
@@ -339,7 +417,7 @@ export default function StockPage() {
                               cursor: "pointer",
                               fontSize: 12,
                             }}
-                            onClick={() => handleEdit(item)}
+                            onClick={() => handleEdit(prod)}
                           >
                             Editar
                           </button>
@@ -353,7 +431,7 @@ export default function StockPage() {
                               cursor: "pointer",
                               fontSize: 12,
                             }}
-                            onClick={() => handleDelete(item.id)}
+                            onClick={() => handleDelete(prod.id)}
                           >
                             Remover
                           </button>

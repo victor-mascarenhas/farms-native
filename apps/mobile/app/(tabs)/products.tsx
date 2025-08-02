@@ -2,38 +2,24 @@ import React, { useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import {
   Button,
-  List,
   Portal,
   Modal,
   TextInput,
   HelperText,
-  useTheme,
   Card,
   Title,
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import { z } from "zod";
 
-import { db } from "@farms/firebase";
 import { productSchema } from "@farms/schemas";
 import { useProductForm } from "../hooks/useProductForm";
-import { getAuth } from "firebase/auth";
 import { useAuth } from "@/AuthProvider";
 import {
   getAllFromCollection,
   addToCollection,
   updateInCollection,
-  removeFromCollection,
 } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = productSchema;
@@ -42,7 +28,6 @@ type Product = z.infer<typeof typedSchema> & { id: string };
 export default function ProductsScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
-  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -152,33 +137,22 @@ export default function ProductsScreen() {
     );
   };
 
-  const onSubmit = async (data: any) => {
+  const handleSave = async (data: any) => {
     try {
       if (!user) return;
       if (editing) {
-        await updateInCollection(
-          "products",
-          editing.id,
-          {
-            ...data,
-            updated_at: new Date(),
-          },
-          user.uid
-        );
+        await updateInCollection("products", editing.id, data, user.uid);
       } else {
-        await addToCollection(
-          "products",
-          {
-            ...data,
-            created_at: new Date(),
-          },
-          user.uid
-        );
+        await addToCollection("products", data, user.uid);
       }
+      // Atualize a lista imediatamente após adicionar/editar
+      const items = await getAllFromCollection<Product>("products", user.uid);
+      setProducts(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {
-      console.error("Error saving product:", error);
+      // tratamento de erro
+      console.error(error);
     }
   };
 
@@ -288,7 +262,7 @@ export default function ProductsScreen() {
                 </Button>
                 <Button
                   mode="contained"
-                  onPress={form.handleSubmit(onSubmit)}
+                  onPress={form.handleSubmit(handleSave)}
                   loading={form.formState.isSubmitting}
                   style={styles.button}
                 >

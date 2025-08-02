@@ -1,30 +1,23 @@
 import { z } from "zod";
-
-// 📌 users
-export const timestampSchema = z.union([
-  z.date(),
-  z.object({ seconds: z.number(), nanoseconds: z.number() }),
-]);
+import { Timestamp } from "firebase/firestore";
 
 export const userSchema = z.object({
   uid: z.string(),
   name: z.string(),
   email: z.string().email(),
   role: z.enum(["admin", "member"]),
-  created_at: timestampSchema,
+  created_at: z.instanceof(Timestamp),
 });
 
-// 📌 products
 export const productSchema = z.object({
   name: z.string(),
   category: z.string(),
   unit_price: z.number(),
   cost_price: z.number(),
   created_by: z.string(),
-  created_at: timestampSchema,
+  created_at: z.instanceof(Timestamp),
 });
 
-// 📌 sales
 export const saleSchema = z.object({
   product_id: z.string(),
   quantity: z.number(),
@@ -36,42 +29,38 @@ export const saleSchema = z.object({
       longitude: z.number(),
     })
     .optional(),
-  sale_date: timestampSchema,
+  sale_date: z.instanceof(Timestamp),
   created_by: z.string(),
 });
 
-// 📌 productions
 export const productionSchema = z.object({
   product_id: z.string(),
   status: z.enum(["aguardando", "em_producao", "colhido"]),
   quantity: z.number(),
-  start_date: timestampSchema,
-  harvest_date: timestampSchema.nullable(),
+  start_date: z.instanceof(Timestamp),
+  harvest_date: z.instanceof(Timestamp).nullable(),
   created_by: z.string(),
 });
 
-// 📌 stock
 export const stockSchema = z.object({
   product_id: z.string(),
   available_quantity: z.number(),
-  last_updated: timestampSchema,
+  last_updated: z.instanceof(Timestamp),
 });
 
-// 📌 goals
 export const goalSchema = z.object({
   type: z.enum(["venda", "producao"]),
   product_id: z.string(),
   target_quantity: z.number(),
-  start_date: timestampSchema,
-  end_date: timestampSchema,
+  start_date: z.instanceof(Timestamp),
+  end_date: z.instanceof(Timestamp),
   notified: z.boolean(),
   created_by: z.string(),
 });
 
-// 📌 notifications (opcional)
 export const notificationSchema = z.object({
   user_id: z.string(),
   message: z.string(),
-  created_at: timestampSchema,
+  created_at: z.instanceof(Timestamp),
   read: z.boolean(),
 });

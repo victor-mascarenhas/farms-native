@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, View, Dimensions } from "react-native";
-import {
-  Surface,
-  Text,
-  Appbar,
-  Card,
-  Title,
-  Paragraph,
-  useTheme,
-} from "react-native-paper";
-import { collection, getDocs } from "firebase/firestore";
-import { WebView } from "react-native-webview";
+import { Appbar, Card, Title, Paragraph, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { BarChart } from "react-native-chart-kit";
 
-import { db } from "@farms/firebase";
 import { productionSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
 import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";

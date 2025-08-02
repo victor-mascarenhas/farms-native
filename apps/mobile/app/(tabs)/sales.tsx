@@ -6,46 +6,40 @@ import {
   Modal,
   TextInput,
   HelperText,
-  useTheme,
   Card,
   Title,
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import { z } from "zod";
-import { getAuth } from "firebase/auth";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Dropdown } from "react-native-paper-dropdown";
 
-import { db } from "@farms/firebase";
 import { saleSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import {
   getAllFromCollection,
   addToCollection,
   updateInCollection,
-  removeFromCollection,
 } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = saleSchema;
 type Sale = z.infer<typeof typedSchema> & { id: string };
 
+type Product = {
+  id: string;
+  name: string;
+};
+
 export default function SalesScreen() {
   const [sales, setSales] = useState<Sale[]>([]);
   const { user } = useAuth();
-  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Sale | null>(null);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [showDropDown, setShowDropDown] = useState(false);
 
   const schema = typedSchema.omit({ created_by: true });
   const {
@@ -68,14 +62,15 @@ export default function SalesScreen() {
   useEffect(() => {
     if (visible) {
       if (editing) {
+        const foundProduct = products.find((p) => p.id === editing.product_id);
         reset({
-          product_id: editing.product_id,
+          product_id: foundProduct ? foundProduct.id : "",
           quantity: editing.quantity,
           total_price: editing.total_price,
           client_name: editing.client_name,
           location: {
-            latitude: editing.location.latitude,
-            longitude: editing.location.longitude,
+            latitude: editing.location?.latitude,
+            longitude: editing.location?.longitude,
           },
           sale_date:
             editing.sale_date instanceof Date
@@ -93,7 +88,7 @@ export default function SalesScreen() {
         });
       }
     }
-  }, [visible, editing]);
+  }, [visible, editing, products]);
 
   useEffect(() => {
     if (!user) return;
@@ -102,6 +97,9 @@ export default function SalesScreen() {
       .then((items) => setSales(items))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
+    getAllFromCollection<Product>("products", user.uid)
+      .then((items) => setProducts(items))
+      .catch((err) => console.error(err));
   }, [user]);
 
   const renderItem = ({ item }: { item: Sale }) => {
@@ -157,8 +155,8 @@ export default function SalesScreen() {
             <View style={styles.locationContainer}>
               <Paragraph style={styles.detailLabel}>Localização:</Paragraph>
               <Paragraph style={styles.locationValue}>
-                {item.location.latitude.toFixed(4)},{" "}
-                {item.location.longitude.toFixed(4)}
+                {item.location?.latitude.toFixed(4)},{" "}
+                {item.location?.longitude.toFixed(4)}
               </Paragraph>
             </View>
           </View>
@@ -174,6 +172,32 @@ export default function SalesScreen() {
       </View>
     );
   }
+
+  if (visible && products.length === 0) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Paragraph>Carregando lista de produtos...</Paragraph>
+      </View>
+    );
+  }
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editing) {
+        await updateInCollection("sales", editing.id, data, user!.uid);
+      } else {
+        await addToCollection("sales", data, user!.uid);
+      }
+      // Atualize a lista imediatamente após adicionar/editar
+      const items = await getAllFromCollection<Sale>("sales", user!.uid);
+      setSales(items);
+      setVisible(false);
+      setEditing(null);
+    } catch (error) {
+      // tratamento de erro
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -228,14 +252,17 @@ export default function SalesScreen() {
               <Controller
                 control={control}
                 name="product_id"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
+                render={({ field: { onChange, value } }) => (
+                  <Dropdown
                     label="Produto"
-                    value={value}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
+                    mode="outlined"
+                    value={value || ""}
+                    onSelect={onChange}
+                    options={products.map((p) => ({
+                      label: p.name,
+                      value: p.id,
+                    }))}
                     error={!!errors.product_id}
-                    style={styles.input}
                   />
                 )}
               />
@@ -359,24 +386,7 @@ export default function SalesScreen() {
                 </Button>
                 <Button
                   mode="contained"
-                  onPress={handleSubmit(async (data) => {
-                    try {
-                      if (editing) {
-                        await updateInCollection(
-                          "sales",
-                          editing.id,
-                          data,
-                          user.uid
-                        );
-                      } else if (user) {
-                        await addToCollection("sales", data, user.uid);
-                      }
-                      setVisible(false);
-                      setEditing(null);
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  })}
+                  onPress={handleSubmit(handleSave)}
                   loading={isSubmitting}
                   style={styles.button}
                 >

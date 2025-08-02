@@ -236,6 +236,24 @@ export default function GoalsScreen() {
     );
   }
 
+  const handleSave = async (data: any) => {
+    try {
+      if (editing) {
+        await updateDoc(doc(db, "goals", editing.id), data);
+      } else {
+        await addDoc(collection(db, "goals"), data);
+      }
+      // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
+      const items = await getAllFromCollection<Goal>("goals", user?.uid);
+      setGoals(items);
+      setVisible(false);
+      setEditing(null);
+    } catch (error) {
+      // tratamento de erro
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -381,22 +399,7 @@ export default function GoalsScreen() {
                 </Button>
                 <Button
                   mode="contained"
-                  onPress={handleSubmit(async (data) => {
-                    try {
-                      if (editing) {
-                        await updateDoc(doc(db, "goals", editing.id), data);
-                      } else if (user) {
-                        await addDoc(collection(db, "goals"), {
-                          ...data,
-                          created_by: user.uid,
-                        });
-                      }
-                      setVisible(false);
-                      setEditing(null);
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  })}
+                  onPress={handleSubmit(handleSave)}
                   loading={isSubmitting}
                   style={styles.button}
                 >
@@ -423,27 +426,27 @@ export default function GoalsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6fa',
+    backgroundColor: "#f4f6fa",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: "#e2e8f0",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
-    color: '#23272f',
+    color: "#23272f",
   },
   subtitle: {
-    color: '#64748b',
+    color: "#64748b",
   },
   list: {
     flex: 1,
@@ -453,30 +456,30 @@ const styles = StyleSheet.create({
   },
   goalCard: {
     marginBottom: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   goalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   productId: {
     fontSize: 18,
     flex: 1,
-    color: '#23272f',
-    fontWeight: '600',
+    color: "#23272f",
+    fontWeight: "600",
   },
   goalActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   editButton: {
     marginLeft: 8,
@@ -485,28 +488,28 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   detailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   detailLabel: {
-    color: '#64748b',
+    color: "#64748b",
   },
   targetValue: {
-    fontWeight: 'bold',
-    color: '#3b82f6',
+    fontWeight: "bold",
+    color: "#3b82f6",
   },
   dateValue: {
-    fontWeight: 'bold',
-    color: '#8b5cf6',
+    fontWeight: "bold",
+    color: "#8b5cf6",
   },
   endDateValue: {
-    fontWeight: 'bold',
-    color: '#f59e0b',
+    fontWeight: "bold",
+    color: "#f59e0b",
   },
   notifiedValue: {
-    fontWeight: 'bold',
-    color: '#10b981',
+    fontWeight: "bold",
+    color: "#10b981",
   },
   typeBadge: {
     paddingHorizontal: 8,
@@ -515,34 +518,34 @@ const styles = StyleSheet.create({
   },
   typeValue: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   modal: {
     margin: 20,
   },
   formCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 8,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   formTitle: {
     marginBottom: 20,
-    textAlign: 'center',
-    color: '#23272f',
-    fontWeight: '600',
+    textAlign: "center",
+    color: "#23272f",
+    fontWeight: "600",
   },
   input: {
     marginBottom: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   button: {
@@ -550,7 +553,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,

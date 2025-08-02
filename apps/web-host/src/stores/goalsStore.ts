@@ -13,7 +13,6 @@ export type Goal = {
   valor: number;
   progresso: number;
   atingida: boolean;
-  // Adicione outros campos necessários
 };
 
 type GoalsStore = {

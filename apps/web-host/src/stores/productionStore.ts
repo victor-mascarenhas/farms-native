@@ -11,7 +11,6 @@ export type Production = {
   nome: string;
   status: "aguardando" | "em_producao" | "colhido";
   data: string;
-  // Adicione outros campos necessários
 };
 
 type ProductionStore = {

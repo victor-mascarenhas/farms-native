@@ -14,7 +14,6 @@ export type Sale = {
   data: string;
   lat?: number;
   lng?: number;
-  // Adicione outros campos necessários
 };
 
 type SalesStore = {

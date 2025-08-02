@@ -15,7 +15,6 @@ const links = [
 function Sidebar({ children }: { children: ReactNode }) {
   const handleLogout = async () => {
     await fetch("/api/logout");
-    /* window.location.href = "/login"; */
   };
 
   return (
@@ -71,7 +70,11 @@ function Sidebar({ children }: { children: ReactNode }) {
           Sair
         </button>
       </nav>
-      <main style={{ flex: 1, padding: 32, height: "100vh", overflowY: "auto" }}>{children}</main>
+      <main
+        style={{ flex: 1, padding: 32, height: "100vh", overflowY: "auto" }}
+      >
+        {children}
+      </main>
     </div>
   );
 }

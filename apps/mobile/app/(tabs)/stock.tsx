@@ -6,22 +6,13 @@ import {
   Modal,
   TextInput,
   HelperText,
-  useTheme,
   Card,
   Title,
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import { z } from "zod";
 
-import { db } from "@farms/firebase";
 import { stockSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import { Controller, useForm } from "react-hook-form";
@@ -30,7 +21,6 @@ import {
   getAllFromCollection,
   addToCollection,
   updateInCollection,
-  removeFromCollection,
 } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = stockSchema;
@@ -39,7 +29,6 @@ type StockItem = z.infer<typeof typedSchema> & { id: string };
 export default function StockScreen() {
   const [items, setItems] = useState<StockItem[]>([]);
   const { user } = useAuth();
-  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<StockItem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -147,6 +136,25 @@ export default function StockScreen() {
     );
   }
 
+  const handleSave = async (data: any) => {
+    if (!user) return;
+    try {
+      if (editing) {
+        await updateInCollection("stock", editing.id, data, user.uid);
+      } else {
+        await addToCollection("stock", data, user.uid);
+      }
+      // Atualize a lista imediatamente após adicionar/editar
+      const items = await getAllFromCollection<StockItem>("stock", user.uid);
+      setItems(items);
+      setVisible(false);
+      setEditing(null);
+    } catch (error) {
+      // tratamento de erro
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -251,28 +259,11 @@ export default function StockScreen() {
                 </Button>
                 <Button
                   mode="contained"
-                  onPress={handleSubmit(async (data) => {
-                    try {
-                      if (editing) {
-                        await updateInCollection(
-                          "stock",
-                          editing.id,
-                          data,
-                          user?.uid
-                        );
-                      } else if (user) {
-                        await addToCollection("stock", data, user.uid);
-                      }
-                      setVisible(false);
-                      setEditing(null);
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  })}
+                  onPress={handleSubmit(handleSave)}
                   loading={isSubmitting}
                   style={styles.button}
                 >
-                  {editing ? "Atualizar" : "Salvar"}
+                  {editing ? "Salvar" : "Adicionar"}
                 </Button>
               </View>
             </Card.Content>
