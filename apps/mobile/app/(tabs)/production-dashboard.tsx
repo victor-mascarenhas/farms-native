@@ -17,6 +17,7 @@ import { BarChart } from "react-native-chart-kit";
 import { db } from "@farms/firebase";
 import { productionSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
+import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
 
 const typedProduction = productionSchema;
 type Production = z.infer<typeof typedProduction> & { id: string };
@@ -26,30 +27,25 @@ type Product = z.infer<typeof typedProduct> & { id: string };
 export default function ProductionDashboardScreen() {
   const [productions, setProductions] = useState<Production[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const { logout, user } = useAuth();
   const theme = useTheme();
-  const { logout } = useAuth();
 
   useEffect(() => {
+    if (!user) return;
     const load = async () => {
-      const prodSnap = await getDocs(collection(db, "productions"));
-      const prodData: Production[] = [];
-      prodSnap.forEach((doc) => {
-        const data = typedProduction.parse(doc.data());
-        prodData.push({ id: doc.id, ...data });
-      });
+      const prodData = await getAllFromCollection<Production>(
+        "productions",
+        user.uid
+      );
       setProductions(prodData);
-
-      const productSnap = await getDocs(collection(db, "products"));
-      const productData: Product[] = [];
-      productSnap.forEach((doc) => {
-        const data = typedProduct.parse(doc.data());
-        productData.push({ id: doc.id, ...data });
-      });
+      const productData = await getAllFromCollection<Product>(
+        "products",
+        user.uid
+      );
       setProducts(productData);
     };
-
     load().catch((err) => console.error(err));
-  }, []);
+  }, [user]);
 
   const totalProductions = productions.length;
   const quantityHarvested = productions

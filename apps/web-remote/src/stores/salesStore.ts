@@ -3,8 +3,8 @@ import {
   getAllFromCollection,
   addToCollection,
   updateInCollection,
-  deleteFromCollection,
-} from "../services/firestoreService";
+  removeFromCollection,
+} from "@farms/firebase/src/firestoreUtils";
 
 export type Sale = {
   id?: string;

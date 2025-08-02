@@ -29,6 +29,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { db } from "@farms/firebase";
 import { saleSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
+import {
+  getAllFromCollection,
+  addToCollection,
+  updateInCollection,
+  removeFromCollection,
+} from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = saleSchema;
 type Sale = z.infer<typeof typedSchema> & { id: string };
@@ -90,31 +96,19 @@ export default function SalesScreen() {
   }, [visible, editing]);
 
   useEffect(() => {
-    const user = getAuth().currentUser;
-    const q = query(collection(db, 'sales'), where('created_by', '==', user?.uid));
-    const unsubscribe = onSnapshot(
-      q,
-      (querySnapshot) => {
-        const items: Sale[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = typedSchema.parse(doc.data());
-          items.push({ id: doc.id, ...data });
-        });
-        setSales(items);
-        setLoading(false);
-      },
-      (err) => {
-        console.error(err);
-        setLoading(false);
-      }
-    );
-    return unsubscribe;
-  }, []);
+    if (!user) return;
+    setLoading(true);
+    getAllFromCollection<Sale>("sales", user.uid)
+      .then((items) => setSales(items))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [user]);
 
   const renderItem = ({ item }: { item: Sale }) => {
-    const saleDate = item.sale_date instanceof Date 
-      ? item.sale_date 
-      : new Date((item.sale_date as any).seconds * 1000);
+    const saleDate =
+      item.sale_date instanceof Date
+        ? item.sale_date
+        : new Date((item.sale_date as any).seconds * 1000);
 
     return (
       <Card style={styles.saleCard}>
@@ -136,14 +130,14 @@ export default function SalesScreen() {
             </View>
           </View>
 
-          <Paragraph style={styles.productId}>Produto: {item.product_id}</Paragraph>
+          <Paragraph style={styles.productId}>
+            Produto: {item.product_id}
+          </Paragraph>
 
           <View style={styles.saleDetails}>
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Quantidade:</Paragraph>
-              <Paragraph style={styles.detailValue}>
-                {item.quantity}
-              </Paragraph>
+              <Paragraph style={styles.detailValue}>{item.quantity}</Paragraph>
             </View>
 
             <View style={styles.detailContainer}>
@@ -156,14 +150,15 @@ export default function SalesScreen() {
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Data da Venda:</Paragraph>
               <Paragraph style={styles.dateValue}>
-                {saleDate.toLocaleDateString('pt-BR')}
+                {saleDate.toLocaleDateString("pt-BR")}
               </Paragraph>
             </View>
 
             <View style={styles.locationContainer}>
               <Paragraph style={styles.detailLabel}>Localização:</Paragraph>
               <Paragraph style={styles.locationValue}>
-                {item.location.latitude.toFixed(4)}, {item.location.longitude.toFixed(4)}
+                {item.location.latitude.toFixed(4)},{" "}
+                {item.location.longitude.toFixed(4)}
               </Paragraph>
             </View>
           </View>
@@ -185,7 +180,8 @@ export default function SalesScreen() {
       <View style={styles.header}>
         <Title style={styles.title}>Vendas</Title>
         <Paragraph style={styles.subtitle}>
-          {sales.length} venda{sales.length !== 1 ? "s" : ""} registrada{sales.length !== 1 ? "s" : ""}
+          {sales.length} venda{sales.length !== 1 ? "s" : ""} registrada
+          {sales.length !== 1 ? "s" : ""}
         </Paragraph>
       </View>
 
@@ -366,12 +362,14 @@ export default function SalesScreen() {
                   onPress={handleSubmit(async (data) => {
                     try {
                       if (editing) {
-                        await updateDoc(doc(db, "sales", editing.id), data);
+                        await updateInCollection(
+                          "sales",
+                          editing.id,
+                          data,
+                          user.uid
+                        );
                       } else if (user) {
-                        await addDoc(collection(db, "sales"), {
-                          ...data,
-                          created_by: user.uid,
-                        });
+                        await addToCollection("sales", data, user.uid);
                       }
                       setVisible(false);
                       setEditing(null);
@@ -405,27 +403,27 @@ export default function SalesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6fa',
+    backgroundColor: "#f4f6fa",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: "#e2e8f0",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
-    color: '#23272f',
+    color: "#23272f",
   },
   subtitle: {
-    color: '#64748b',
+    color: "#64748b",
   },
   list: {
     flex: 1,
@@ -435,97 +433,97 @@ const styles = StyleSheet.create({
   },
   saleCard: {
     marginBottom: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   saleHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   clientName: {
     fontSize: 18,
     flex: 1,
-    color: '#23272f',
-    fontWeight: '600',
+    color: "#23272f",
+    fontWeight: "600",
   },
   saleActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   editButton: {
     marginLeft: 8,
   },
   productId: {
-    color: '#64748b',
+    color: "#64748b",
     marginBottom: 12,
   },
   saleDetails: {
     gap: 8,
   },
   detailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   detailLabel: {
-    color: '#64748b',
+    color: "#64748b",
   },
   detailValue: {
-    fontWeight: 'bold',
-    color: '#3b82f6',
+    fontWeight: "bold",
+    color: "#3b82f6",
   },
   priceValue: {
-    fontWeight: 'bold',
-    color: '#10b981',
+    fontWeight: "bold",
+    color: "#10b981",
   },
   dateValue: {
-    fontWeight: 'bold',
-    color: '#8b5cf6',
+    fontWeight: "bold",
+    color: "#8b5cf6",
   },
   locationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   locationValue: {
-    fontWeight: 'bold',
-    color: '#f59e0b',
+    fontWeight: "bold",
+    color: "#f59e0b",
     fontSize: 12,
   },
   modal: {
     margin: 20,
   },
   formCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
     elevation: 8,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: "#e2e8f0",
   },
   formTitle: {
     marginBottom: 20,
-    textAlign: 'center',
-    color: '#23272f',
-    fontWeight: '600',
+    textAlign: "center",
+    color: "#23272f",
+    fontWeight: "600",
   },
   input: {
     marginBottom: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   button: {
@@ -533,7 +531,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,

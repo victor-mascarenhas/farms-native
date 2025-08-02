@@ -14,9 +14,10 @@ import { z } from "zod";
 import { BarChart } from "react-native-chart-kit";
 
 import { db } from "@farms/firebase";
-import { useSalesStore } from "@farms/state";
+// Remover: import { useSalesStore } from "@farms/state";
 import { saleSchema, productSchema, stockSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
+import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
 
 // Data types for queries
 const typedSale = saleSchema;
@@ -27,32 +28,25 @@ const typedStock = stockSchema;
 type Stock = z.infer<typeof typedStock> & { id: string };
 
 export default function DashboardScreen() {
-  const { sales, fetchSales } = useSalesStore();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const [sales, setSales] = useState<Sale[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
     const load = async () => {
       setLoading(true);
       try {
-        await fetchSales();
-
-        const productSnap = await getDocs(collection(db, "products"));
-        const productData: Product[] = [];
-        productSnap.forEach((doc) => {
-          const data = typedProduct.parse(doc.data());
-          productData.push({ id: doc.id, ...data });
-        });
+        const salesData = await getAllFromCollection<Sale>("sales", user.uid);
+        setSales(salesData);
+        const productData = await getAllFromCollection<Product>(
+          "products",
+          user.uid
+        );
         setProducts(productData);
-
-        const stockSnap = await getDocs(collection(db, "stock"));
-        const stockData: Stock[] = [];
-        stockSnap.forEach((doc) => {
-          const data = typedStock.parse(doc.data());
-          stockData.push({ id: doc.id, ...data });
-        });
+        const stockData = await getAllFromCollection<Stock>("stock", user.uid);
         setStocks(stockData);
       } catch (err) {
         console.error(err);
@@ -60,9 +54,8 @@ export default function DashboardScreen() {
         setLoading(false);
       }
     };
-
     load();
-  }, [fetchSales]);
+  }, [user]);
 
   const productMap = new Map(products.map((p) => [p.id, p]));
   const totalRevenue = sales.reduce(
