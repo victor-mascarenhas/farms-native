@@ -14,7 +14,7 @@ import { BarChart } from "react-native-chart-kit";
 
 import { saleSchema, productSchema, stockSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
-import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
+import { subscribeToCollection } from "@/firestore";
 
 const typedSale = saleSchema;
 type Sale = z.infer<typeof typedSale> & { id: string };
@@ -32,25 +32,40 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     if (!user) return;
-    const load = async () => {
-      setLoading(true);
-      try {
-        const salesData = await getAllFromCollection<Sale>("sales", user.uid);
-        setSales(salesData);
-        const productData = await getAllFromCollection<Product>(
-          "products",
-          user.uid
-        );
-        setProducts(productData);
-        const stockData = await getAllFromCollection<Stock>("stock", user.uid);
-        setStocks(stockData);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    const loaded = { sales: false, products: false, stocks: false };
+    const unsubSales = subscribeToCollection<Sale>(
+      "sales",
+      user.uid,
+      (items) => {
+        setSales(items);
+        loaded.sales = true;
+        if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
       }
+    );
+    const unsubProducts = subscribeToCollection<Product>(
+      "products",
+      user.uid,
+      (items) => {
+        setProducts(items);
+        loaded.products = true;
+        if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
+      }
+    );
+    const unsubStocks = subscribeToCollection<Stock>(
+      "stock",
+      user.uid,
+      (items) => {
+        setStocks(items);
+        loaded.stocks = true;
+        if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
+      }
+    );
+    return () => {
+      unsubSales();
+      unsubProducts();
+      unsubStocks();
     };
-    load();
   }, [user]);
 
   const productMap = new Map(products.map((p) => [p.id, p]));
@@ -162,6 +177,7 @@ export default function DashboardScreen() {
               width={chartWidth}
               height={250}
               yAxisLabel="R$ "
+              yAxisSuffix=""
               chartConfig={{
                 backgroundColor: "#f4f6fa",
                 backgroundGradientFrom: "#f4f6fa",

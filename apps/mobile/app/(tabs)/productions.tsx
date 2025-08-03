@@ -6,30 +6,21 @@ import {
   Modal,
   TextInput,
   HelperText,
-  useTheme,
   Card,
   Title,
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import { z } from "zod";
-import { getAuth } from "firebase/auth";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { db } from "@farms/firebase";
 import { productionSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
-import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
+import {
+  subscribeToCollection,
+  addToCollection,
+  updateInCollection,
+} from "@/firestore";
 
 const typedSchema = productionSchema;
 type Production = z.infer<typeof typedSchema> & { id: string };
@@ -37,7 +28,6 @@ type Production = z.infer<typeof typedSchema> & { id: string };
 export default function ProductionsScreen() {
   const [productions, setProductions] = useState<Production[]>([]);
   const { user } = useAuth();
-  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Production | null>(null);
   const [loading, setLoading] = useState(true);
@@ -89,29 +79,18 @@ export default function ProductionsScreen() {
   }, [visible, editing]);
 
   useEffect(() => {
-    const user = getAuth().currentUser;
-    const q = query(
-      collection(db, "productions"),
-      where("created_by", "==", user?.uid)
-    );
-    const unsubscribe = onSnapshot(
-      q,
-      (querySnapshot) => {
-        const items: Production[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = typedSchema.parse(doc.data());
-          items.push({ id: doc.id, ...data });
-        });
+    if (!user) return;
+    setLoading(true);
+    const unsubscribe = subscribeToCollection<Production>(
+      "productions",
+      user.uid,
+      (items) => {
         setProductions(items);
-        setLoading(false);
-      },
-      (err) => {
-        console.error(err);
         setLoading(false);
       }
     );
     return unsubscribe;
-  }, []);
+  }, [user]);
 
   const renderItem = ({ item }: { item: Production }) => {
     const startDate =
@@ -233,16 +212,10 @@ export default function ProductionsScreen() {
   const handleSave = async (data: any) => {
     try {
       if (editing) {
-        await updateDoc(doc(db, "productions", editing.id), data);
+        await updateInCollection("productions", editing.id, data, user!.uid);
       } else {
-        await addDoc(collection(db, "productions"), data);
+        await addToCollection("productions", data, user!.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
-      const items = await getAllFromCollection<Production>(
-        "productions",
-        user!.uid
-      );
-      setProductions(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {

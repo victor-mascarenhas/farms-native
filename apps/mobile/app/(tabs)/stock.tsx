@@ -18,10 +18,10 @@ import { useAuth } from "@/AuthProvider";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  getAllFromCollection,
+  subscribeToCollection,
   addToCollection,
   updateInCollection,
-} from "@farms/firebase/src/firestoreUtils";
+} from "@/firestore";
 
 const typedSchema = stockSchema;
 type StockItem = z.infer<typeof typedSchema> & { id: string };
@@ -72,10 +72,15 @@ export default function StockScreen() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    getAllFromCollection<StockItem>("stock", user.uid)
-      .then((items) => setItems(items))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+    const unsubscribe = subscribeToCollection<StockItem>(
+      "stock",
+      user.uid,
+      (items) => {
+        setItems(items);
+        setLoading(false);
+      }
+    );
+    return unsubscribe;
   }, [user]);
 
   const renderItem = ({ item }: { item: StockItem }) => {
@@ -144,9 +149,6 @@ export default function StockScreen() {
       } else {
         await addToCollection("stock", data, user.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar
-      const items = await getAllFromCollection<StockItem>("stock", user.uid);
-      setItems(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, View, Dimensions } from "react-native";
-import { Appbar, Card, Title, Paragraph, useTheme } from "react-native-paper";
+import { Appbar, Card, Title, Paragraph } from "react-native-paper";
 import { z } from "zod";
 import { BarChart } from "react-native-chart-kit";
 
 import { productionSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
-import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
+import { subscribeToCollection } from "@/firestore";
 
 const typedProduction = productionSchema;
 type Production = z.infer<typeof typedProduction> & { id: string };
@@ -17,23 +17,23 @@ export default function ProductionDashboardScreen() {
   const [productions, setProductions] = useState<Production[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const { logout, user } = useAuth();
-  const theme = useTheme();
 
   useEffect(() => {
     if (!user) return;
-    const load = async () => {
-      const prodData = await getAllFromCollection<Production>(
-        "productions",
-        user.uid
-      );
-      setProductions(prodData);
-      const productData = await getAllFromCollection<Product>(
-        "products",
-        user.uid
-      );
-      setProducts(productData);
+    const unsubProd = subscribeToCollection<Production>(
+      "productions",
+      user.uid,
+      setProductions
+    );
+    const unsubProducts = subscribeToCollection<Product>(
+      "products",
+      user.uid,
+      setProducts
+    );
+    return () => {
+      unsubProd();
+      unsubProducts();
     };
-    load().catch((err) => console.error(err));
   }, [user]);
 
   const totalProductions = productions.length;
@@ -113,6 +113,7 @@ export default function ProductionDashboardScreen() {
               width={chartWidth}
               height={300}
               yAxisLabel=""
+              yAxisSuffix=""
               chartConfig={{
                 backgroundColor: "#f4f6fa",
                 backgroundGradientFrom: "#f4f6fa",

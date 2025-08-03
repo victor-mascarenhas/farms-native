@@ -17,10 +17,10 @@ import { productSchema } from "@farms/schemas";
 import { useProductForm } from "../hooks/useProductForm";
 import { useAuth } from "@/AuthProvider";
 import {
-  getAllFromCollection,
+  subscribeToCollection,
   addToCollection,
   updateInCollection,
-} from "@farms/firebase/src/firestoreUtils";
+} from "@/firestore";
 
 const typedSchema = productSchema;
 type Product = z.infer<typeof typedSchema> & { id: string };
@@ -37,10 +37,15 @@ export default function ProductsScreen() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    getAllFromCollection<Product>("products", user.uid)
-      .then((items) => setProducts(items))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+    const unsubscribe = subscribeToCollection<Product>(
+      "products",
+      user.uid,
+      (items) => {
+        setProducts(items);
+        setLoading(false);
+      }
+    );
+    return unsubscribe;
   }, [user]);
 
   useEffect(() => {
@@ -145,9 +150,6 @@ export default function ProductsScreen() {
       } else {
         await addToCollection("products", data, user.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar
-      const items = await getAllFromCollection<Product>("products", user.uid);
-      setProducts(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {

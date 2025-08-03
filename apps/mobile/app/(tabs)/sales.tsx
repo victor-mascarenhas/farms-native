@@ -19,10 +19,10 @@ import { Dropdown } from "react-native-paper-dropdown";
 import { saleSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import {
-  getAllFromCollection,
+  subscribeToCollection,
   addToCollection,
   updateInCollection,
-} from "@farms/firebase/src/firestoreUtils";
+} from "@/firestore";
 
 const typedSchema = saleSchema;
 type Sale = z.infer<typeof typedSchema> & { id: string };
@@ -93,13 +93,23 @@ export default function SalesScreen() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    getAllFromCollection<Sale>("sales", user.uid)
-      .then((items) => setSales(items))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-    getAllFromCollection<Product>("products", user.uid)
-      .then((items) => setProducts(items))
-      .catch((err) => console.error(err));
+    const unsubscribeSales = subscribeToCollection<Sale>(
+      "sales",
+      user.uid,
+      (items) => {
+        setSales(items);
+        setLoading(false);
+      }
+    );
+    const unsubscribeProducts = subscribeToCollection<Product>(
+      "products",
+      user.uid,
+      setProducts
+    );
+    return () => {
+      unsubscribeSales();
+      unsubscribeProducts();
+    };
   }, [user]);
 
   const renderItem = ({ item }: { item: Sale }) => {
@@ -188,9 +198,6 @@ export default function SalesScreen() {
       } else {
         await addToCollection("sales", data, user!.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar
-      const items = await getAllFromCollection<Sale>("sales", user!.uid);
-      setSales(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {
