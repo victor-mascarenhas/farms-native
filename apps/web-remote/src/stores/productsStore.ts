@@ -1,17 +1,5 @@
-import { create, StateCreator } from "zustand";
-import {
-  getAllFromCollection,
-  addToCollection,
-  updateInCollection,
-  removeFromCollection,
-} from "@farms/firebase/src/firestoreUtils";
-
-export type Product = {
-  id?: string;
-  nome: string;
-  preco: number;
-  descricao?: string;
-};
+import { create } from "zustand";
+import { type Product } from "@farms/schemas";
 
 type ProductsStore = {
   products: Product[];

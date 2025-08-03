@@ -169,15 +169,13 @@ export default function StockPage() {
               </h2>
               <form
                 onSubmit={form.handleSubmit(handleSave)}
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                className={styles.form}
               >
+                <label htmlFor="product_id">Produto</label>
                 <select
+                  id="product_id"
                   {...form.register("product_id", { required: true })}
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                   defaultValue={form.getValues("product_id") || ""}
                 >
                   <option value="">Selecione o produto</option>
@@ -187,30 +185,42 @@ export default function StockPage() {
                     </option>
                   ))}
                 </select>
+                {form.formState.errors.product_id && (
+                  <span className={styles.error}>
+                    {form.formState.errors.product_id.message}
+                  </span>
+                )}
+
+                <label htmlFor="available_quantity">
+                  Quantidade Disponível
+                </label>
                 <input
+                  id="available_quantity"
                   type="number"
                   {...form.register("available_quantity", {
-                    valueAsNumber: true,
                     required: true,
-                    min: 0,
+                    valueAsNumber: true,
                   })}
-                  placeholder="Quantidade disponível"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
+                {form.formState.errors.available_quantity && (
+                  <span className={styles.error}>
+                    {form.formState.errors.available_quantity.message}
+                  </span>
+                )}
+
+                <label htmlFor="last_updated">Data da Última Atualização</label>
                 <input
+                  id="last_updated"
                   type="date"
-                  {...form.register("last_updated")}
-                  placeholder="Última atualização"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  {...form.register("last_updated", { required: true })}
+                  className={styles.input}
                 />
+                {form.formState.errors.last_updated && (
+                  <span className={styles.error}>
+                    {form.formState.errors.last_updated.message}
+                  </span>
+                )}
                 <div style={{ display: "flex", gap: 12 }}>
                   <button
                     type="button"

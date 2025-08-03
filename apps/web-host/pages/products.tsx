@@ -131,9 +131,10 @@ export default function ProductsPage() {
                 onSubmit={form.handleSubmit(handleSave)}
                 style={{ display: "flex", flexDirection: "column", gap: 16 }}
               >
+                <label htmlFor="name">Nome do Produto</label>
                 <input
+                  id="name"
                   {...form.register("name")}
-                  placeholder="Nome do Produto"
                   className={styles.input}
                 />
                 {form.formState.errors.name && (
@@ -142,9 +143,10 @@ export default function ProductsPage() {
                   </span>
                 )}
 
+                <label htmlFor="category">Categoria</label>
                 <input
+                  id="category"
                   {...form.register("category")}
-                  placeholder="Categoria"
                   className={styles.input}
                 />
                 {form.formState.errors.category && (
@@ -153,11 +155,12 @@ export default function ProductsPage() {
                   </span>
                 )}
 
+                <label htmlFor="unit_price">Preço de Venda (R$)</label>
                 <input
+                  id="unit_price"
                   type="number"
                   step="0.01"
                   {...form.register("unit_price", { valueAsNumber: true })}
-                  placeholder="Preço de Venda (R$)"
                   className={styles.input}
                 />
                 {form.formState.errors.unit_price && (
@@ -166,11 +169,12 @@ export default function ProductsPage() {
                   </span>
                 )}
 
+                <label htmlFor="cost_price">Preço de Custo (R$)</label>
                 <input
+                  id="cost_price"
                   type="number"
                   step="0.01"
                   {...form.register("cost_price", { valueAsNumber: true })}
-                  placeholder="Preço de Custo (R$)"
                   className={styles.input}
                 />
                 {form.formState.errors.cost_price && (

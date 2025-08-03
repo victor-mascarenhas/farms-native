@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useProductionStore, Production } from "./stores/productionStore";
-import { useProductsStore, Product } from "./stores/productsStore";
+import { useProductionStore } from "./stores/productionStore";
+import { useProductsStore } from "./stores/productsStore";
 import { Pie, Bar, Line } from "react-chartjs-2";
+import { type Product, type Production } from "@farms/schemas";
+
 import {
   Chart,
   ArcElement,
@@ -39,7 +41,7 @@ export default function ProductionDashboardPage() {
   const producoesFiltradas = useMemo(() => {
     return productions.filter((prod: Production) => {
       const produtoCorreto =
-        filtroProduto === "todos" || prod.nome === filtroProduto;
+        filtroProduto === "todos" || prod.product_id === filtroProduto;
       const statusCorreto =
         filtroStatus === "todos" || prod.status === filtroStatus;
       return produtoCorreto && statusCorreto;
@@ -63,15 +65,17 @@ export default function ProductionDashboardPage() {
   const quantidadePorProduto = useMemo(() => {
     const map: Record<string, number> = {};
     producoesFiltradas.forEach((prod: Production) => {
-      map[prod.nome] = (map[prod.nome] || 0) + 1;
+      const product = products.find((p) => p.id === prod.product_id);
+      const productName = product ? product.name : prod.product_id;
+      map[productName] = (map[productName] || 0) + 1;
     });
     return map;
-  }, [producoesFiltradas]);
+  }, [producoesFiltradas, products]);
 
   const producoesPorMes = useMemo(() => {
     const map: Record<string, number> = {};
     producoesFiltradas.forEach((prod: Production) => {
-      const data = new Date(prod.data);
+      const data = new Date(prod.start_date);
       const mesAno = `${data.getFullYear()}-${String(
         data.getMonth() + 1
       ).padStart(2, "0")}`;
@@ -165,8 +169,8 @@ export default function ProductionDashboardPage() {
           >
             <option value="todos">Todos os produtos</option>
             {products.map((product: Product) => (
-              <option key={product.id} value={product.nome}>
-                {product.nome}
+              <option key={product.id} value={product.name}>
+                {product.name}
               </option>
             ))}
           </select>
@@ -304,47 +308,62 @@ export default function ProductionDashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {producoesFiltradas.slice(0, 10).map((prod: Production) => (
-                    <tr
-                      key={prod.id}
-                      style={{ borderBottom: "1px solid #f1f5f9" }}
-                    >
-                      <td style={{ padding: "12px" }}>{prod.nome}</td>
-                      <td style={{ padding: "12px" }}>
-                        <span
-                          style={{
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            backgroundColor:
-                              prod.status === "aguardando"
-                                ? "#fef3c7"
-                                : prod.status === "em_producao"
-                                ? "#dbeafe"
-                                : "#dcfce7",
-                            color:
-                              prod.status === "aguardando"
-                                ? "#92400e"
-                                : prod.status === "em_producao"
-                                ? "#1e40af"
-                                : "#166534",
-                          }}
-                        >
-                          {prod.status === "aguardando"
-                            ? "Aguardando"
-                            : prod.status === "em_producao"
-                            ? "Em Produção"
-                            : "Colhido"}
-                        </span>
-                      </td>
-                      <td style={{ padding: "12px" }}>-</td>
-                      <td style={{ padding: "12px" }}>{prod.data}</td>
-                      <td style={{ padding: "12px" }}>
-                        <span style={{ color: "#94a3b8" }}>-</span>
-                      </td>
-                    </tr>
-                  ))}
+                  {producoesFiltradas.slice(0, 10).map((prod: Production) => {
+                    const product = products.find(
+                      (p) => p.id === prod.product_id
+                    );
+                    const productName = product
+                      ? product.name
+                      : prod.product_id;
+
+                    return (
+                      <tr
+                        key={prod.id}
+                        style={{ borderBottom: "1px solid #f1f5f9" }}
+                      >
+                        <td style={{ padding: "12px" }}>{productName}</td>
+                        <td style={{ padding: "12px" }}>
+                          <span
+                            style={{
+                              padding: "4px 8px",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              fontWeight: "bold",
+                              backgroundColor:
+                                prod.status === "aguardando"
+                                  ? "#fef3c7"
+                                  : prod.status === "em_producao"
+                                  ? "#dbeafe"
+                                  : "#dcfce7",
+                              color:
+                                prod.status === "aguardando"
+                                  ? "#92400e"
+                                  : prod.status === "em_producao"
+                                  ? "#1e40af"
+                                  : "#166534",
+                            }}
+                          >
+                            {prod.status === "aguardando"
+                              ? "Aguardando"
+                              : prod.status === "em_producao"
+                              ? "Em Produção"
+                              : "Colhido"}
+                          </span>
+                        </td>
+                        <td style={{ padding: "12px" }}>-</td>
+                        <td style={{ padding: "12px" }}>
+                          {new Date(prod.start_date).toLocaleDateString()}
+                        </td>
+                        <td style={{ padding: "12px" }}>
+                          {prod.harvest_date ? (
+                            new Date(prod?.harvest_date).toLocaleDateString()
+                          ) : (
+                            <span style={{ color: "#94a3b8" }}>-</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

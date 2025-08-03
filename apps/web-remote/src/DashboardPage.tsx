@@ -14,7 +14,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import type { Product } from "./stores/productsStore";
+import type { Product } from "@farms/schemas";
 
 Chart.register(
   BarElement,
@@ -60,9 +60,13 @@ export default function DashboardPage() {
     > = {};
 
     vendasFiltradas.forEach((sale: Sale) => {
-      const produto = products.find((p: Product) => p.nome === sale.produto);
-      const custoUnitario = produto?.preco || 0; // Usando preco como custo por enquanto
-      const lucroUnitario = sale.valor / sale.quantidade - custoUnitario;
+      const produto = products.find(
+        (p: any) => p.nome === sale.produto || p.name === sale.produto
+      );
+
+      const unitPrice = produto?.unit_price || 0;
+      const costPrice = produto?.cost_price || 0;
+      const lucroUnitario = unitPrice - costPrice;
       const lucroTotal = lucroUnitario * sale.quantidade;
 
       if (!map[sale.produto]) {
@@ -106,7 +110,7 @@ export default function DashboardPage() {
   const vendasPorDia = useMemo(() => {
     const map: Record<string, number> = {};
     vendasFiltradas.forEach((sale: Sale) => {
-      const data = sale.data.split("T")[0]; // Pegar apenas a data
+      const data = sale.data.split("T")[0];
       map[data] = (map[data] || 0) + sale.valor;
     });
     return map;
@@ -213,8 +217,8 @@ export default function DashboardPage() {
           >
             <option value="todos">Todos os produtos</option>
             {products.map((product: Product) => (
-              <option key={product.id} value={product.nome}>
-                {product.nome}
+              <option key={product.id} value={product.name}>
+                {product.name}
               </option>
             ))}
           </select>
@@ -225,7 +229,6 @@ export default function DashboardPage() {
         <p>Carregando...</p>
       ) : (
         <>
-          {/* Cards de estatísticas */}
           <div
             style={{
               display: "grid",
@@ -290,7 +293,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Gráficos */}
           <div
             style={{
               display: "grid",
@@ -327,7 +329,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Mapa */}
           <div className="card" style={{ marginBottom: 32 }}>
             <h3>Mapa das Vendas</h3>
             <div style={{ height: 400, width: "100%" }}>
@@ -351,7 +352,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Tabela de vendas recentes */}
           <div className="card">
             <h3>Vendas Recentes</h3>
             <div style={{ overflowX: "auto" }}>

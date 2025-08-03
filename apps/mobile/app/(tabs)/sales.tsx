@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -229,6 +229,7 @@ export default function SalesScreen() {
                 {editing ? "Editar Venda" : "Nova Venda"}
               </Title>
 
+              <Text style={styles.label}>Nome do Cliente</Text>
               <Controller
                 control={control}
                 name="client_name"
@@ -249,6 +250,7 @@ export default function SalesScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Produto</Text>
               <Controller
                 control={control}
                 name="product_id"
@@ -272,6 +274,7 @@ export default function SalesScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Quantidade</Text>
               <Controller
                 control={control}
                 name="quantity"
@@ -291,6 +294,7 @@ export default function SalesScreen() {
                 <HelperText type="error">{errors.quantity.message}</HelperText>
               )}
 
+              <Text style={styles.label}>Valor Total (R$)</Text>
               <Controller
                 control={control}
                 name="total_price"
@@ -312,6 +316,7 @@ export default function SalesScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Latitude</Text>
               <Controller
                 control={control}
                 name="location.latitude"
@@ -333,6 +338,7 @@ export default function SalesScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Longitude</Text>
               <Controller
                 control={control}
                 name="location.longitude"
@@ -354,6 +360,7 @@ export default function SalesScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Data da Venda</Text>
               <Controller
                 control={control}
                 name="sale_date"
@@ -545,5 +552,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#23272f",
   },
 });

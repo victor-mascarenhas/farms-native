@@ -217,56 +217,83 @@ export default function ProductionsPage() {
               </h2>
               <form
                 onSubmit={form.handleSubmit(handleSave)}
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                className={styles.form}
               >
+                <label htmlFor="product_id">Produto</label>
+                <select
+                  id="product_id"
+                  {...form.register("product_id", { required: true })}
+                  className={styles.input}
+                  defaultValue={form.getValues("product_id") || ""}
+                >
+                  <option value="">Selecione o produto</option>
+                  {products.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+                {form.formState.errors.product_id && (
+                  <span className={styles.error}>
+                    {form.formState.errors.product_id.message}
+                  </span>
+                )}
+
+                <label htmlFor="status">Status</label>
                 <input
-                  {...form.register("product_id")}
-                  placeholder="Produto"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  id="status"
+                  {...form.register("status", { required: true })}
+                  className={styles.input}
                 />
+                {form.formState.errors.status && (
+                  <span className={styles.error}>
+                    {form.formState.errors.status.message}
+                  </span>
+                )}
+
+                <label htmlFor="quantity">Quantidade</label>
                 <input
-                  {...form.register("status")}
-                  placeholder="Status"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
-                />
-                <input
+                  id="quantity"
                   type="number"
-                  {...form.register("quantity", { valueAsNumber: true })}
-                  placeholder="Quantidade"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  {...form.register("quantity", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  className={styles.input}
                 />
+                {form.formState.errors.quantity && (
+                  <span className={styles.error}>
+                    {form.formState.errors.quantity.message}
+                  </span>
+                )}
+
+                <label htmlFor="start_date">Data de Início</label>
                 <input
+                  id="start_date"
                   type="date"
-                  {...form.register("start_date")}
-                  placeholder="Data de Início"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  {...form.register("start_date", { required: true })}
+                  className={styles.input}
                 />
+                {form.formState.errors.start_date && (
+                  <span className={styles.error}>
+                    {form.formState.errors.start_date.message}
+                  </span>
+                )}
+
+                <label htmlFor="harvest_date">
+                  Data de Colheita (opcional)
+                </label>
                 <input
+                  id="harvest_date"
                   type="date"
                   {...form.register("harvest_date")}
-                  placeholder="Data de Colheita (opcional)"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
+                {form.formState.errors.harvest_date && (
+                  <span className={styles.error}>
+                    {form.formState.errors.harvest_date.message}
+                  </span>
+                )}
                 <div style={{ display: "flex", gap: 12 }}>
                   <button
                     type="button"

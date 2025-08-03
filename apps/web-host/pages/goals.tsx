@@ -152,48 +152,53 @@ export default function GoalsPage() {
                 onSubmit={form.handleSubmit(handleSave)}
                 style={{ display: "flex", flexDirection: "column", gap: 16 }}
               >
+                <label htmlFor="type">Tipo</label>
                 <input
+                  id="type"
                   {...form.register("type")}
-                  placeholder="Tipo"
                   style={{
                     padding: 12,
                     borderRadius: 6,
                     border: "1px solid #d1d5db",
                   }}
                 />
+                <label htmlFor="product_id">ID do Produto</label>
                 <input
+                  id="product_id"
                   {...form.register("product_id")}
-                  placeholder="ID do Produto"
                   style={{
                     padding: 12,
                     borderRadius: 6,
                     border: "1px solid #d1d5db",
                   }}
                 />
+                <label htmlFor="target_quantity">Quantidade Alvo</label>
                 <input
+                  id="target_quantity"
                   type="number"
                   {...form.register("target_quantity", { valueAsNumber: true })}
-                  placeholder="Quantidade Alvo"
                   style={{
                     padding: 12,
                     borderRadius: 6,
                     border: "1px solid #d1d5db",
                   }}
                 />
+                <label htmlFor="start_date">Data de Início</label>
                 <input
+                  id="start_date"
                   type="date"
                   {...form.register("start_date")}
-                  placeholder="Data de Início"
                   style={{
                     padding: 12,
                     borderRadius: 6,
                     border: "1px solid #d1d5db",
                   }}
                 />
+                <label htmlFor="end_date">Data de Fim</label>
                 <input
+                  id="end_date"
                   type="date"
                   {...form.register("end_date")}
-                  placeholder="Data de Fim"
                   style={{
                     padding: 12,
                     borderRadius: 6,

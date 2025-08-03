@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -284,6 +284,7 @@ export default function GoalsScreen() {
                 {editing ? "Editar Meta" : "Nova Meta"}
               </Title>
 
+              <Text style={styles.label}>Produto</Text>
               <Controller
                 control={control}
                 name="product_id"
@@ -304,6 +305,7 @@ export default function GoalsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Tipo</Text>
               <Controller
                 control={control}
                 name="type"
@@ -322,6 +324,7 @@ export default function GoalsScreen() {
                 <HelperText type="error">{errors.type.message}</HelperText>
               )}
 
+              <Text style={styles.label}>Meta de Quantidade</Text>
               <Controller
                 control={control}
                 name="target_quantity"
@@ -343,6 +346,7 @@ export default function GoalsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Data de Início</Text>
               <Controller
                 control={control}
                 name="start_date"
@@ -367,6 +371,7 @@ export default function GoalsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Data de Fim</Text>
               <Controller
                 control={control}
                 name="end_date"
@@ -557,5 +562,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#23272f",
   },
 });

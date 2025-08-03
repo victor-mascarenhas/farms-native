@@ -218,6 +218,9 @@ importers:
       '@farms/firebase':
         specifier: workspace:^
         version: link:../../packages/firebase
+      '@farms/schemas':
+        specifier: workspace:^
+        version: link:../../packages/schemas
       '@react-google-maps/api':
         specifier: ^2.20.7
         version: 2.20.7(react-dom@19.0.0)(react@19.0.0)

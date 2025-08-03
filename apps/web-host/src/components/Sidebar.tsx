@@ -7,16 +7,18 @@ const links = [
   { href: "/dashboard", label: "Dashboard de Vendas" },
   { href: "/production-dashboard", label: "Dashboard de Produção" },
   { href: "/sales", label: "Controle de Vendas" },
-  { href: "/stock", label: "Estoque e Vendas" },
+  { href: "/stock", label: "Estoque" },
   { href: "/goals", label: "Metas" },
   { href: "/products", label: "Produtos" },
   { href: "/productions", label: "Produções" },
-  { href: "/production-form", label: "Nova Produção" },
 ];
 
 function Sidebar({ children }: { children: ReactNode }) {
   const handleLogout = async () => {
-    await fetch("/api/logout");
+    const res = await fetch("/api/logout");
+    if (res.status !== 200) {
+      window.location.href = "/login";
+    }
   };
 
   return (

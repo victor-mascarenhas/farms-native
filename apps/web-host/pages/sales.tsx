@@ -2,12 +2,8 @@ import { useEffect, useState } from "react";
 import Sidebar from "../src/components/Sidebar";
 import { useForm } from "react-hook-form";
 import styles from "./sales.module.css";
+import { Product } from "@farms/schemas";
 
-interface Product {
-  id: string;
-  nome: string;
-  preco: number;
-}
 interface Sale {
   id: string;
   product_id: string;
@@ -36,6 +32,11 @@ export default function SalesPage() {
       location: { latitude: 0, longitude: 0 },
     },
   });
+  const [autoTotal, setAutoTotal] = useState(0);
+
+  useEffect(() => {
+    console.log(autoTotal);
+  }, [autoTotal]);
 
   const fetchSales = async () => {
     setLoading(true);
@@ -87,6 +88,18 @@ export default function SalesPage() {
     }
   }, [modalOpen, editing, products]);
 
+  useEffect(() => {
+    const prod = products.find((p) => p.id === form.watch("product_id"));
+    const qty = Number(form.watch("quantity"));
+    if (prod && qty > 0) {
+      setAutoTotal(prod.unit_price * qty);
+      form.setValue("total_price", prod.unit_price * qty);
+    } else {
+      setAutoTotal(0);
+      form.setValue("total_price", 0);
+    }
+  }, [form.watch("product_id"), form.watch("quantity"), products]);
+
   const handleSave = async (data: any) => {
     setSucesso("");
     setErro("");
@@ -98,7 +111,7 @@ export default function SalesPage() {
       }
       const payload = {
         ...data,
-        produto: foundProduct.nome,
+        produto: foundProduct.name,
         quantidade: data.quantity,
         valor: data.total_price,
         data: data.sale_date,
@@ -164,7 +177,6 @@ export default function SalesPage() {
           {sales.length !== 1 ? "s" : ""}
         </p>
 
-        {/* Botão flutuante */}
         <button
           className={styles.fab}
           onClick={() => {
@@ -175,7 +187,6 @@ export default function SalesPage() {
           +
         </button>
 
-        {/* Modal */}
         {modalOpen && (
           <div
             className={styles.modalOverlay}
@@ -190,102 +201,104 @@ export default function SalesPage() {
               </h2>
               <form
                 onSubmit={form.handleSubmit(handleSave)}
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                className={styles.form}
               >
+                <label htmlFor="client_name">Nome do Cliente</label>
+                <input
+                  id="client_name"
+                  {...form.register("client_name", { required: true })}
+                  className={styles.input}
+                />
+                {form.formState.errors.client_name && (
+                  <span className={styles.error}>
+                    {form.formState.errors.client_name.message}
+                  </span>
+                )}
+
+                <label htmlFor="product_id">Produto</label>
                 <select
+                  id="product_id"
                   {...form.register("product_id", { required: true })}
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                   defaultValue={form.getValues("product_id") || ""}
                 >
                   <option value="">Selecione o produto</option>
                   {products.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.nome}
+                      {p.name}
                     </option>
                   ))}
                 </select>
+                {form.formState.errors.product_id && (
+                  <span className={styles.error}>
+                    {form.formState.errors.product_id.message}
+                  </span>
+                )}
+
+                <label htmlFor="quantity">Quantidade</label>
                 <input
+                  id="quantity"
                   type="number"
                   {...form.register("quantity", {
-                    valueAsNumber: true,
                     required: true,
-                    min: 1,
+                    valueAsNumber: true,
                   })}
-                  placeholder="Quantidade"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
+                {form.formState.errors.quantity && (
+                  <span className={styles.error}>
+                    {form.formState.errors.quantity.message}
+                  </span>
+                )}
+
+                <label htmlFor="total_price">Valor Total (R$)</label>
                 <input
+                  id="total_price"
                   type="number"
-                  {...form.register("total_price", {
-                    valueAsNumber: true,
-                    required: true,
-                    min: 0,
-                  })}
-                  placeholder="Valor total"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  step="0.01"
+                  value={autoTotal}
+                  readOnly
+                  className={styles.input}
                 />
+                {form.formState.errors.total_price && (
+                  <span className={styles.error}>
+                    {form.formState.errors.total_price.message}
+                  </span>
+                )}
+
+                <label htmlFor="sale_date">Data da Venda</label>
                 <input
-                  type="text"
-                  {...form.register("client_name", { required: true })}
-                  placeholder="Nome do cliente"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
-                />
-                <input
+                  id="sale_date"
                   type="date"
                   {...form.register("sale_date", { required: true })}
-                  placeholder="Data da venda"
-                  style={{
-                    padding: 12,
-                    borderRadius: 6,
-                    border: "1px solid #d1d5db",
-                  }}
+                  className={styles.input}
                 />
-                <div style={{ display: "flex", gap: 8 }}>
-                  <input
-                    type="number"
-                    step="any"
-                    {...form.register("location.latitude", {
-                      valueAsNumber: true,
-                    })}
-                    placeholder="Latitude"
-                    style={{
-                      flex: 1,
-                      padding: 12,
-                      borderRadius: 6,
-                      border: "1px solid #d1d5db",
-                    }}
-                  />
-                  <input
-                    type="number"
-                    step="any"
-                    {...form.register("location.longitude", {
-                      valueAsNumber: true,
-                    })}
-                    placeholder="Longitude"
-                    style={{
-                      flex: 1,
-                      padding: 12,
-                      borderRadius: 6,
-                      border: "1px solid #d1d5db",
-                    }}
-                  />
-                </div>
+                {form.formState.errors.sale_date && (
+                  <span className={styles.error}>
+                    {form.formState.errors.sale_date.message}
+                  </span>
+                )}
+
+                <label htmlFor="latitude">Latitude</label>
+                <input
+                  id="latitude"
+                  type="number"
+                  step="any"
+                  {...form.register("location.latitude", {
+                    valueAsNumber: true,
+                  })}
+                  className={styles.input}
+                />
+                <label htmlFor="longitude">Longitude</label>
+                <input
+                  id="longitude"
+                  type="number"
+                  step="any"
+                  {...form.register("location.longitude", {
+                    valueAsNumber: true,
+                  })}
+                  className={styles.input}
+                />
                 <div style={{ display: "flex", gap: 12 }}>
                   <button
                     type="button"
@@ -330,7 +343,6 @@ export default function SalesPage() {
           </div>
         )}
 
-        {/* Lista de vendas */}
         <div className={styles.card}>
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>Vendas Registradas</h2>
           {loading ? (
@@ -364,7 +376,7 @@ export default function SalesPage() {
                           const found = products.find(
                             (p) => p.id === sale.product_id
                           );
-                          return found ? found.nome : sale.product_id;
+                          return found ? found.name : sale.product_id;
                         })()}
                       </td>
                       <td style={{ padding: 12 }}>{sale.quantity}</td>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -184,6 +184,7 @@ export default function StockScreen() {
                 {editing ? "Editar Item" : "Novo Item"}
               </Title>
 
+              <Text style={styles.label}>Produto</Text>
               <Controller
                 control={control}
                 name="product_id"
@@ -204,6 +205,7 @@ export default function StockScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Quantidade Disponível</Text>
               <Controller
                 control={control}
                 name="available_quantity"
@@ -225,6 +227,7 @@ export default function StockScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Data da Última Atualização</Text>
               <Controller
                 control={control}
                 name="last_updated"
@@ -400,5 +403,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#23272f",
   },
 });

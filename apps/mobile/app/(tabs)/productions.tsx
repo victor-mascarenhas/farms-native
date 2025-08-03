@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -281,6 +281,7 @@ export default function ProductionsScreen() {
                 {editing ? "Editar Produção" : "Nova Produção"}
               </Title>
 
+              <Text style={styles.label}>Produto</Text>
               <Controller
                 control={control}
                 name="product_id"
@@ -301,6 +302,7 @@ export default function ProductionsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Status</Text>
               <Controller
                 control={control}
                 name="status"
@@ -319,6 +321,7 @@ export default function ProductionsScreen() {
                 <HelperText type="error">{errors.status.message}</HelperText>
               )}
 
+              <Text style={styles.label}>Quantidade</Text>
               <Controller
                 control={control}
                 name="quantity"
@@ -338,6 +341,7 @@ export default function ProductionsScreen() {
                 <HelperText type="error">{errors.quantity.message}</HelperText>
               )}
 
+              <Text style={styles.label}>Data de Início</Text>
               <Controller
                 control={control}
                 name="start_date"
@@ -362,6 +366,7 @@ export default function ProductionsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Data de Colheita (opcional)</Text>
               <Controller
                 control={control}
                 name="harvest_date"
@@ -551,5 +556,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#23272f",
   },
 });

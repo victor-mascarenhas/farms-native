@@ -1,17 +1,5 @@
-import { create, StateCreator } from "zustand";
-import {
-  getAllFromCollection,
-  addToCollection,
-  updateInCollection,
-  removeFromCollection,
-} from "@farms/firebase/src/firestoreUtils";
-
-export type Production = {
-  id?: string;
-  nome: string;
-  status: "aguardando" | "em_producao" | "colhido";
-  data: string;
-};
+import { create } from "zustand";
+import { type Production } from "@farms/schemas";
 
 type ProductionStore = {
   productions: Production[];

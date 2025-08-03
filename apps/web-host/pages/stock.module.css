@@ -75,3 +75,19 @@
   background-color: #ef4444;
   color: white;
 }
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.input {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+.error {
+  color: red;
+  margin-top: 4px;
+  font-size: 13px;
+}

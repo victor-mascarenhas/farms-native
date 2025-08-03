@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -194,6 +194,7 @@ export default function ProductsScreen() {
                 {editing ? "Editar Produto" : "Novo Produto"}
               </Title>
 
+              <Text style={styles.label}>Nome do Produto</Text>
               <TextInput
                 label="Nome do Produto"
                 value={form.watch("name")}
@@ -207,6 +208,7 @@ export default function ProductsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Categoria</Text>
               <TextInput
                 label="Categoria"
                 value={form.watch("category")}
@@ -220,6 +222,7 @@ export default function ProductsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Preço de Venda (R$)</Text>
               <TextInput
                 label="Preço de Venda (R$)"
                 value={form.watch("unit_price")?.toString()}
@@ -236,6 +239,7 @@ export default function ProductsScreen() {
                 </HelperText>
               )}
 
+              <Text style={styles.label}>Preço de Custo (R$)</Text>
               <TextInput
                 label="Preço de Custo (R$)"
                 value={form.watch("cost_price")?.toString()}
@@ -424,5 +428,10 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#23272f",
   },
 });
