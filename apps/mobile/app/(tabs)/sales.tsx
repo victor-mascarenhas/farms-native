@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet, Text } from "react-native";
+import { FlatList, View, StyleSheet, Text, ScrollView } from "react-native";
 import {
   Button,
   Portal,
@@ -26,6 +26,16 @@ import {
 
 const typedSchema = saleSchema;
 
+const formatDateToBR = (date: string) => {
+  const [year, month, day] = date.split("-");
+  return `${day}-${month}-${year}`;
+};
+
+const formatDateToISO = (date: string) => {
+  const [day, month, year] = date.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 export default function SalesScreen() {
   const [sales, setSales] = useState<Sale[]>([]);
   const { user } = useAuth();
@@ -47,8 +57,7 @@ export default function SalesScreen() {
       total_price: 0,
       client_name: "",
       location: { latitude: 0, longitude: 0 },
-      sale_date: new Date(),
-      created_by: user?.uid,
+      sale_date: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -65,10 +74,7 @@ export default function SalesScreen() {
             latitude: editing.location?.latitude,
             longitude: editing.location?.longitude,
           },
-          sale_date:
-            editing.sale_date instanceof Date
-              ? editing.sale_date
-              : new Date((editing.sale_date as any).seconds * 1000),
+          sale_date: editing.sale_date,
         });
       } else {
         reset({
@@ -77,8 +83,7 @@ export default function SalesScreen() {
           total_price: 0,
           client_name: "",
           location: { latitude: 0, longitude: 0 },
-          sale_date: new Date(),
-          created_by: user?.uid,
+          sale_date: new Date().toISOString().split("T")[0],
         });
       }
     }
@@ -97,11 +102,6 @@ export default function SalesScreen() {
   }, [user]);
 
   const renderItem = ({ item }: { item: Sale }) => {
-    const saleDate =
-      item.sale_date instanceof Date
-        ? item.sale_date
-        : new Date((item.sale_date as any).seconds * 1000);
-
     return (
       <Card style={styles.saleCard}>
         <Card.Content>
@@ -142,7 +142,7 @@ export default function SalesScreen() {
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Data da Venda:</Paragraph>
               <Paragraph style={styles.dateValue}>
-                {saleDate.toLocaleDateString("pt-BR")}
+                {formatDateToBR(item.sale_date)}
               </Paragraph>
             </View>
 
@@ -182,7 +182,6 @@ export default function SalesScreen() {
       } else {
         await addToCollection("sales", data, user!.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar
       const items = await getAllFromCollection<Sale>("sales", user!.uid);
       setSales(items);
       setVisible(false);
@@ -218,183 +217,186 @@ export default function SalesScreen() {
           contentContainerStyle={styles.modal}
         >
           <Card style={styles.formCard}>
-            <Card.Content>
-              <Title style={styles.formTitle}>
-                {editing ? "Editar Venda" : "Nova Venda"}
-              </Title>
+            <ScrollView style={styles.formScroll}>
+              <Card.Content>
+                <Title style={styles.formTitle}>
+                  {editing ? "Editar Venda" : "Nova Venda"}
+                </Title>
 
-              <Text style={styles.label}>Nome do Cliente</Text>
-              <Controller
-                control={control}
-                name="client_name"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Nome do Cliente"
-                    value={value}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    error={!!errors.client_name}
-                    style={styles.input}
-                  />
+                <Text style={styles.label}>Nome do Cliente</Text>
+                <Controller
+                  control={control}
+                  name="client_name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Nome do Cliente"
+                      value={value}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      error={!!errors.client_name}
+                      style={styles.input}
+                    />
+                  )}
+                />
+                {errors.client_name && (
+                  <HelperText type="error">
+                    {errors.client_name.message}
+                  </HelperText>
                 )}
-              />
-              {errors.client_name && (
-                <HelperText type="error">
-                  {errors.client_name.message}
-                </HelperText>
-              )}
 
-              <Text style={styles.label}>Produto</Text>
-              <Controller
-                control={control}
-                name="product_id"
-                render={({ field: { onChange, value } }) => (
-                  <Dropdown
-                    label="Produto"
+                <Text style={styles.label}>Produto</Text>
+                <Controller
+                  control={control}
+                  name="product_id"
+                  render={({ field: { onChange, value } }) => (
+                    <Dropdown
+                      label="Produto"
+                      mode="outlined"
+                      value={value || ""}
+                      onSelect={onChange}
+                      options={products.map((p) => ({
+                        label: p.name,
+                        value: p.id!,
+                      }))}
+                      error={!!errors.product_id}
+                    />
+                  )}
+                />
+                {errors.product_id && (
+                  <HelperText type="error">
+                    {errors.product_id.message}
+                  </HelperText>
+                )}
+
+                <Text style={styles.label}>Quantidade</Text>
+                <Controller
+                  control={control}
+                  name="quantity"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Quantidade"
+                      value={value ? String(value) : ""}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                      keyboardType="numeric"
+                      error={!!errors.quantity}
+                      style={styles.input}
+                    />
+                  )}
+                />
+                {errors.quantity && (
+                  <HelperText type="error">
+                    {errors.quantity.message}
+                  </HelperText>
+                )}
+
+                <Text style={styles.label}>Valor Total (R$)</Text>
+                <Controller
+                  control={control}
+                  name="total_price"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Valor Total (R$)"
+                      value={value ? String(value) : ""}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                      keyboardType="numeric"
+                      error={!!errors.total_price}
+                      style={styles.input}
+                    />
+                  )}
+                />
+                {errors.total_price && (
+                  <HelperText type="error">
+                    {errors.total_price.message}
+                  </HelperText>
+                )}
+
+                <Text style={styles.label}>Latitude</Text>
+                <Controller
+                  control={control}
+                  name="location.latitude"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Latitude"
+                      value={value ? String(value) : ""}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                      keyboardType="numeric"
+                      error={!!errors.location?.latitude}
+                      style={styles.input}
+                    />
+                  )}
+                />
+                {errors.location?.latitude && (
+                  <HelperText type="error">
+                    {errors.location.latitude.message}
+                  </HelperText>
+                )}
+
+                <Text style={styles.label}>Longitude</Text>
+                <Controller
+                  control={control}
+                  name="location.longitude"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Longitude"
+                      value={value ? String(value) : ""}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(parseFloat(text) || 0)}
+                      keyboardType="numeric"
+                      error={!!errors.location?.longitude}
+                      style={styles.input}
+                    />
+                  )}
+                />
+                {errors.location?.longitude && (
+                  <HelperText type="error">
+                    {errors.location.longitude.message}
+                  </HelperText>
+                )}
+
+                <Text style={styles.label}>Data da Venda</Text>
+                <Controller
+                  control={control}
+                  name="sale_date"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      label="Data da Venda"
+                      value={formatDateToBR(value)}
+                      onBlur={onBlur}
+                      onChangeText={(text) => onChange(formatDateToISO(text))}
+                      error={!!errors.sale_date}
+                      style={styles.input}
+                      placeholder="DD-MM-AAAA"
+                    />
+                  )}
+                />
+                {errors.sale_date && (
+                  <HelperText type="error">
+                    {errors.sale_date.message}
+                  </HelperText>
+                )}
+
+                <View style={styles.buttonContainer}>
+                  <Button
                     mode="outlined"
-                    value={value || ""}
-                    onSelect={onChange}
-                    options={products.map((p) => ({
-                      label: p.name,
-                      value: p.id!,
-                    }))}
-                    error={!!errors.product_id}
-                  />
-                )}
-              />
-              {errors.product_id && (
-                <HelperText type="error">
-                  {errors.product_id.message}
-                </HelperText>
-              )}
-
-              <Text style={styles.label}>Quantidade</Text>
-              <Controller
-                control={control}
-                name="quantity"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Quantidade"
-                    value={value ? String(value) : ""}
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                    keyboardType="numeric"
-                    error={!!errors.quantity}
-                    style={styles.input}
-                  />
-                )}
-              />
-              {errors.quantity && (
-                <HelperText type="error">{errors.quantity.message}</HelperText>
-              )}
-
-              <Text style={styles.label}>Valor Total (R$)</Text>
-              <Controller
-                control={control}
-                name="total_price"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Valor Total (R$)"
-                    value={value ? String(value) : ""}
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                    keyboardType="numeric"
-                    error={!!errors.total_price}
-                    style={styles.input}
-                  />
-                )}
-              />
-              {errors.total_price && (
-                <HelperText type="error">
-                  {errors.total_price.message}
-                </HelperText>
-              )}
-
-              <Text style={styles.label}>Latitude</Text>
-              <Controller
-                control={control}
-                name="location.latitude"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Latitude"
-                    value={value ? String(value) : ""}
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                    keyboardType="numeric"
-                    error={!!errors.location?.latitude}
-                    style={styles.input}
-                  />
-                )}
-              />
-              {errors.location?.latitude && (
-                <HelperText type="error">
-                  {errors.location.latitude.message}
-                </HelperText>
-              )}
-
-              <Text style={styles.label}>Longitude</Text>
-              <Controller
-                control={control}
-                name="location.longitude"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Longitude"
-                    value={value ? String(value) : ""}
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(parseFloat(text) || 0)}
-                    keyboardType="numeric"
-                    error={!!errors.location?.longitude}
-                    style={styles.input}
-                  />
-                )}
-              />
-              {errors.location?.longitude && (
-                <HelperText type="error">
-                  {errors.location.longitude.message}
-                </HelperText>
-              )}
-
-              <Text style={styles.label}>Data da Venda</Text>
-              <Controller
-                control={control}
-                name="sale_date"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    label="Data da Venda"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
-                    onBlur={onBlur}
-                    onChangeText={(text) => onChange(new Date(text))}
-                    error={!!errors.sale_date}
-                    style={styles.input}
-                  />
-                )}
-              />
-              {errors.sale_date && (
-                <HelperText type="error">{errors.sale_date.message}</HelperText>
-              )}
-
-              <View style={styles.buttonContainer}>
-                <Button
-                  mode="outlined"
-                  onPress={() => setVisible(false)}
-                  style={styles.button}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  mode="contained"
-                  onPress={handleSubmit(handleSave)}
-                  loading={isSubmitting}
-                  style={styles.button}
-                >
-                  {editing ? "Atualizar" : "Salvar"}
-                </Button>
-              </View>
-            </Card.Content>
+                    onPress={() => setVisible(false)}
+                    style={styles.button}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    mode="contained"
+                    onPress={handleSubmit(handleSave)}
+                    loading={isSubmitting}
+                    style={styles.button}
+                  >
+                    {editing ? "Atualizar" : "Salvar"}
+                  </Button>
+                </View>
+              </Card.Content>
+            </ScrollView>
           </Card>
         </Modal>
       </Portal>
@@ -511,6 +513,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     margin: 20,
+    marginBottom: 80, // Adiciona margem inferior para não ocupar a barra inferior
   },
   formCard: {
     backgroundColor: "#fff",
@@ -522,6 +525,10 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderWidth: 1,
     borderColor: "#e2e8f0",
+    maxHeight: "85%", // Limita a altura do card
+  },
+  formScroll: {
+    flexGrow: 0,
   },
   formTitle: {
     marginBottom: 20,

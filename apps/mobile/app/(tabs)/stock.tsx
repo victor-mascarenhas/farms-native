@@ -13,7 +13,7 @@ import {
 } from "react-native-paper";
 import { z } from "zod";
 
-import { stockSchema } from "@farms/schemas";
+import { Product, stockSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,8 +26,19 @@ import {
 const typedSchema = stockSchema;
 type StockItem = z.infer<typeof typedSchema> & { id: string };
 
+const formatDateToDisplay = (dateStr: string) => {
+  const [year, month, day] = dateStr.split("-");
+  return `${day}-${month}-${year}`;
+};
+
+const formatDateToStore = (dateStr: string) => {
+  const [day, month, year] = dateStr.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 export default function StockScreen() {
   const [items, setItems] = useState<StockItem[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<StockItem | null>(null);
@@ -44,7 +55,7 @@ export default function StockScreen() {
     defaultValues: {
       product_id: "",
       available_quantity: 0,
-      last_updated: new Date(),
+      last_updated: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -54,16 +65,13 @@ export default function StockScreen() {
         reset({
           product_id: editing.product_id,
           available_quantity: editing.available_quantity,
-          last_updated:
-            editing.last_updated instanceof Date
-              ? editing.last_updated
-              : new Date((editing.last_updated as any).seconds * 1000),
+          last_updated: editing.last_updated,
         });
       } else {
         reset({
           product_id: "",
           available_quantity: 0,
-          last_updated: new Date(),
+          last_updated: new Date().toISOString().split("T")[0],
         });
       }
     }
@@ -72,23 +80,34 @@ export default function StockScreen() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    getAllFromCollection<StockItem>("stock", user.uid)
-      .then((items) => setItems(items))
+
+    // First get all products
+    getAllFromCollection<Product>("products", user.uid)
+      .then((productsData) => {
+        setProducts(productsData);
+        // Then get stock items
+        return getAllFromCollection<StockItem>("stock", user.uid);
+      })
+      .then((stockItems) => {
+        setItems(stockItems);
+      })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, [user]);
 
-  const renderItem = ({ item }: { item: StockItem }) => {
-    const lastUpdated =
-      item.last_updated instanceof Date
-        ? item.last_updated
-        : new Date((item.last_updated as any).seconds * 1000);
+  const getProductName = (productId: string) => {
+    const product = products.find((p) => p.id === productId);
+    return product ? product.name : productId;
+  };
 
+  const renderItem = ({ item }: { item: StockItem }) => {
     return (
       <Card style={styles.stockCard}>
         <Card.Content>
           <View style={styles.stockHeader}>
-            <Title style={styles.productId}>{item.product_id}</Title>
+            <Title style={styles.productId}>
+              {getProductName(item.product_id)}
+            </Title>
             <View style={styles.stockActions}>
               <Button
                 mode="contained"
@@ -119,7 +138,7 @@ export default function StockScreen() {
                 Última Atualização:
               </Paragraph>
               <Paragraph style={styles.dateValue}>
-                {lastUpdated.toLocaleDateString("pt-BR")}
+                {formatDateToDisplay(item.last_updated)}
               </Paragraph>
             </View>
           </View>
@@ -234,15 +253,12 @@ export default function StockScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     label="Data da Última Atualização"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
+                    value={value ? formatDateToDisplay(value) : ""}
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(new Date(text))}
+                    onChangeText={(text) => onChange(formatDateToStore(text))}
                     error={!!errors.last_updated}
                     style={styles.input}
+                    placeholder="DD-MM-AAAA"
                   />
                 )}
               />

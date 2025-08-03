@@ -30,12 +30,23 @@ import { useAuth } from "@/AuthProvider";
 import { db } from "@farms/firebase";
 import { goalSchema } from "@farms/schemas";
 import { useGoalStore } from "@farms/state";
+import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = goalSchema;
 type Goal = z.infer<typeof typedSchema> & { id: string };
 
 const formSchema = typedSchema.omit({ created_by: true });
 type FormData = z.infer<typeof formSchema>;
+
+const formatDateToBR = (date: string) => {
+  const [year, month, day] = date.split("-");
+  return `${day}-${month}-${year}`;
+};
+
+const formatDateToISO = (date: string) => {
+  const [day, month, year] = date.split("-");
+  return `${year}-${month}-${day}`;
+};
 
 export default function GoalsScreen() {
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -59,8 +70,8 @@ export default function GoalsScreen() {
       type: "venda",
       product_id: "",
       target_quantity: 0,
-      start_date: new Date(),
-      end_date: new Date(),
+      start_date: new Date().toISOString().split("T")[0],
+      end_date: new Date().toISOString().split("T")[0],
       notified: false,
     },
   });
@@ -102,14 +113,8 @@ export default function GoalsScreen() {
           type: editing.type,
           product_id: editing.product_id,
           target_quantity: editing.target_quantity,
-          start_date:
-            editing.start_date instanceof Date
-              ? editing.start_date
-              : new Date((editing.start_date as any).seconds * 1000),
-          end_date:
-            editing.end_date instanceof Date
-              ? editing.end_date
-              : new Date((editing.end_date as any).seconds * 1000),
+          start_date: editing.start_date,
+          end_date: editing.end_date,
           notified: editing.notified,
         });
       } else {
@@ -117,8 +122,8 @@ export default function GoalsScreen() {
           type: "venda",
           product_id: "",
           target_quantity: 0,
-          start_date: new Date(),
-          end_date: new Date(),
+          start_date: new Date().toISOString().split("T")[0],
+          end_date: new Date().toISOString().split("T")[0],
           notified: false,
         });
       }
@@ -126,16 +131,6 @@ export default function GoalsScreen() {
   }, [visible, editing]);
 
   const renderItem = ({ item }: { item: Goal }) => {
-    const startDate =
-      item.start_date instanceof Date
-        ? item.start_date
-        : new Date((item.start_date as any).seconds * 1000);
-
-    const endDate =
-      item.end_date instanceof Date
-        ? item.end_date
-        : new Date((item.end_date as any).seconds * 1000);
-
     const getTypeColor = (type: string) => {
       switch (type) {
         case "venda":
@@ -205,14 +200,14 @@ export default function GoalsScreen() {
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Data de Início:</Paragraph>
               <Paragraph style={styles.dateValue}>
-                {startDate.toLocaleDateString("pt-BR")}
+                {formatDateToBR(item.start_date)}
               </Paragraph>
             </View>
 
             <View style={styles.detailContainer}>
               <Paragraph style={styles.detailLabel}>Data de Fim:</Paragraph>
               <Paragraph style={styles.endDateValue}>
-                {endDate.toLocaleDateString("pt-BR")}
+                {formatDateToBR(item.end_date)}
               </Paragraph>
             </View>
 
@@ -243,13 +238,11 @@ export default function GoalsScreen() {
       } else {
         await addDoc(collection(db, "goals"), data);
       }
-      // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
-      const items = await getAllFromCollection<Goal>("goals", user?.uid);
+      const items = await getAllFromCollection<Goal>("goals", user?.uid!);
       setGoals(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {
-      // tratamento de erro
       console.error(error);
     }
   };
@@ -353,15 +346,12 @@ export default function GoalsScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     label="Data de Início"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
+                    value={formatDateToBR(value)}
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(new Date(text))}
+                    onChangeText={(text) => onChange(formatDateToISO(text))}
                     error={!!errors.start_date}
                     style={styles.input}
+                    placeholder="DD-MM-AAAA"
                   />
                 )}
               />
@@ -378,15 +368,12 @@ export default function GoalsScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     label="Data de Fim"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
+                    value={formatDateToBR(value)}
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(new Date(text))}
+                    onChangeText={(text) => onChange(formatDateToISO(text))}
                     error={!!errors.end_date}
                     style={styles.input}
+                    placeholder="DD-MM-AAAA"
                   />
                 )}
               />

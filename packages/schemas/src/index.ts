@@ -35,7 +35,7 @@ export const saleSchema = z.object({
       longitude: z.number(),
     })
     .optional(),
-  sale_date: z.instanceof(Timestamp),
+  sale_date: z.string(),
   created_by: z.string(),
   id: z.string().optional(),
 });
@@ -57,7 +57,7 @@ export type Production = z.infer<typeof productionSchema>;
 export const stockSchema = z.object({
   product_id: z.string(),
   available_quantity: z.number(),
-  last_updated: z.instanceof(Timestamp),
+  last_updated: z.string(),
   id: z.string().optional(),
 });
 
@@ -67,8 +67,8 @@ export const goalSchema = z.object({
   type: z.enum(["venda", "producao"]),
   product_id: z.string(),
   target_quantity: z.number(),
-  start_date: z.instanceof(Timestamp),
-  end_date: z.instanceof(Timestamp),
+  start_date: z.string(),
+  end_date: z.string(),
   notified: z.boolean(),
   created_by: z.string(),
   id: z.string().optional(),

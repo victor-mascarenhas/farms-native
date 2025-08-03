@@ -6,38 +6,34 @@ import {
   Modal,
   TextInput,
   HelperText,
-  useTheme,
   Card,
   Title,
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import { z } from "zod";
-import { getAuth } from "firebase/auth";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { db } from "@farms/firebase";
-import { productionSchema } from "@farms/schemas";
+import { productionSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
-import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
+import {
+  getAllFromCollection,
+  addToCollection,
+  updateInCollection,
+} from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = productionSchema;
-type Production = z.infer<typeof typedSchema> & { id: string };
+type Production = z.infer<typeof typedSchema> & {
+  id: string;
+  productName?: string;
+};
+type Product = z.infer<typeof productSchema> & { id: string };
 
 export default function ProductionsScreen() {
   const [productions, setProductions] = useState<Production[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
-  const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [editing, setEditing] = useState<Production | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,8 +50,7 @@ export default function ProductionsScreen() {
       product_id: "",
       status: "aguardando",
       quantity: 0,
-      start_date: new Date(),
-      harvest_date: null,
+      start_date: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -66,65 +61,75 @@ export default function ProductionsScreen() {
           product_id: editing.product_id,
           status: editing.status,
           quantity: editing.quantity,
-          start_date:
-            editing.start_date instanceof Date
-              ? editing.start_date
-              : new Date((editing.start_date as any).seconds * 1000),
-          harvest_date:
-            editing.harvest_date instanceof Date ||
-            editing.harvest_date === null
-              ? editing.harvest_date
-              : new Date((editing.harvest_date as any).seconds * 1000),
+          start_date: editing.start_date,
+          harvest_date: editing.harvest_date,
         });
       } else {
         reset({
           product_id: "",
           status: "aguardando",
           quantity: 0,
-          start_date: new Date(),
-          harvest_date: null,
+          start_date: new Date().toISOString().split("T")[0],
         });
       }
     }
   }, [visible, editing]);
 
   useEffect(() => {
-    const user = getAuth().currentUser;
-    const q = query(
-      collection(db, "productions"),
-      where("created_by", "==", user?.uid)
-    );
-    const unsubscribe = onSnapshot(
-      q,
-      (querySnapshot) => {
-        const items: Production[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = typedSchema.parse(doc.data());
-          items.push({ id: doc.id, ...data });
+    if (!user) return;
+    setLoading(true);
+
+    const loadData = async () => {
+      try {
+        const productsData = await getAllFromCollection<Product>(
+          "products",
+          user.uid
+        );
+        setProducts(productsData);
+
+        const productionsData = await getAllFromCollection<Production>(
+          "productions",
+          user.uid
+        );
+        const productionsWithNames = productionsData.map((production) => {
+          const product = productsData.find(
+            (p) => p.id === production.product_id
+          );
+          return {
+            ...production,
+            productName: product?.name || "Produto não encontrado",
+          };
         });
-        setProductions(items);
-        setLoading(false);
-      },
-      (err) => {
-        console.error(err);
+
+        setProductions(productionsWithNames);
+      } catch (error) {
+        console.error(error);
+      } finally {
         setLoading(false);
       }
-    );
-    return unsubscribe;
-  }, []);
+    };
+
+    loadData();
+  }, [user]);
 
   const renderItem = ({ item }: { item: Production }) => {
-    const startDate =
-      item.start_date instanceof Date
-        ? item.start_date
-        : new Date((item.start_date as any).seconds * 1000);
+    const [startYear, startMonth, startDay] = item.start_date.split("-");
+    const startDate = new Date(
+      Number(startYear),
+      Number(startMonth) - 1,
+      Number(startDay)
+    );
 
-    const harvestDate =
-      item.harvest_date instanceof Date
-        ? item.harvest_date
-        : item.harvest_date
-        ? new Date((item.harvest_date as any).seconds * 1000)
-        : null;
+    let harvestDate;
+    if (item.harvest_date) {
+      const [harvestYear, harvestMonth, harvestDay] =
+        item.harvest_date.split("-");
+      harvestDate = new Date(
+        Number(harvestYear),
+        Number(harvestMonth) - 1,
+        Number(harvestDay)
+      );
+    }
 
     const getStatusColor = (status: string) => {
       switch (status) {
@@ -156,7 +161,7 @@ export default function ProductionsScreen() {
       <Card style={styles.productionCard}>
         <Card.Content>
           <View style={styles.productionHeader}>
-            <Title style={styles.productId}>Produto: {item.product_id}</Title>
+            <Title style={styles.productId}>Produto: {item.productName}</Title>
             <View style={styles.productionActions}>
               <Button
                 mode="contained"
@@ -231,22 +236,21 @@ export default function ProductionsScreen() {
   }
 
   const handleSave = async (data: any) => {
+    if (!user) return;
     try {
       if (editing) {
-        await updateDoc(doc(db, "productions", editing.id), data);
+        await updateInCollection("productions", editing.id, data, user.uid);
       } else {
-        await addDoc(collection(db, "productions"), data);
+        await addToCollection("productions", data, user.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
       const items = await getAllFromCollection<Production>(
         "productions",
-        user!.uid
+        user.uid
       );
       setProductions(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {
-      // tratamento de erro
       console.error(error);
     }
   };
@@ -348,15 +352,12 @@ export default function ProductionsScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     label="Data de Início"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
+                    value={value}
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(new Date(text))}
+                    onChangeText={onChange}
                     error={!!errors.start_date}
                     style={styles.input}
+                    placeholder="AAAA-MM-DD"
                   />
                 )}
               />
@@ -373,16 +374,11 @@ export default function ProductionsScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     label="Data de Colheita (opcional)"
-                    value={
-                      value instanceof Date
-                        ? value.toISOString().slice(0, 10)
-                        : ""
-                    }
+                    value={value || ""}
                     onBlur={onBlur}
-                    onChangeText={(text) =>
-                      onChange(text ? new Date(text) : null)
-                    }
+                    onChangeText={onChange}
                     style={styles.input}
+                    placeholder="AAAA-MM-DD"
                   />
                 )}
               />
