@@ -16,11 +16,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productionSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
-import {
-  subscribeToCollection,
-  addToCollection,
-  updateInCollection,
-} from "@/firestore";
+import { addToCollection, updateInCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
 const typedSchema = productionSchema;
 type Production = z.infer<typeof typedSchema> & { id: string };
@@ -79,18 +78,31 @@ export default function ProductionsScreen() {
   }, [visible, editing]);
 
   useEffect(() => {
-    if (!user) return;
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
     setLoading(true);
-    const unsubscribe = subscribeToCollection<Production>(
-      "productions",
-      user.uid,
-      (items) => {
+    const q = query(
+      collection(db, "productions"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const items: Production[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSchema.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setProductions(items);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
         setLoading(false);
       }
     );
     return unsubscribe;
-  }, [user]);
+  }, []);
 
   const renderItem = ({ item }: { item: Production }) => {
     const startDate =

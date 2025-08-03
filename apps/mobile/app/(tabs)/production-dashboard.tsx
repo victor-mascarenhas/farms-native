@@ -6,7 +6,9 @@ import { BarChart } from "react-native-chart-kit";
 
 import { productionSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
-import { subscribeToCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
 const typedProduction = productionSchema;
 type Production = z.infer<typeof typedProduction> & { id: string };
@@ -16,25 +18,52 @@ type Product = z.infer<typeof typedProduct> & { id: string };
 export default function ProductionDashboardScreen() {
   const [productions, setProductions] = useState<Production[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    if (!user) return;
-    const unsubProd = subscribeToCollection<Production>(
-      "productions",
-      user.uid,
-      setProductions
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
+    const qProd = query(
+      collection(db, "productions"),
+      where("created_by", "==", authUser.uid)
     );
-    const unsubProducts = subscribeToCollection<Product>(
-      "products",
-      user.uid,
-      setProducts
+    const unsubProd = onSnapshot(
+      qProd,
+      (querySnapshot) => {
+        const items: Production[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedProduction.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
+        setProductions(items);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+    const qProducts = query(
+      collection(db, "products"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubProducts = onSnapshot(
+      qProducts,
+      (querySnapshot) => {
+        const items: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedProduct.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
+        setProducts(items);
+      },
+      (err) => {
+        console.error(err);
+      }
     );
     return () => {
       unsubProd();
       unsubProducts();
     };
-  }, [user]);
+  }, []);
 
   const totalProductions = productions.length;
   const quantityHarvested = productions

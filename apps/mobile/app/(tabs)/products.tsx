@@ -16,11 +16,10 @@ import { z } from "zod";
 import { productSchema } from "@farms/schemas";
 import { useProductForm } from "../hooks/useProductForm";
 import { useAuth } from "@/AuthProvider";
-import {
-  subscribeToCollection,
-  addToCollection,
-  updateInCollection,
-} from "@/firestore";
+import { addToCollection, updateInCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
 const typedSchema = productSchema;
 type Product = z.infer<typeof typedSchema> & { id: string };
@@ -35,18 +34,31 @@ export default function ProductsScreen() {
   const form = useProductForm();
 
   useEffect(() => {
-    if (!user) return;
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
     setLoading(true);
-    const unsubscribe = subscribeToCollection<Product>(
-      "products",
-      user.uid,
-      (items) => {
+    const q = query(
+      collection(db, "products"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const items: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSchema.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setProducts(items);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
         setLoading(false);
       }
     );
     return unsubscribe;
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (visible) {

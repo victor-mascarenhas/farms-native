@@ -14,7 +14,9 @@ import { BarChart } from "react-native-chart-kit";
 
 import { saleSchema, productSchema, stockSchema } from "@farms/schemas";
 import { useAuth } from "../../AuthProvider";
-import { subscribeToCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
 const typedSale = saleSchema;
 type Sale = z.infer<typeof typedSale> & { id: string };
@@ -24,41 +26,78 @@ const typedStock = stockSchema;
 type Stock = z.infer<typeof typedStock> & { id: string };
 
 export default function DashboardScreen() {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const [sales, setSales] = useState<Sale[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
     setLoading(true);
     const loaded = { sales: false, products: false, stocks: false };
-    const unsubSales = subscribeToCollection<Sale>(
-      "sales",
-      user.uid,
-      (items) => {
+    const qSales = query(
+      collection(db, "sales"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubSales = onSnapshot(
+      qSales,
+      (querySnapshot) => {
+        const items: Sale[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSale.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setSales(items);
         loaded.sales = true;
         if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        setLoading(false);
       }
     );
-    const unsubProducts = subscribeToCollection<Product>(
-      "products",
-      user.uid,
-      (items) => {
+    const qProducts = query(
+      collection(db, "products"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubProducts = onSnapshot(
+      qProducts,
+      (querySnapshot) => {
+        const items: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedProduct.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setProducts(items);
         loaded.products = true;
         if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        setLoading(false);
       }
     );
-    const unsubStocks = subscribeToCollection<Stock>(
-      "stock",
-      user.uid,
-      (items) => {
+    const qStocks = query(
+      collection(db, "stock"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubStocks = onSnapshot(
+      qStocks,
+      (querySnapshot) => {
+        const items: Stock[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedStock.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setStocks(items);
         loaded.stocks = true;
         if (loaded.sales && loaded.products && loaded.stocks) setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        setLoading(false);
       }
     );
     return () => {
@@ -66,7 +105,7 @@ export default function DashboardScreen() {
       unsubProducts();
       unsubStocks();
     };
-  }, [user]);
+  }, []);
 
   const productMap = new Map(products.map((p) => [p.id, p]));
   const totalRevenue = sales.reduce(

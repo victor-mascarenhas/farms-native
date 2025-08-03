@@ -16,21 +16,17 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dropdown } from "react-native-paper-dropdown";
 
-import { saleSchema } from "@farms/schemas";
+import { saleSchema, productSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
-import {
-  subscribeToCollection,
-  addToCollection,
-  updateInCollection,
-} from "@/firestore";
+import { addToCollection, updateInCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
-const typedSchema = saleSchema;
-type Sale = z.infer<typeof typedSchema> & { id: string };
-
-type Product = {
-  id: string;
-  name: string;
-};
+const typedSale = saleSchema;
+type Sale = z.infer<typeof typedSale> & { id: string };
+const typedProduct = productSchema;
+type Product = z.infer<typeof typedProduct> & { id: string };
 
 export default function SalesScreen() {
   const [sales, setSales] = useState<Sale[]>([]);
@@ -41,7 +37,7 @@ export default function SalesScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [showDropDown, setShowDropDown] = useState(false);
 
-  const schema = typedSchema.omit({ created_by: true });
+  const schema = typedSale.omit({ created_by: true });
   const {
     control,
     handleSubmit,
@@ -91,26 +87,58 @@ export default function SalesScreen() {
   }, [visible, editing, products]);
 
   useEffect(() => {
-    if (!user) return;
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
     setLoading(true);
-    const unsubscribeSales = subscribeToCollection<Sale>(
-      "sales",
-      user.uid,
-      (items) => {
+    const loaded = { sales: false, products: false };
+    const qSales = query(
+      collection(db, "sales"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubscribeSales = onSnapshot(
+      qSales,
+      (querySnapshot) => {
+        const items: Sale[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSale.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setSales(items);
+        loaded.sales = true;
+        if (loaded.sales && loaded.products) setLoading(false);
+      },
+      (err) => {
+        console.error(err);
         setLoading(false);
       }
     );
-    const unsubscribeProducts = subscribeToCollection<Product>(
-      "products",
-      user.uid,
-      setProducts
+    const qProducts = query(
+      collection(db, "products"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubscribeProducts = onSnapshot(
+      qProducts,
+      (querySnapshot) => {
+        const items: Product[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedProduct.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
+        setProducts(items);
+        loaded.products = true;
+        if (loaded.sales && loaded.products) setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        loaded.products = true;
+        if (loaded.sales && loaded.products) setLoading(false);
+      }
     );
     return () => {
       unsubscribeSales();
       unsubscribeProducts();
     };
-  }, [user]);
+  }, []);
 
   const renderItem = ({ item }: { item: Sale }) => {
     const saleDate =

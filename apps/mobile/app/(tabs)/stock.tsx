@@ -17,11 +17,10 @@ import { stockSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  subscribeToCollection,
-  addToCollection,
-  updateInCollection,
-} from "@/firestore";
+import { addToCollection, updateInCollection } from "@/firestore";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@farms/firebase";
 
 const typedSchema = stockSchema;
 type StockItem = z.infer<typeof typedSchema> & { id: string };
@@ -70,18 +69,31 @@ export default function StockScreen() {
   }, [visible, editing]);
 
   useEffect(() => {
-    if (!user) return;
+    const authUser = getAuth().currentUser;
+    if (!authUser) return;
     setLoading(true);
-    const unsubscribe = subscribeToCollection<StockItem>(
-      "stock",
-      user.uid,
-      (items) => {
+    const q = query(
+      collection(db, "stock"),
+      where("created_by", "==", authUser.uid)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const items: StockItem[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = typedSchema.parse(doc.data());
+          items.push({ id: doc.id, ...data });
+        });
         setItems(items);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
         setLoading(false);
       }
     );
     return unsubscribe;
-  }, [user]);
+  }, []);
 
   const renderItem = ({ item }: { item: StockItem }) => {
     const lastUpdated =

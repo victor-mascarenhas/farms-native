@@ -5,37 +5,11 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  query,
-  where,
-  onSnapshot,
-  QueryConstraint,
   DocumentData,
   Firestore,
 } from "firebase/firestore";
 
 import { db } from "@farms/firebase";
-
-// Subscribe to collection updates using onSnapshot
-export function subscribeToCollection<T = DocumentData>(
-  col: string,
-  userId: string,
-  callback: (items: (T & { id: string })[]) => void,
-  userField: string = "created_by",
-  constraints: QueryConstraint[] = [],
-  dbInstance: Firestore = db
-) {
-  const q = query(
-    collection(dbInstance, col),
-    where(userField, "==", userId),
-    ...constraints
-  );
-  return onSnapshot(q, (snapshot) => {
-    const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as (T & {
-      id: string;
-    })[];
-    callback(data);
-  });
-}
 
 // Add document ensuring user ownership
 export async function addToCollection<T = DocumentData>(
