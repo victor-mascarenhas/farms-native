@@ -12,15 +12,7 @@ import {
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { onSnapshot, query, where, collection } from "firebase/firestore";
 import { z } from "zod";
 import { getAuth } from "firebase/auth";
 import { useForm, Controller } from "react-hook-form";
@@ -30,6 +22,11 @@ import { useAuth } from "@/AuthProvider";
 import { db } from "@farms/firebase";
 import { goalSchema } from "@farms/schemas";
 import { useGoalStore } from "@farms/state";
+import {
+  addToCollection,
+  updateInCollection,
+  getAllFromCollection,
+} from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = goalSchema;
 type Goal = z.infer<typeof typedSchema> & { id: string };
@@ -237,14 +234,15 @@ export default function GoalsScreen() {
   }
 
   const handleSave = async (data: any) => {
+    if (!user) return;
     try {
       if (editing) {
-        await updateDoc(doc(db, "goals", editing.id), data);
+        await updateInCollection("goals", editing.id, data, user.uid);
       } else {
-        await addDoc(collection(db, "goals"), data);
+        await addToCollection("goals", data, user.uid);
       }
       // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
-      const items = await getAllFromCollection<Goal>("goals", user?.uid);
+      const items = await getAllFromCollection<Goal>("goals", user.uid);
       setGoals(items);
       setVisible(false);
       setEditing(null);

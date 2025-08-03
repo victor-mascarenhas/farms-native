@@ -12,15 +12,7 @@ import {
   Paragraph,
   FAB,
 } from "react-native-paper";
-import {
-  onSnapshot,
-  query,
-  where,
-  collection,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { onSnapshot, query, where, collection } from "firebase/firestore";
 import { z } from "zod";
 import { getAuth } from "firebase/auth";
 import { useForm, Controller } from "react-hook-form";
@@ -29,7 +21,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { db } from "@farms/firebase";
 import { productionSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
-import { getAllFromCollection } from "@farms/firebase/src/firestoreUtils";
+import {
+  getAllFromCollection,
+  addToCollection,
+  updateInCollection,
+} from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = productionSchema;
 type Production = z.infer<typeof typedSchema> & { id: string };
@@ -231,16 +227,17 @@ export default function ProductionsScreen() {
   }
 
   const handleSave = async (data: any) => {
+    if (!user) return;
     try {
       if (editing) {
-        await updateDoc(doc(db, "productions", editing.id), data);
+        await updateInCollection("productions", editing.id, data, user.uid);
       } else {
-        await addDoc(collection(db, "productions"), data);
+        await addToCollection("productions", data, user.uid);
       }
       // Atualize a lista imediatamente após adicionar/editar, se não usar onSnapshot
       const items = await getAllFromCollection<Production>(
         "productions",
-        user!.uid
+        user.uid
       );
       setProductions(items);
       setVisible(false);
