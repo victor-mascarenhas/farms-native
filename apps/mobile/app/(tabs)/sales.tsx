@@ -91,7 +91,12 @@ export default function SalesScreen() {
   }, [visible, editing, products]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setSales([]);
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     getAllFromCollection<Sale>("sales", user.uid)
       .then((items) => setSales(items))
@@ -182,14 +187,15 @@ export default function SalesScreen() {
   }
 
   const handleSave = async (data: any) => {
+    if (!user) return;
     try {
       if (editing) {
-        await updateInCollection("sales", editing.id, data, user!.uid);
+        await updateInCollection("sales", editing.id, data, user.uid);
       } else {
-        await addToCollection("sales", data, user!.uid);
+        await addToCollection("sales", data, user.uid);
       }
       // Atualize a lista imediatamente após adicionar/editar
-      const items = await getAllFromCollection<Sale>("sales", user!.uid);
+      const items = await getAllFromCollection<Sale>("sales", user.uid);
       setSales(items);
       setVisible(false);
       setEditing(null);

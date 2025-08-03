@@ -35,7 +35,11 @@ export default function ProductsScreen() {
   const form = useProductForm();
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     getAllFromCollection<Product>("products", user.uid)
       .then((items) => setProducts(items))
@@ -138,8 +142,8 @@ export default function ProductsScreen() {
   };
 
   const handleSave = async (data: any) => {
+    if (!user) return;
     try {
-      if (!user) return;
       if (editing) {
         await updateInCollection("products", editing.id, data, user.uid);
       } else {
