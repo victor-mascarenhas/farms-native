@@ -1,5 +1,5 @@
-Gravação Mobile: https://drive.google.com/file/d/1_bolRL5BG_oe76p1f9UsGKQMK92C5-Ya/view?usp=sharing
-Gravação Web: https://drive.google.com/file/d/17o8u0_LAVY0iHoV9detl-o3272PZ0Z5F/view?usp=sharing
+* Gravação Mobile: https://drive.google.com/file/d/1_bolRL5BG_oe76p1f9UsGKQMK92C5-Ya/view?usp=sharing
+* Gravação Web: https://drive.google.com/file/d/17o8u0_LAVY0iHoV9detl-o3272PZ0Z5F/view?usp=sharing
 
 # Farms Native
 Solução multiplataforma para gerenciamento de vendas, produções e estoque de uma fazenda, composta por um aplicativo web (Next.js) + aplicação remota (react.js) e um aplicativo móvel (React Native/Expo). 
