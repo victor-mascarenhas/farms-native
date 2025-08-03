@@ -1,10 +1,4 @@
-import { create, StateCreator } from "zustand";
-import {
-  getAllFromCollection,
-  addToCollection,
-  updateInCollection,
-  removeFromCollection,
-} from "@farms/firebase/src/firestoreUtils";
+import { create } from "zustand";
 
 export type Production = {
   id?: string;

@@ -11,9 +11,8 @@ import {
   Paragraph,
   FAB,
 } from "react-native-paper";
-import { z } from "zod";
 
-import { Product, stockSchema } from "@farms/schemas";
+import { Product, Stock, stockSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,9 +21,7 @@ import {
   addToCollection,
   updateInCollection,
 } from "@farms/firebase/src/firestoreUtils";
-
-const typedSchema = stockSchema;
-type StockItem = z.infer<typeof typedSchema> & { id: string };
+import { styles } from "./../styles/stock";
 
 const formatDateToDisplay = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -37,21 +34,20 @@ const formatDateToStore = (dateStr: string) => {
 };
 
 export default function StockScreen() {
-  const [items, setItems] = useState<StockItem[]>([]);
+  const [items, setItems] = useState<Stock[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const { user } = useAuth();
   const [visible, setVisible] = useState(false);
-  const [editing, setEditing] = useState<StockItem | null>(null);
+  const [editing, setEditing] = useState<Stock | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const schema = typedSchema;
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  } = useForm<Stock>({
+    resolver: zodResolver(stockSchema),
     defaultValues: {
       product_id: "",
       available_quantity: 0,
@@ -86,7 +82,7 @@ export default function StockScreen() {
       .then((productsData) => {
         setProducts(productsData);
         // Then get stock items
-        return getAllFromCollection<StockItem>("stock", user.uid);
+        return getAllFromCollection<Stock>("stock", user.uid);
       })
       .then((stockItems) => {
         setItems(stockItems);
@@ -100,7 +96,7 @@ export default function StockScreen() {
     return product ? product.name : productId;
   };
 
-  const renderItem = ({ item }: { item: StockItem }) => {
+  const renderItem = ({ item }: { item: Stock }) => {
     return (
       <Card style={styles.stockCard}>
         <Card.Content>
@@ -159,17 +155,15 @@ export default function StockScreen() {
     if (!user) return;
     try {
       if (editing) {
-        await updateInCollection("stock", editing.id, data, user.uid);
+        await updateInCollection("stock", editing.id!, data, user.uid);
       } else {
         await addToCollection("stock", data, user.uid);
       }
-      // Atualize a lista imediatamente após adicionar/editar
-      const items = await getAllFromCollection<StockItem>("stock", user.uid);
+      const items = await getAllFromCollection<Stock>("stock", user.uid);
       setItems(items);
       setVisible(false);
       setEditing(null);
     } catch (error) {
-      // tratamento de erro
       console.error(error);
     }
   };
@@ -186,7 +180,7 @@ export default function StockScreen() {
       <FlatList
         data={items}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id!}
         style={styles.list}
         contentContainerStyle={styles.listContent}
       />
@@ -301,128 +295,3 @@ export default function StockScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f6fa",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    padding: 16,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: "#23272f",
-  },
-  subtitle: {
-    color: "#64748b",
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    padding: 16,
-  },
-  stockCard: {
-    marginBottom: 12,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  stockHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  productId: {
-    fontSize: 18,
-    flex: 1,
-    color: "#23272f",
-    fontWeight: "600",
-  },
-  stockActions: {
-    flexDirection: "row",
-  },
-  editButton: {
-    marginLeft: 8,
-  },
-  stockDetails: {
-    gap: 8,
-  },
-  detailContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  detailLabel: {
-    color: "#64748b",
-  },
-  quantityValue: {
-    fontWeight: "bold",
-    color: "#3b82f6",
-  },
-  dateValue: {
-    fontWeight: "bold",
-    color: "#8b5cf6",
-  },
-  modal: {
-    margin: 20,
-  },
-  formCard: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  formTitle: {
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#23272f",
-    fontWeight: "600",
-  },
-  input: {
-    marginBottom: 16,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-  label: {
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: "#23272f",
-  },
-});

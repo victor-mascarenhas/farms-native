@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet, Text } from "react-native";
+import { FlatList, View, Text } from "react-native";
 import {
   Button,
   Portal,
@@ -11,9 +11,8 @@ import {
   Paragraph,
   FAB,
 } from "react-native-paper";
-import { z } from "zod";
 
-import { productSchema } from "@farms/schemas";
+import { Product } from "@farms/schemas";
 import { useProductForm } from "../hooks/useProductForm";
 import { useAuth } from "@/AuthProvider";
 import {
@@ -21,9 +20,7 @@ import {
   addToCollection,
   updateInCollection,
 } from "@farms/firebase/src/firestoreUtils";
-
-const typedSchema = productSchema;
-type Product = z.infer<typeof typedSchema> & { id: string };
+import { styles } from "./../styles/products";
 
 export default function ProductsScreen() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -141,7 +138,7 @@ export default function ProductsScreen() {
     try {
       if (!user) return;
       if (editing) {
-        await updateInCollection("products", editing.id, data, user.uid);
+        await updateInCollection("products", editing.id!, data, user.uid);
       } else {
         await addToCollection("products", data, user.uid);
       }
@@ -177,7 +174,7 @@ export default function ProductsScreen() {
       <FlatList
         data={products}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id!}
         style={styles.list}
         contentContainerStyle={styles.listContent}
       />
@@ -289,149 +286,3 @@ export default function ProductsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f6fa",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    padding: 16,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: "#23272f",
-  },
-  subtitle: {
-    color: "#64748b",
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    padding: 16,
-  },
-  productCard: {
-    marginBottom: 12,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  productHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  productName: {
-    fontSize: 18,
-    flex: 1,
-    color: "#23272f",
-    fontWeight: "600",
-  },
-  productActions: {
-    flexDirection: "row",
-  },
-  editButton: {
-    marginLeft: 8,
-  },
-  productCategory: {
-    color: "#64748b",
-    marginBottom: 12,
-  },
-  productDetails: {
-    gap: 8,
-  },
-  priceContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  priceLabel: {
-    color: "#64748b",
-  },
-  priceValue: {
-    fontWeight: "bold",
-    color: "#10b981",
-  },
-  costValue: {
-    fontWeight: "bold",
-    color: "#ef4444",
-  },
-  marginContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  marginLabel: {
-    color: "#64748b",
-  },
-  marginBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  marginValue: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  modal: {
-    margin: 20,
-  },
-  formCard: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  formTitle: {
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#23272f",
-    fontWeight: "600",
-  },
-  input: {
-    marginBottom: 16,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-  label: {
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: "#23272f",
-  },
-});

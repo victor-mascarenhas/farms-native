@@ -1,8 +1,3 @@
-/**
- * Learn more about Light and Dark modes:
- * https://docs.expo.io/guides/color-schemes/
- */
-
 import { Text as PaperText, Surface } from "react-native-paper";
 
 import Colors from "@/constants/Colors";
@@ -18,7 +13,7 @@ export type ViewProps = ThemeProps & React.ComponentProps<typeof Surface>;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
+  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
   const theme = useColorScheme() ?? "light";
   const colorFromProps = props[theme];
@@ -41,7 +36,7 @@ export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "background",
+    "background"
   );
 
   return <Surface style={[{ backgroundColor }, style]} {...otherProps} />;
