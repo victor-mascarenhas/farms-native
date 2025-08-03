@@ -3,7 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --tunnel"
+    "start": "expo start --tunnel",
+    "dev": "expo start --tunnel"
   },
   "jest": {
     "preset": "jest-expo"
