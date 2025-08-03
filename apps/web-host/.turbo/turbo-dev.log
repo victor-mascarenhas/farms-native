@@ -1,0 +1,555 @@
+
+> web-host@0.1.0 dev C:\Users\Wzeer\Desktop\native\farms-native\apps\web-host
+> cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true next dev
+
+   ▲ Next.js 15.4.5
+   - Local:        http://localhost:3000
+   - Network:      http://172.17.144.1:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+[ Module Federation Manifest Plugin ] Warn Manifest will use absolute path resolution via its host at runtime, reason: publicPath='auto'
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Ready in 16.4s
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /middleware in 197ms (151 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling / ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled / in 1578ms (648 modules)
+ GET / 200 in 3571ms
+ ○ Compiling /dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /dashboard in 3.6s (1580 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 401 in 5015ms
+ GET /dashboard 200 in 5038ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /login in 1093ms (1584 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /login 200 in 1455ms
+ ○ Compiling /api/login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/login in 814ms (1325 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ POST /api/login 200 in 1949ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 360ms
+ GET /api/me 200 in 341ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 557ms (1328 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled (1330 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/sales 200 in 2108ms
+ GET /api/products 200 in 2113ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /production-dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /production-dashboard in 911ms (1674 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /production-dashboard 200 in 1293ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 169ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/productions ...
+ ✓ Compiled /api/productions in 530ms (1335 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 796ms
+ GET /api/productions 200 in 1279ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /sales ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /sales in 979ms (1685 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /sales 200 in 1342ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 558ms
+ GET /api/sales 304 in 563ms
+ PUT /api/sales 200 in 98ms
+ GET /api/sales 200 in 67ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /stock ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /stock in 864ms (1605 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /stock 200 in 1240ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ ○ Compiling /api/stock ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/stock in 1248ms (1261 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 1722ms
+ GET /api/stock 200 in 2053ms
+ DELETE /api/stock 200 in 85ms
+ GET /api/stock 200 in 59ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /stock 200 in 320ms
+ GET /api/stock 304 in 65ms
+ GET /api/products 304 in 95ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /goals ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /goals in 1174ms (1597 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /goals 200 in 1549ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/goals in 447ms (1259 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/goals 200 in 1459ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /products ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /products in 1481ms (1606 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /products 200 in 1885ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 930ms
+ POST /api/products 201 in 89ms
+ GET /api/products 200 in 68ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled in 509ms (336 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /products 200 in 337ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/products in 449ms (1249 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 200 in 2505ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /products 200 in 326ms
+ GET /api/products 200 in 63ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /dashboard in 750ms (691 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 2063ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/me in 386ms (1256 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 1932ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 708ms (1259 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled (1261 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/sales 304 in 2952ms
+ GET /api/products 304 in 2955ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /productions in 1098ms (1608 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /productions 200 in 1469ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ ○ Compiling /api/productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/productions in 940ms (1263 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 1282ms
+ GET /api/productions 200 in 1499ms
+ POST /api/productions 201 in 72ms
+ GET /api/productions 200 in 89ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /production-dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /production-dashboard in 1177ms (1613 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /production-dashboard 200 in 1536ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 399ms
+ GET /api/products 304 in 542ms
+ GET /api/productions 304 in 546ms
+ GET /productions 200 in 243ms
+ GET /api/productions 304 in 89ms
+ GET /api/products 304 in 119ms
+ POST /api/productions 201 in 70ms
+ GET /api/productions 200 in 62ms
+ PUT /api/productions 200 in 82ms
+ GET /api/productions 200 in 57ms
+ POST /api/productions 201 in 69ms
+ GET /api/productions 200 in 68ms
+ GET /production-dashboard 200 in 234ms
+ GET /api/me 304 in 5ms
+ GET /api/productions 304 in 68ms
+ GET /api/products 304 in 107ms
+ GET /productions 200 in 227ms
+ GET /api/products 304 in 66ms
+ GET /api/productions 304 in 100ms
+ POST /api/productions 201 in 66ms
+ GET /api/productions 200 in 57ms
+ GET /production-dashboard 200 in 227ms
+ GET /api/me 304 in 4ms
+ GET /api/productions 304 in 51ms
+ GET /api/products 304 in 76ms
+ GET /productions 200 in 229ms
+ GET /api/productions 304 in 61ms
+ GET /api/products 304 in 71ms
+ POST /api/productions 201 in 67ms
+ GET /api/productions 200 in 48ms
+ GET /production-dashboard 200 in 221ms
+ GET /api/me 304 in 5ms
+ GET /api/productions 304 in 54ms
+ GET /api/products 304 in 65ms
+ GET /productions 200 in 229ms
+ GET /api/productions 304 in 53ms
+ GET /api/products 304 in 59ms
+ POST /api/productions 201 in 70ms
+ GET /api/productions 200 in 68ms
+ POST /api/productions 201 in 64ms
+ GET /api/productions 200 in 52ms
+ GET /production-dashboard 200 in 224ms
+ GET /api/me 304 in 6ms
+ GET /api/products 304 in 62ms
+ GET /api/productions 304 in 70ms
+ GET /dashboard 200 in 228ms
+ GET /api/me 304 in 4ms
+ GET /api/products 304 in 66ms
+ GET /api/sales 304 in 71ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /sales ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /sales in 1032ms (1605 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /sales 200 in 1403ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/sales 304 in 1142ms
+ GET /api/products 304 in 1145ms
+ POST /api/sales 201 in 74ms
+ GET /api/sales 200 in 67ms
+ GET /dashboard 200 in 227ms
+ GET /api/me 304 in 7ms
+ GET /api/sales 304 in 54ms
+ GET /api/products 304 in 92ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /goals ...
+ ✓ Compiled /goals in 611ms (1603 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /goals 200 in 985ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/goals ...
+ ✓ Compiled /api/goals in 1047ms (1259 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/goals 200 in 1997ms
+ POST /api/goals 201 in 78ms
+ GET /api/goals 200 in 57ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /products ...
+ ✓ Compiled /products in 811ms (1614 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /products 200 in 1201ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 1091ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /productions ...
+ ✓ Compiled /productions in 579ms (1617 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /productions 200 in 914ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ ○ Compiling /api/productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ GET /api/products 304 in 1209ms
+ ✓ Compiled /api/productions in 1272ms (1264 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/productions 304 in 1875ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 296ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/me ...
+ ✓ Compiled /api/me in 642ms (1263 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 837ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/sales ...
+ GET /api/products 304 in 611ms
+ ✓ Compiled /api/sales in 1224ms (1265 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/sales 304 in 1774ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /sales ...
+ ✓ Compiled /sales in 777ms (1623 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /sales 200 in 1116ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 746ms
+ GET /api/sales 304 in 754ms
+ POST /api/sales 201 in 78ms
+ GET /api/sales 200 in 77ms
+ GET /dashboard 200 in 242ms
+ GET /api/me 304 in 9ms
+ GET /api/sales 304 in 63ms
+ GET /api/products 304 in 105ms
+ GET /sales 200 in 220ms
+ GET /api/sales 304 in 62ms
+ GET /api/products 304 in 92ms
+ POST /api/sales 201 in 77ms
+ GET /api/sales 200 in 64ms
+ GET /dashboard 200 in 218ms
+ GET /api/me 304 in 4ms
+ GET /api/sales 304 in 65ms
+ GET /api/products 304 in 94ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/logout ...
+ ✓ Compiled /api/logout in 741ms (1260 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/logout 200 in 833ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /login in 1039ms (1603 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /login 200 in 1398ms
+ ○ Compiling /api/login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/login in 1003ms (554 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ POST /api/login 200 in 2113ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 340ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/me in 425ms (1327 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 944ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 994ms (1330 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled (1332 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 3767ms
+ GET /api/sales 304 in 3783ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /production-dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /production-dashboard in 1282ms (1674 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /production-dashboard 200 in 1670ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 455ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/productions ...
+ ✓ Compiled /api/productions in 710ms (1337 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/productions 304 in 3107ms
+ GET /api/products 304 in 3110ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /sales ...
+ ✓ Compiled /sales in 845ms (1598 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /sales 200 in 1221ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ ○ Compiling /api/sales ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/sales in 1144ms (1258 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 1208ms
+ GET /api/sales 304 in 1723ms
+ POST /api/sales 201 in 92ms
+ GET /api/sales 200 in 63ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 300ms
+ GET /api/me 304 in 9ms
+ GET /api/sales 304 in 55ms
+ GET /api/products 304 in 91ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /stock ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /stock in 1335ms (1603 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /stock 200 in 1896ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/stock ...
+ ✓ Compiled /api/stock in 1082ms (1259 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 3642ms
+ GET /api/stock 200 in 3645ms
+ POST /api/stock 201 in 83ms
+ GET /api/stock 200 in 76ms
+ POST /api/stock 201 in 61ms
+ GET /api/stock 200 in 53ms
+ POST /api/stock 201 in 65ms
+ GET /api/stock 200 in 51ms
+ POST /api/stock 201 in 54ms
+ GET /api/stock 200 in 63ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/logout ...
+ ✓ Compiled /api/logout in 853ms (1258 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/logout 304 in 972ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /login in 1667ms (1601 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /login 200 in 2018ms
+ ○ Compiling /api/login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/login in 1263ms (1330 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ POST /api/login 200 in 2212ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 580ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/me ...
+ ✓ Compiled /api/me in 919ms (1332 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 1395ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 1089ms (1334 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled (1336 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 3384ms
+ GET /api/sales 304 in 3392ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /production-dashboard ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /production-dashboard in 984ms (1674 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /production-dashboard 200 in 1343ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 270ms
+ ○ Compiling /api/productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ GET /api/products 304 in 984ms
+ ✓ Compiled /api/productions in 1089ms (1337 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/productions 304 in 1732ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /sales ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /sales in 1452ms (1681 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /sales 200 in 1845ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 941ms
+ GET /api/sales 304 in 947ms
+ POST /api/sales 201 in 81ms
+ GET /api/sales 200 in 82ms
+ GET /dashboard 200 in 231ms
+ GET /api/me 304 in 8ms
+ GET /api/sales 304 in 76ms
+ GET /api/products 304 in 109ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /stock ...
+ ✓ Compiled /stock in 584ms (1605 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /stock 200 in 922ms
+ ○ Compiling /api/stock ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/stock in 1251ms (1261 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/stock 304 in 3696ms
+ GET /api/products 304 in 3700ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /productions in 2.2s (1606 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /productions 200 in 2624ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ ○ Compiling /api/productions ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/productions in 1181ms (1261 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 1654ms
+ GET /api/productions 304 in 1988ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /products ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /products in 2.3s (1623 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /products 200 in 2618ms
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/products 304 in 701ms
+ ○ Compiling /api/logout ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/logout in 972ms (1267 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/logout 304 in 1045ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1818ms (1622 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /login 200 in 2137ms
+ ○ Compiling /api/login ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/login in 1342ms (1334 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ POST /api/login 200 in 2645ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1037ms (1695 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /dashboard 200 in 1412ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/me ...
+ ✓ Compiled /api/me in 1050ms (1344 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/me 304 in 1450ms
+ ○ Compiling /api/sales ...
+ GET /api/products 304 in 735ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /api/sales in 1204ms (1346 modules)
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled in 1602ms (1699 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/logout 304 in 3568ms
+ GET /api/logout 304 in 2ms
+ GET /dashboard 200 in 2265ms
+ GET /api/sales 200 in 4616ms
+ GET /api/me 401 in 6ms
+ GET /login 200 in 333ms
+ POST /api/login 200 in 969ms
+ GET /dashboard 200 in 232ms
+ GET /api/me 304 in 5ms
+ GET /api/sales 200 in 69ms
+ GET /api/products 304 in 117ms
+ GET /products 200 in 261ms
+ GET /api/products 304 in 70ms
+ POST /api/products 201 in 84ms
+ GET /api/products 200 in 65ms
+ GET /productions 200 in 236ms
+ GET /api/productions 304 in 67ms
+ GET /api/products 304 in 98ms
+ POST /api/productions 201 in 73ms
+ GET /api/productions 200 in 63ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /goals ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /goals in 2s (1610 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /goals 200 in 2437ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ○ Compiling /api/goals ...
+ ✓ Compiled /api/goals in 1054ms (1261 modules)
+[ Federation Runtime ]: The remote "remote" is already registered. If you want to merge the remote, you can set "force: true".
+ GET /api/goals 304 in 2208ms
+[ Module Federation Manifest Plugin ] Info Manifest Link: {auto}/static/chunks/mf-manifest.json 
+ ○ Compiling /stock ...
+[ Module Federation Manifest Plugin ] Info Manifest Link: /_next/mf-manifest.json 
+ ✓ Compiled /stock in 1319ms (1619 modules)

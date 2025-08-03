@@ -1,13 +1,11 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
@@ -22,32 +20,68 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}
     >
       <Tabs.Screen
         name="dashboard"
         options={{
-          title: "Dashboard",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="products"
-        options={{
-          title: "Produtos",
+          title: "Dash Vendas",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="shopping-bag" color={color} />
+            <TabBarIcon name="bar-chart" color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="production-dashboard"
         options={{
-          title: "Produção",
+          title: "Dash Produção",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="bar-chart" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="products"
+        options={{
+          title: "Produtos",
           tabBarIcon: ({ color }) => <TabBarIcon name="leaf" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="goals"
+        options={{
+          title: "Objetivos",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="bullseye" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="sales"
+        options={{
+          title: "Vendas",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-bag" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="stock"
+        options={{
+          title: "Estoque",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="dropbox" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="productions"
+        options={{
+          title: "Produção",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="industry" color={color} />
+          ),
         }}
       />
     </Tabs>

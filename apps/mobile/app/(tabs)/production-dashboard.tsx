@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, View, Dimensions } from "react-native";
-import { Appbar, Card, Title, Paragraph, useTheme } from "react-native-paper";
+import { Card, Title, Paragraph, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { BarChart } from "react-native-chart-kit";
 
@@ -68,17 +68,6 @@ export default function ProductionDashboardScreen() {
 
   return (
     <>
-      <Appbar.Header
-        style={{
-          backgroundColor: "#fff",
-          elevation: 0,
-          borderBottomWidth: 1,
-          borderBottomColor: "#e2e8f0",
-        }}
-      >
-        <Appbar.Content title="Dashboard de Produção" />
-        <Appbar.Action icon="logout" onPress={logout} />
-      </Appbar.Header>
       <ScrollView style={styles.container}>
         <Title style={styles.title}>Dashboard de Produção</Title>
         <View style={styles.statsContainer}>

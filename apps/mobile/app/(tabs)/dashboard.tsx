@@ -104,17 +104,6 @@ export default function DashboardScreen() {
 
   return (
     <>
-      <Appbar.Header
-        style={{
-          backgroundColor: "#fff",
-          elevation: 0,
-          borderBottomWidth: 1,
-          borderBottomColor: "#e2e8f0",
-        }}
-      >
-        <Appbar.Content title="Dashboard de Vendas" />
-        <Appbar.Action icon="logout" onPress={logout} />
-      </Appbar.Header>
       <ScrollView style={styles.container}>
         {/* Cards de estatísticas */}
         <View style={styles.statsContainer}>

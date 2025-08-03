@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dropdown } from "react-native-paper-dropdown";
 
-import { saleSchema } from "@farms/schemas";
+import { Product, Sale, saleSchema } from "@farms/schemas";
 import { useAuth } from "@/AuthProvider";
 import {
   getAllFromCollection,
@@ -25,12 +25,6 @@ import {
 } from "@farms/firebase/src/firestoreUtils";
 
 const typedSchema = saleSchema;
-type Sale = z.infer<typeof typedSchema> & { id: string };
-
-type Product = {
-  id: string;
-  name: string;
-};
 
 export default function SalesScreen() {
   const [sales, setSales] = useState<Sale[]>([]);
@@ -39,16 +33,14 @@ export default function SalesScreen() {
   const [editing, setEditing] = useState<Sale | null>(null);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
-  const [showDropDown, setShowDropDown] = useState(false);
 
-  const schema = typedSchema.omit({ created_by: true });
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  } = useForm<Sale>({
+    resolver: zodResolver(saleSchema),
     defaultValues: {
       product_id: "",
       quantity: 0,
@@ -56,6 +48,7 @@ export default function SalesScreen() {
       client_name: "",
       location: { latitude: 0, longitude: 0 },
       sale_date: new Date(),
+      created_by: user?.uid,
     },
   });
 
@@ -85,6 +78,7 @@ export default function SalesScreen() {
           client_name: "",
           location: { latitude: 0, longitude: 0 },
           sale_date: new Date(),
+          created_by: user?.uid,
         });
       }
     }
@@ -184,7 +178,7 @@ export default function SalesScreen() {
   const handleSave = async (data: any) => {
     try {
       if (editing) {
-        await updateInCollection("sales", editing.id, data, user!.uid);
+        await updateInCollection("sales", editing.id!, data, user!.uid);
       } else {
         await addToCollection("sales", data, user!.uid);
       }
@@ -212,7 +206,7 @@ export default function SalesScreen() {
       <FlatList
         data={sales}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id!}
         style={styles.list}
         contentContainerStyle={styles.listContent}
       />
@@ -262,7 +256,7 @@ export default function SalesScreen() {
                     onSelect={onChange}
                     options={products.map((p) => ({
                       label: p.name,
-                      value: p.id,
+                      value: p.id!,
                     }))}
                     error={!!errors.product_id}
                   />

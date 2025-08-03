@@ -9,17 +9,23 @@ export default async function handler(
   try {
     const token = req.cookies.token;
     if (!token) return res.status(401).json({ error: "Não autenticado" });
-    await verifyIdToken(token);
+    const decodedToken = await verifyIdToken(token);
     const db = getFirestore();
     const collection = db.collection("stock");
 
     if (req.method === "GET") {
-      const snapshot = await collection.get();
-      const items = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      return res.status(200).json(items);
+      const snapshot = await collection
+        .where("created_by", "==", decodedToken.uid)
+        .get();
+      const sales = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      return res.status(200).json(sales);
     }
     if (req.method === "POST") {
-      const docRef = await collection.add(req.body);
+      const docData = {
+        ...req.body,
+        created_by: decodedToken.uid,
+      };
+      const docRef = await collection.add(docData);
       return res.status(201).json({ id: docRef.id });
     }
     if (req.method === "PUT") {
